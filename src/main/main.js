@@ -31,7 +31,7 @@ const { cleanupStaleManagedWebServerProcesses } = require('./utils/StartupCleanu
 const { showAndFocusWindow } = require('./utils/WindowUtils');
 const { setupIpcHandlers } = require('./ipc/handlers');
 
-const GENERATED_CONFIG_SCHEMA_VERSION = 2;
+const GENERATED_CONFIG_SCHEMA_VERSION = 3;
 
 // Single instance lock - prevent multiple instances of the app
 const isPlaywright = process.env.PLAYWRIGHT_TEST === 'true';
@@ -109,8 +109,8 @@ async function checkAndMigrate() {
   const { response } = await dialog.showMessageBox({
     type: 'question',
     title: 'Previous Installation Found',
-    message: 'DevBox Pro found data from a previous installation.\n\nWould you like to copy your existing projects, settings, and downloaded binaries into this portable folder?',
-    detail: 'Please stop services in your previous DevBox Pro installation before continuing. Database data cannot be moved automatically and will start fresh.\n\n"Start Fresh" begins with an empty portable installation.',
+    message: 'MyLocalDev found data from a previous installation.\n\nWould you like to copy your existing projects, settings, and downloaded binaries into this portable folder?',
+    detail: 'Please stop services in your previous MyLocalDev installation before continuing. Database data cannot be moved automatically and will start fresh.\n\n"Start Fresh" begins with an empty portable installation.',
     buttons: ['Copy & Migrate', 'Start Fresh'],
     defaultId: 0,
     cancelId: 1,
@@ -146,7 +146,7 @@ async function createWindow() {
     height: 900,
     minWidth: 1000,
     minHeight: 700,
-    title: 'DevBox Pro',
+    title: 'MyLocalDev',
     icon: icon,
     center: true,
     autoHideMenuBar: true,
@@ -342,7 +342,7 @@ function createTray() {
 
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: 'Open DevBox Pro',
+        label: 'Open MyLocalDev',
         click: () => {
           void ensureMainWindow({ focusExisting: true });
         },
@@ -366,7 +366,7 @@ function createTray() {
       },
     ]);
 
-    tray.setToolTip('DevBox Pro');
+    tray.setToolTip('MyLocalDev');
     tray.setContextMenu(contextMenu);
 
     tray.on('double-click', () => {
@@ -522,7 +522,7 @@ async function startup() {
     });
   } catch (error) {
     managers.log?.systemError('Startup failed', { error: error.message, stack: error.stack });
-    dialog.showErrorBox('DevBox Pro could not start', error.message);
+    dialog.showErrorBox('MyLocalDev could not start', error.message);
     app.quit();
   }
 }
@@ -563,14 +563,14 @@ app.on('activate', () => {
 let isShuttingDown = false;
 
 /**
- * Force kill all DevBox processes on Windows
+ * Force kill all MyLocalDev processes on Windows
  */
 async function forceKillAllProcesses() {
   if (process.platform !== 'win32') return;
 
   const { killProcessByName, killProcessesByPath } = require('./utils/SpawnUtils');
 
-  // Processes that are safe to kill globally (DevBox-specific)
+  // Processes that are safe to kill globally (MyLocalDev-specific)
   const processesToKill = [
     'php-cgi.exe',
     'nginx.exe',

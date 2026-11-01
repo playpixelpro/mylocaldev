@@ -36,4 +36,4 @@ Download the appropriate binary for each platform from GitHub releases:
 - SMTP: 1025
 - Web UI: 8025
 
-Configure in DevBox Pro settings.
+Configure in MyLocalDev settings.

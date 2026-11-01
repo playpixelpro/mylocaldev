@@ -109,7 +109,7 @@ function ImportProjectModal({ project, onClose, onImport }) {
     useEffect(() => {
         const fetchBinaries = async () => {
             try {
-                const status = await window.devbox?.binaries.getStatus();
+                const status = await window.mylocaldev?.binaries.getStatus();
                 if (status) {
                     // Get installed PHP versions (sorted descending - newest first)
                     const phpVersions = Object.entries(status.php || {})

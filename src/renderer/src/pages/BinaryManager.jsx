@@ -290,7 +290,7 @@ const ServiceCard = ({ service, onDownload, onRemove, onImport, onManualOpen, is
         </div>
         <div className="flex items-center gap-1.5 ml-2 shrink-0" onClick={e => e.stopPropagation()}>
           {hasSource && (
-            <button onClick={() => window.devbox?.system.openExternal(sourceUrl)} className="btn-icon text-gray-400 hover:text-gray-600" title={downloadSources[service.id]?.note}>
+            <button onClick={() => window.mylocaldev?.system.openExternal(sourceUrl)} className="btn-icon text-gray-400 hover:text-gray-600" title={downloadSources[service.id]?.note}>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
           )}
@@ -414,7 +414,7 @@ const SimpleRow = ({ id, name, description, icon: Icon, emoji, isInstalled: inst
           </>
         ) : (
           <>
-            {hasSource && <button onClick={() => window.devbox?.system.openExternal(downloadSources[sourceKey]?.url)} className="btn-icon text-gray-400 hover:text-gray-600" title={downloadSources[sourceKey]?.note}><ExternalLink className="w-3.5 h-3.5" /></button>}
+            {hasSource && <button onClick={() => window.mylocaldev?.system.openExternal(downloadSources[sourceKey]?.url)} className="btn-icon text-gray-400 hover:text-gray-600" title={downloadSources[sourceKey]?.note}><ExternalLink className="w-3.5 h-3.5" /></button>}
             {onImport && <button onClick={onImport} className="btn-secondary text-xs px-2 py-1 flex items-center gap-1" title={`Import ${name}`}><Upload className="w-3 h-3" />{importLabel || 'Import'}</button>}
             {onDownload && <button onClick={onDownload} className="btn-primary text-xs px-2.5 py-1 flex items-center gap-1"><Download className="w-3 h-3" /> Download</button>}
           </>
@@ -568,14 +568,14 @@ function BinaryManager() {
 
   const loadVersionDetails = useCallback(async () => {
     try {
-      const details = await window.devbox?.binaries?.getAllPackageVersionDetails?.();
+      const details = await window.mylocaldev?.binaries?.getAllPackageVersionDetails?.();
       if (details) {
         setPackageVersionDetails(details);
         if (details.php) {
           setPhpDetails(details.php);
         }
       } else {
-        const phpDet = await window.devbox?.binaries?.getAllPhpVersionDetails?.();
+        const phpDet = await window.mylocaldev?.binaries?.getAllPhpVersionDetails?.();
         if (phpDet) {
           setPhpDetails(phpDet);
           setPackageVersionDetails(prev => ({ ...prev, php: phpDet }));
@@ -589,7 +589,7 @@ function BinaryManager() {
 
   const loadInstalled = useCallback(async () => {
     try {
-      const result = await window.devbox?.binaries.getInstalled();
+      const result = await window.mylocaldev?.binaries.getInstalled();
       if (result) {
         setInstalled(result);
       }
@@ -601,7 +601,7 @@ function BinaryManager() {
 
   const loadDownloadUrls = useCallback(async () => {
     try {
-      const urls = await window.devbox?.binaries.getDownloadUrls();
+      const urls = await window.mylocaldev?.binaries.getDownloadUrls();
       if (urls) {
         setDownloadUrls(urls);
       }
@@ -612,7 +612,7 @@ function BinaryManager() {
 
   const loadServiceConfig = useCallback(async () => {
     try {
-      const config = await window.devbox?.binaries.getServiceConfig();
+      const config = await window.mylocaldev?.binaries.getServiceConfig();
       if (config?.versions) {
         setServiceVersions(config.versions);
       }
@@ -623,7 +623,7 @@ function BinaryManager() {
 
   const loadGitStatus = useCallback(async () => {
     try {
-      const result = await window.devbox?.git?.isAvailable();
+      const result = await window.mylocaldev?.git?.isAvailable();
       setGitStatus({
         available: result?.available === true,
         source: result?.source || null,
@@ -636,7 +636,7 @@ function BinaryManager() {
 
   const loadZrokStatus = useCallback(async () => {
     try {
-      const result = await window.devbox?.tunnel?.zrokStatus?.();
+      const result = await window.mylocaldev?.tunnel?.zrokStatus?.();
       setZrokStatus({
         enabled: result?.enabled === true,
         configuredAt: result?.configuredAt || null,
@@ -650,7 +650,7 @@ function BinaryManager() {
   const forceRefreshInstalled = useCallback(async () => {
     try {
       // This calls getInstalledBinaries which checks if files exist on disk
-      const result = await window.devbox?.binaries.getInstalled();
+      const result = await window.mylocaldev?.binaries.getInstalled();
       if (result) {
         setInstalled(result);
       }
@@ -776,7 +776,7 @@ function BinaryManager() {
     };
     init();
 
-    const unsubscribe = window.devbox?.binaries.onProgress((id, progressData) => {
+    const unsubscribe = window.mylocaldev?.binaries.onProgress((id, progressData) => {
       if (progressData.status === 'completed') {
         void refreshInstalledUntilDetected(id);
       } else if (progressData.status === 'error') {
@@ -803,7 +803,7 @@ function BinaryManager() {
     setProgressGlobal(id, { status: 'starting', progress: 0 });
 
     // Fire and forget - don't await, let progress events handle updates
-    window.devbox?.binaries.downloadPhp(version).catch((error) => {
+    window.mylocaldev?.binaries.downloadPhp(version).catch((error) => {
       setProgressGlobal(id, { status: 'error', error: error.message });
       setDownloadingGlobal(id, false);
       // Alert is handled by the onProgress listener to prevent duplicates
@@ -831,10 +831,10 @@ function BinaryManager() {
 
     try {
       const [mods, conflicts] = await Promise.all([
-        window.devbox?.binaries?.checkPackageModifications?.(service, version)
-          || (service === 'php' ? window.devbox?.binaries?.checkPhpModifications?.(version) : null)
+        window.mylocaldev?.binaries?.checkPackageModifications?.(service, version)
+          || (service === 'php' ? window.mylocaldev?.binaries?.checkPhpModifications?.(version) : null)
           || { hasModifications: false, modifiedFiles: [] },
-        window.devbox?.binaries?.getRunningConflicts?.(service, version) || { hasConflicts: false, items: [] },
+        window.mylocaldev?.binaries?.getRunningConflicts?.(service, version) || { hasConflicts: false, items: [] },
       ]);
 
       setUpdatePackageModal(prev => ({
@@ -861,13 +861,13 @@ function BinaryManager() {
     setProgressGlobal(id, { status: 'starting', progress: 0 });
 
     try {
-      if (service === 'php' && window.devbox?.binaries?.updatePhp) {
-        await window.devbox.binaries.updatePhp(version, {
+      if (service === 'php' && window.mylocaldev?.binaries?.updatePhp) {
+        await window.mylocaldev.binaries.updatePhp(version, {
           preserveModifications,
           force: true,
         });
       } else {
-        await window.devbox?.binaries?.updatePackage?.(service, version, {
+        await window.mylocaldev?.binaries?.updatePackage?.(service, version, {
           preserveModifications,
           force: true,
         });
@@ -905,55 +905,55 @@ function BinaryManager() {
     let downloadPromise;
     switch (service) {
       case 'mysql':
-        downloadPromise = window.devbox?.binaries.downloadMysql(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadMysql(version);
         break;
       case 'mariadb':
-        downloadPromise = window.devbox?.binaries.downloadMariadb(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadMariadb(version);
         break;
       case 'redis':
-        downloadPromise = window.devbox?.binaries.downloadRedis(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadRedis(version);
         break;
       case 'mailpit':
-        downloadPromise = window.devbox?.binaries.downloadMailpit();
+        downloadPromise = window.mylocaldev?.binaries.downloadMailpit();
         break;
       case 'phpmyadmin':
-        downloadPromise = window.devbox?.binaries.downloadPhpMyAdmin();
+        downloadPromise = window.mylocaldev?.binaries.downloadPhpMyAdmin();
         break;
       case 'nginx':
-        downloadPromise = window.devbox?.binaries.downloadNginx(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadNginx(version);
         break;
       case 'apache':
-        downloadPromise = window.devbox?.binaries.downloadApache(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadApache(version);
         break;
       case 'composer':
-        downloadPromise = window.devbox?.binaries.downloadComposer();
+        downloadPromise = window.mylocaldev?.binaries.downloadComposer();
         break;
       case 'git':
-        downloadPromise = window.devbox?.binaries.downloadGit();
+        downloadPromise = window.mylocaldev?.binaries.downloadGit();
         break;
       case 'postgresql':
-        downloadPromise = window.devbox?.binaries.downloadPostgresql(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadPostgresql(version);
         break;
       case 'python':
-        downloadPromise = window.devbox?.binaries.downloadPython(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadPython(version);
         break;
       case 'mongodb':
-        downloadPromise = window.devbox?.binaries.downloadMongodb(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadMongodb(version);
         break;
       case 'sqlite':
-        downloadPromise = window.devbox?.binaries.downloadSqlite(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadSqlite(version);
         break;
       case 'minio':
-        downloadPromise = window.devbox?.binaries.downloadMinio();
+        downloadPromise = window.mylocaldev?.binaries.downloadMinio();
         break;
       case 'memcached':
-        downloadPromise = window.devbox?.binaries.downloadMemcached(version);
+        downloadPromise = window.mylocaldev?.binaries.downloadMemcached(version);
         break;
       case 'cloudflared':
-        downloadPromise = window.devbox?.binaries.downloadCloudflared();
+        downloadPromise = window.mylocaldev?.binaries.downloadCloudflared();
         break;
       case 'zrok':
-        downloadPromise = window.devbox?.binaries.downloadZrok();
+        downloadPromise = window.mylocaldev?.binaries.downloadZrok();
         break;
     }
 
@@ -965,7 +965,7 @@ function BinaryManager() {
         showAlert({
           title: 'Composer Download Unavailable',
           message: 'This app session cannot start the Composer download.',
-          detail: 'The main process did not register the Composer download IPC handler. Restart DevBox Pro and try again. If it still fails, use the Import button to add composer.phar manually.',
+          detail: 'The main process did not register the Composer download IPC handler. Restart MyLocalDev and try again. If it still fails, use the Import button to add composer.phar manually.',
           type: 'warning',
         });
         return;
@@ -975,7 +975,7 @@ function BinaryManager() {
         showAlert({
           title: 'Download Unavailable',
           message: `${serviceLabel} download is not available in this app session.`,
-          detail: 'The main process is missing the IPC handler for this action. Restart DevBox Pro and try again.',
+          detail: 'The main process is missing the IPC handler for this action. Restart MyLocalDev and try again.',
           type: 'warning',
         });
       }
@@ -991,7 +991,7 @@ function BinaryManager() {
   // Cancel an active download
   const handleCancelDownload = async (id) => {
     try {
-      await window.devbox?.binaries.cancelDownload(id);
+      await window.mylocaldev?.binaries.cancelDownload(id);
       clearDownload(id);
     } catch (error) {
       // Error cancelling download
@@ -1002,7 +1002,7 @@ function BinaryManager() {
   const handleCheckServiceUpdate = async (service) => {
     setCheckingServiceUpdate(prev => ({ ...prev, [service]: true }));
     try {
-      const result = await window.devbox?.binaries.checkForServiceUpdates();
+      const result = await window.mylocaldev?.binaries.checkForServiceUpdates();
       if (result) {
         setServiceUpdates(prev => SERVICE_UPDATE_KEYS.reduce((nextState, key) => ({
           ...nextState,
@@ -1025,7 +1025,7 @@ function BinaryManager() {
     setUpdateResult(null);
 
     try {
-      const result = await window.devbox?.binaries.checkForUpdates();
+      const result = await window.mylocaldev?.binaries.checkForUpdates();
       setUpdateResult(result);
 
       if (result?.success) {
@@ -1042,7 +1042,7 @@ function BinaryManager() {
   // Apply updates from remote config
   const handleApplyUpdates = async () => {
     try {
-      const result = await window.devbox?.binaries.applyUpdates();
+      const result = await window.mylocaldev?.binaries.applyUpdates();
       if (result?.success) {
         // Reload download URLs and service config
         await Promise.all([loadDownloadUrls(), loadServiceConfig()]);
@@ -1061,7 +1061,7 @@ function BinaryManager() {
     }
 
     try {
-      await window.devbox?.system.openExternal(manualUrl);
+      await window.mylocaldev?.system.openExternal(manualUrl);
     } catch (error) {
       // Error opening manual download page
     }
@@ -1080,7 +1080,7 @@ function BinaryManager() {
 
     setEnablingZrok(true);
     try {
-      await window.devbox?.tunnel?.zrokEnable?.(token);
+      await window.mylocaldev?.tunnel?.zrokEnable?.(token);
       setZrokToken('');
       await loadZrokStatus();
       setShowZrokSetupModal(false);
@@ -1155,7 +1155,7 @@ function BinaryManager() {
     git: {
       url: 'https://git-scm.com/downloads/win',
       name: 'git-scm.com',
-      note: 'Install Git for Windows or use DevBox Pro Portable Git',
+      note: 'Install Git for Windows or use MyLocalDev Portable Git',
     },
     python: {
       url: 'https://www.python.org/downloads/',
@@ -1243,7 +1243,7 @@ function BinaryManager() {
   // Generic import handler - opens native file dialog and detects/prompts for version
   const handleImportBinary = async (service) => {
     // Use Electron's native dialog — file.path is not available in sandboxed renderer
-    const filePath = await window.devbox?.system.selectFile([
+    const filePath = await window.mylocaldev?.system.selectFile([
       { name: 'Archive Files', extensions: ['zip', 'gz', 'tar.gz', 'tar'] },
       { name: 'All Files', extensions: ['*'] },
     ]);
@@ -1290,7 +1290,7 @@ function BinaryManager() {
     setProgressGlobal(id, { status: 'starting', progress: 0 });
 
     try {
-      await window.devbox?.binaries.importBinary(service, version || 'default', filePath);
+      await window.mylocaldev?.binaries.importBinary(service, version || 'default', filePath);
     } catch (error) {
       // Error importing service
       setProgressGlobal(id, { status: 'error', error: error.message });
@@ -1312,7 +1312,7 @@ function BinaryManager() {
   // Simple import for non-versioned services (Mailpit, phpMyAdmin, Composer)
   const handleImportSimple = async (service) => {
     // Use Electron's native dialog — file.path is not available in sandboxed renderer
-    const filePath = await window.devbox?.system.selectFile([
+    const filePath = await window.mylocaldev?.system.selectFile([
       { name: 'Archive Files', extensions: ['zip', 'gz', 'tar.gz', 'tar'] },
       { name: 'All Files', extensions: ['*'] },
     ]);
@@ -1322,7 +1322,7 @@ function BinaryManager() {
 
   const handleImportApache = async (version = '2.4') => {
     // Use Electron's native dialog — file.path is not available in sandboxed renderer
-    const filePath = await window.devbox?.system.selectFile([
+    const filePath = await window.mylocaldev?.system.selectFile([
       { name: 'ZIP Archive', extensions: ['zip'] },
       { name: 'All Files', extensions: ['*'] },
     ]);
@@ -1333,7 +1333,7 @@ function BinaryManager() {
     setProgressGlobal(id, { status: 'starting', progress: 0 });
 
     try {
-      await window.devbox?.binaries.importApache(filePath, version);
+      await window.mylocaldev?.binaries.importApache(filePath, version);
     } catch (error) {
       // Error importing Apache
       setProgressGlobal(id, { status: 'error', error: error.message });
@@ -1351,7 +1351,7 @@ function BinaryManager() {
     setProgressGlobal(id, { status: 'starting', progress: 0 });
 
     // Fire and forget - don't await, let progress events handle updates
-    window.devbox?.binaries.downloadNodejs(version).catch((error) => {
+    window.mylocaldev?.binaries.downloadNodejs(version).catch((error) => {
       setProgressGlobal(id, { status: 'error', error: error.message });
       setDownloadingGlobal(id, false);
       // Alert is handled by the onProgress listener to prevent duplicates
@@ -1364,7 +1364,7 @@ function BinaryManager() {
     // Check for running conflicts before showing the confirm dialog
     let conflicts = { hasConflicts: false, items: [] };
     try {
-      conflicts = await window.devbox?.binaries.getRunningConflicts(type, version) ?? conflicts;
+      conflicts = await window.mylocaldev?.binaries.getRunningConflicts(type, version) ?? conflicts;
     } catch (_) {
       // If check fails, continue with normal removal
     }
@@ -1393,7 +1393,7 @@ function BinaryManager() {
     if (!confirmed) return;
 
     try {
-      await window.devbox?.binaries.remove(type, version, false);
+      await window.mylocaldev?.binaries.remove(type, version, false);
       await forceRefreshInstalled();
     } catch (error) {
       const isBinaryInUse = error?.code === 'BINARY_IN_USE' || /currently in use|used by/i.test(error?.message || '');
@@ -1517,7 +1517,7 @@ function BinaryManager() {
               )}
               {manualUrl && (
                 <button
-                  onClick={() => window.devbox?.system.openExternal(manualUrl)}
+                  onClick={() => window.mylocaldev?.system.openExternal(manualUrl)}
                   className="mt-1 text-xs text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1"
                   title="Download manually"
                 >
@@ -1950,7 +1950,7 @@ function BinaryManager() {
                     <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5 animate-pulse" />
                     <div>
                       <span className="font-semibold block mb-0.5">
-                        Update in progress — Please do not close DevBox Pro
+                        Update in progress — Please do not close MyLocalDev
                       </span>
                       <span>
                         The new {updatePackageModal.serviceName || 'package'} binary archive is downloading, extracting, and safely replacing executable files. Any running services will automatically resume once the update completes.
@@ -2122,14 +2122,14 @@ function BinaryManager() {
                 </p>
                 <div className="flex items-center gap-2 flex-wrap">
                   <button
-                    onClick={() => window.devbox?.system.openExternal('https://myzrok.io/')}
+                    onClick={() => window.mylocaldev?.system.openExternal('https://myzrok.io/')}
                     className="btn-secondary text-xs px-2.5 py-1 flex items-center gap-1"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     Open myzrok.io
                   </button>
                   <button
-                    onClick={() => window.devbox?.system.openExternal('https://api-v2.zrok.io/')}
+                    onClick={() => window.mylocaldev?.system.openExternal('https://api-v2.zrok.io/')}
                     className="btn-secondary text-xs px-2.5 py-1 flex items-center gap-1"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -2288,7 +2288,7 @@ function BinaryManager() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Binary Manager</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Download and manage service binaries for DevBox Pro
+            Download and manage service binaries for MyLocalDev
           </p>
         </div>
         <button

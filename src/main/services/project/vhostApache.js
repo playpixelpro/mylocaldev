@@ -76,11 +76,11 @@ module.exports = {
     const productionHeaderBlock = isProd ? PRODUCTION_APACHE.headers.map(h => `    ${h}`).join('\n') : '';
 
     let config = `
-# DevBox Pro - ${project.name}
+# MyLocalDev - ${project.name}
 # Domain: ${project.domain}
 # Generated: ${new Date().toISOString()}
   # NOTE: Auto-generated file. Manual edits are not recommended.
-  # This file is regenerated when DevBox starts, stops, or reloads the project/service.
+  # This file is regenerated when MyLocalDev starts, stops, or reloads the project/service.
 # Apache running on ports HTTP=${finalHttpPort}, SSL=${httpsPort}
 # PHP Version: ${phpVersion}${networkAccess ? '\n# Network Access: ENABLED - accessible from local network' : ''}${canUsePort80 ? '\n# Port 80 (first-come-first-served)' : ''}
 
@@ -235,11 +235,11 @@ ${productionHeaderBlock}
     const certsExist = await this.ensureProjectSslCertificates(project, sslDir);
 
     let config = `
-# DevBox Pro Proxy - ${project.name}
+# MyLocalDev Proxy - ${project.name}
 # Domain: ${project.domain}
 # Generated: ${new Date().toISOString()}
   # NOTE: Auto-generated file. Manual edits are not recommended.
-  # This file is regenerated when DevBox starts, stops, or reloads the project/service.
+  # This file is regenerated when MyLocalDev starts, stops, or reloads the project/service.
 # Front Door: apache -> ${this.getEffectiveWebServer(project)}:${backendHttpPort}
 
 <VirtualHost *:${httpPort}>

@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 afterEach(cleanup);
 
-const mockDevbox = {
+const mockMyLocalDev = {
     logs: {
         getLogs: vi.fn().mockResolvedValue([]),
         clearLogs: vi.fn().mockResolvedValue({}),
@@ -19,9 +19,9 @@ const mockDevbox = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
-    mockDevbox.logs.getLogs.mockResolvedValue([]);
+    mockMyLocalDev.logs.getLogs.mockResolvedValue([]);
 });
 
 vi.mock('@/context/AppContext', () => ({

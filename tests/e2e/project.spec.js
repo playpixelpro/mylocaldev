@@ -1,6 +1,6 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro Project Lifecycle', () => {
+test.describe('MyLocalDev Project Lifecycle', () => {
 
     test('Creates a new project successfully', async ({ page }) => {
         test.setTimeout(60000);

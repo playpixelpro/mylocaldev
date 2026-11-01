@@ -1,10 +1,10 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro Database Workflow', () => {
+test.describe('MyLocalDev Database Workflow', () => {
 
     test('Creates, checks and deletes a database', async ({ page }) => {
         // Wait for the Dashboard
-        await expect(page.locator('text=DevBox Pro')).toBeVisible();
+        await expect(page.locator('text=MyLocalDev')).toBeVisible();
 
         // Navigate to Databases
         await page.click('a:has-text("Databases")');

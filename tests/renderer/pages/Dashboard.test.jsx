@@ -46,9 +46,9 @@ describe('Dashboard', () => {
             refreshProjects: mockRefreshProjects,
         });
 
-        // Setup window.devbox mock for Dashboard component
-        window.devbox = {
-            ...window.devbox,
+        // Setup window.mylocaldev mock for Dashboard component
+        window.mylocaldev = {
+            ...window.mylocaldev,
             binaries: {
                 getStatus: vi.fn().mockResolvedValue({}),
                 getServiceConfig: vi.fn().mockResolvedValue({

@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const https = require('https');
 
-const REMOTE_CONFIG_URL = 'https://raw.githubusercontent.com/JeffGepiga/DevBoxPro/main/config/binaries.json';
+const REMOTE_CONFIG_URL = 'https://raw.githubusercontent.com/playpixelpro/mylocaldev/main/config/binaries.json';
 
 module.exports = {
   async checkForUpdates() {
@@ -52,7 +52,7 @@ module.exports = {
   async fetchRemoteConfig() {
     return new Promise((resolve, reject) => {
       https.get(REMOTE_CONFIG_URL, {
-        headers: { 'User-Agent': 'DevBoxPro' },
+        headers: { 'User-Agent': 'MyLocalDev' },
       }, (res) => {
         if (res.statusCode !== 200) {
           reject(new Error(`HTTP ${res.statusCode}: Failed to fetch config`));

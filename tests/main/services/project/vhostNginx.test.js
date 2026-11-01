@@ -12,8 +12,8 @@ function makeContext(overrides = {}) {
     configStore: {
       get: vi.fn(() => []),
       set: vi.fn(),
-      getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.devbox-pro'),
-      getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/devbox-pro/resources'),
+      getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.mylocaldev'),
+      getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/MyLocalDev/resources'),
     },
     managers: {
       service: {
@@ -25,8 +25,8 @@ function makeContext(overrides = {}) {
         systemWarn: vi.fn(),
       },
     },
-    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.devbox-pro'),
-    getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/devbox-pro/resources'),
+    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.mylocaldev'),
+    getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/MyLocalDev/resources'),
     getEffectiveWebServerVersion: vi.fn(() => '1.28'),
     getPhpFpmPort: vi.fn(() => 9957),
     getProjectServerNameEntries: vi.fn(() => ['hrms.test', 'www.hrms.test', '*.hrms.test']),
@@ -110,7 +110,7 @@ describe('project/vhostNginx', () => {
     expect(config).not.toContain('http2 on;');
   });
 
-  it('keeps DevBox FastCGI HTTPS overrides after bundled fastcgi params', async () => {
+  it('keeps MyLocalDev FastCGI HTTPS overrides after bundled fastcgi params', async () => {
     const ctx = makeContext();
     const project = {
       id: 'proxied-https-project',
@@ -124,10 +124,10 @@ describe('project/vhostNginx', () => {
     await ctx.createNginxVhost(project, 9957, '1.28');
 
     const [, config] = fs.writeFile.mock.calls.at(-1);
-    const includeIndex = config.indexOf('include "C:/Users/Jeffrey/AppData/Roaming/devbox-pro/resources/nginx/1.28/win/conf/fastcgi_params";');
-    const httpsIndex = config.indexOf('fastcgi_param HTTPS $devbox_https;');
-    const schemeIndex = config.indexOf('fastcgi_param REQUEST_SCHEME $devbox_request_scheme;');
-    const portIndex = config.indexOf('fastcgi_param SERVER_PORT $devbox_server_port;');
+    const includeIndex = config.indexOf('include "C:/Users/Jeffrey/AppData/Roaming/MyLocalDev/resources/nginx/1.28/win/conf/fastcgi_params";');
+    const httpsIndex = config.indexOf('fastcgi_param HTTPS $mylocaldev_https;');
+    const schemeIndex = config.indexOf('fastcgi_param REQUEST_SCHEME $mylocaldev_request_scheme;');
+    const portIndex = config.indexOf('fastcgi_param SERVER_PORT $mylocaldev_server_port;');
 
     expect(includeIndex).toBeGreaterThan(-1);
     expect(includeIndex).toBeLessThan(httpsIndex);
@@ -149,10 +149,10 @@ describe('project/vhostNginx', () => {
     await ctx.createNginxVhost(project, 9957, '1.28');
 
     const [, config] = fs.writeFile.mock.calls.at(-1);
-    expect(config).toContain('set $devbox_forwarded_proto $scheme;');
-    expect(config).toContain('set $devbox_forwarded_proto https;');
-    expect(config).toContain('fastcgi_param HTTP_X_FORWARDED_PROTO $devbox_forwarded_proto;');
-    expect(config).toContain('fastcgi_param HTTP_X_FORWARDED_PORT $devbox_server_port;');
+    expect(config).toContain('set $mylocaldev_forwarded_proto $scheme;');
+    expect(config).toContain('set $mylocaldev_forwarded_proto https;');
+    expect(config).toContain('fastcgi_param HTTP_X_FORWARDED_PROTO $mylocaldev_forwarded_proto;');
+    expect(config).toContain('fastcgi_param HTTP_X_FORWARDED_PORT $mylocaldev_server_port;');
     expect(config).not.toContain('fastcgi_param HTTP_X_FORWARDED_PROTO $http_x_forwarded_proto;');
     expect(config).not.toContain('fastcgi_param HTTP_X_FORWARDED_PORT $http_x_forwarded_port;');
   });

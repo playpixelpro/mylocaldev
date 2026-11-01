@@ -272,7 +272,7 @@ describe('ConfigStore', () => {
         it('writes config to file and returns success', async () => {
             const fs = require('fs-extra');
             const os = require('os');
-            const filePath = path.join(os.tmpdir(), `devbox-test-export-${Date.now()}.json`);
+            const filePath = path.join(os.tmpdir(), `MyLocalDev-test-export-${Date.now()}.json`);
 
             try {
                 const result = await store.exportConfig(filePath);
@@ -301,7 +301,7 @@ describe('ConfigStore', () => {
         it('throws for invalid format (missing settings)', async () => {
             const fs = require('fs-extra');
             const os = require('os');
-            const filePath = path.join(os.tmpdir(), `devbox-test-invalid-${Date.now()}.json`);
+            const filePath = path.join(os.tmpdir(), `MyLocalDev-test-invalid-${Date.now()}.json`);
 
             try {
                 await fs.writeJson(filePath, { projects: [] }); // missing settings
@@ -315,7 +315,7 @@ describe('ConfigStore', () => {
         it('throws for invalid format (projects not array)', async () => {
             const fs = require('fs-extra');
             const os = require('os');
-            const filePath = path.join(os.tmpdir(), `devbox-test-invalid2-${Date.now()}.json`);
+            const filePath = path.join(os.tmpdir(), `MyLocalDev-test-invalid2-${Date.now()}.json`);
 
             try {
                 await fs.writeJson(filePath, { settings: {}, projects: 'not-array' });
@@ -329,7 +329,7 @@ describe('ConfigStore', () => {
         it('merges valid config with defaults', async () => {
             const fs = require('fs-extra');
             const os = require('os');
-            const filePath = path.join(os.tmpdir(), `devbox-test-valid-${Date.now()}.json`);
+            const filePath = path.join(os.tmpdir(), `MyLocalDev-test-valid-${Date.now()}.json`);
 
             try {
                 await fs.writeJson(filePath, {
@@ -357,21 +357,21 @@ describe('ConfigStore', () => {
         });
 
         it('normalizes stored dataPath to the resolved portable path', () => {
-            const installRoot = path.join(os.tmpdir(), `devboxpro-portable-${Date.now()}`);
+            const installRoot = path.join(os.tmpdir(), `MyLocalDev-portable-${Date.now()}`);
             fs.mkdirSync(installRoot, { recursive: true });
             fs.writeFileSync(path.join(installRoot, 'portable.flag'), '');
 
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(installRoot, 'DevBox Pro.exe');
+                    return path.join(installRoot, 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
 
             try {
                 const portableStore = new ConfigStore();
-                portableStore.set('dataPath', path.join(os.homedir(), '.devbox-pro'));
+                portableStore.set('dataPath', path.join(os.homedir(), '.mylocaldev'));
 
                 const normalizedPath = path.join(installRoot, 'data');
                 portableStore.normalizeDataPath();
@@ -385,14 +385,14 @@ describe('ConfigStore', () => {
         });
 
         it('defaults portable projects into the install folder', () => {
-            const installRoot = path.join(os.tmpdir(), `devboxpro-portable-projects-${Date.now()}`);
+            const installRoot = path.join(os.tmpdir(), `MyLocalDev-portable-projects-${Date.now()}`);
             fs.mkdirSync(installRoot, { recursive: true });
             fs.writeFileSync(path.join(installRoot, 'portable.flag'), '');
 
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(installRoot, 'DevBox Pro.exe');
+                    return path.join(installRoot, 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
@@ -408,14 +408,14 @@ describe('ConfigStore', () => {
         });
 
         it('migrates the old portable default projects path into the install folder', () => {
-            const installRoot = path.join(os.tmpdir(), `devboxpro-portable-migrate-${Date.now()}`);
+            const installRoot = path.join(os.tmpdir(), `MyLocalDev-portable-migrate-${Date.now()}`);
             fs.mkdirSync(installRoot, { recursive: true });
             fs.writeFileSync(path.join(installRoot, 'portable.flag'), '');
 
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(installRoot, 'DevBox Pro.exe');
+                    return path.join(installRoot, 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
@@ -434,14 +434,14 @@ describe('ConfigStore', () => {
         });
 
         it('preserves a custom portable projects path', () => {
-            const installRoot = path.join(os.tmpdir(), `devboxpro-portable-custom-${Date.now()}`);
+            const installRoot = path.join(os.tmpdir(), `MyLocalDev-portable-custom-${Date.now()}`);
             fs.mkdirSync(installRoot, { recursive: true });
             fs.writeFileSync(path.join(installRoot, 'portable.flag'), '');
 
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(installRoot, 'DevBox Pro.exe');
+                    return path.join(installRoot, 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
@@ -461,8 +461,8 @@ describe('ConfigStore', () => {
 
         it('normalizes back to the standard data path when a stale portable.flag exists in Local Programs', () => {
             const originalLocalAppData = process.env.LOCALAPPDATA;
-            const installRoot = path.join(os.tmpdir(), `devboxpro-standard-install-${Date.now()}`);
-            const exeDir = path.join(installRoot, 'Programs', 'DevBox Pro', 'DevBoxPro');
+            const installRoot = path.join(os.tmpdir(), `MyLocalDev-standard-install-${Date.now()}`);
+            const exeDir = path.join(installRoot, 'Programs', 'MyLocalDev', 'MyLocalDev');
             fs.mkdirSync(exeDir, { recursive: true });
             fs.writeFileSync(path.join(exeDir, 'portable.flag'), '');
 
@@ -471,7 +471,7 @@ describe('ConfigStore', () => {
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(exeDir, 'DevBoxPro.exe');
+                    return path.join(exeDir, 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
@@ -493,7 +493,7 @@ describe('ConfigStore', () => {
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(os.tmpdir(), 'devboxpro-standard', 'DevBox Pro.exe');
+                    return path.join(os.tmpdir(), 'MyLocalDev-standard', 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };
@@ -517,7 +517,7 @@ describe('ConfigStore', () => {
             const originalGetPath = mockApp.getPath;
             mockApp.getPath = (name) => {
                 if (name === 'exe') {
-                    return path.join(os.tmpdir(), 'devboxpro-standard-custom', 'DevBox Pro.exe');
+                    return path.join(os.tmpdir(), 'MyLocalDev-standard-custom', 'MyLocalDev.exe');
                 }
                 return originalGetPath(name);
             };

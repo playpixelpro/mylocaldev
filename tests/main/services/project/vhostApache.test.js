@@ -9,7 +9,7 @@ function makeContext(overrides = {}) {
   return {
     ...vhostApache,
     configStore: {
-      getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.devbox-pro'),
+      getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.mylocaldev'),
     },
     managers: {
       service: {
@@ -22,8 +22,8 @@ function makeContext(overrides = {}) {
         systemError: vi.fn(),
       },
     },
-    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.devbox-pro'),
-    getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/devbox-pro/resources'),
+    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.mylocaldev'),
+    getResourcesPath: vi.fn(() => 'C:/Users/Jeffrey/AppData/Roaming/MyLocalDev/resources'),
     getEffectiveWebServerVersion: vi.fn(() => '2.4'),
     getProjectServerAliasEntries: vi.fn(() => ['www.hrms.test', '*.hrms.test']),
     getProjectPrimaryDomain: vi.fn(() => 'hrms.test'),

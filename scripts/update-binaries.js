@@ -1,5 +1,5 @@
 /**
- * DevBox Pro - Automated Binary Manifest Updater
+ * MyLocalDev - Automated Binary Manifest Updater
  *
  * Checks official upstream sources for new releases, verifies download URLs,
  * updates config/binaries.json, and increments the manifest version.
@@ -20,7 +20,7 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || null;
 
 function getHeaders(extraHeaders = {}) {
   const headers = {
-    'User-Agent': 'DevBoxPro-BinaryUpdater/1.0',
+    'User-Agent': 'MyLocalDev-BinaryUpdater/1.0',
     Accept: 'application/json, text/html, */*',
     ...extraHeaders,
   };
@@ -548,7 +548,7 @@ async function main() {
   const isDryRun = process.argv.includes('--dry-run');
   const serviceFilter = process.argv.find((_, i, arr) => arr[i - 1] === '--service');
 
-  console.log(`\n=== DevBox Pro Binary Updater ===`);
+  console.log(`\n=== MyLocalDev Binary Updater ===`);
   console.log(`Config path: ${CONFIG_PATH}`);
   if (isDryRun) console.log('Mode: DRY RUN (no files will be written)');
   if (serviceFilter) console.log(`Filter: service=${serviceFilter}`);

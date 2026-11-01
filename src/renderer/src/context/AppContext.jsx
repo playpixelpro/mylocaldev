@@ -107,9 +107,9 @@ export function AppProvider({ children }) {
         dispatch({ type: 'SET_LOADING', payload: true });
 
         const [projects, services, settings] = await Promise.all([
-          window.devbox?.projects.getAll() || [],
-          window.devbox?.services.getStatus() || {},
-          window.devbox?.settings.getAll() || {},
+          window.mylocaldev?.projects.getAll() || [],
+          window.mylocaldev?.services.getStatus() || {},
+          window.mylocaldev?.settings.getAll() || {},
         ]);
 
         dispatch({ type: 'SET_PROJECTS', payload: projects });
@@ -128,31 +128,31 @@ export function AppProvider({ children }) {
 
   // Subscribe to events
   useEffect(() => {
-    if (!window.devbox) return;
+    if (!window.mylocaldev) return;
 
-    window.devbox.on('project:statusChanged', (data) => {
+    window.mylocaldev.on('project:statusChanged', (data) => {
       dispatch({ type: 'UPDATE_PROJECT', payload: data });
     });
 
-    window.devbox.on('service:statusChanged', (data) => {
+    window.mylocaldev.on('service:statusChanged', (data) => {
       dispatch({ type: 'UPDATE_SERVICE', payload: data });
     });
 
-    window.devbox.on('resource:update', (data) => {
+    window.mylocaldev.on('resource:update', (data) => {
       dispatch({ type: 'SET_RESOURCE_USAGE', payload: data });
     });
 
     // Auto-start loading state listeners
-    window.devbox.on('project:autoStarting', (data) => {
+    window.mylocaldev.on('project:autoStarting', (data) => {
       // Set loading state for this project
       dispatch({ type: 'SET_PROJECT_LOADING', payload: { projectId: data.projectId, loadingState: 'starting' } });
     });
 
-    window.devbox.on('project:autoStarted', (data) => {
+    window.mylocaldev.on('project:autoStarted', (data) => {
       // Clear loading state for this project
       dispatch({ type: 'CLEAR_PROJECT_LOADING', payload: data.projectId });
       // Refresh projects to get updated status
-      window.devbox?.projects?.getAll?.().then(projects => {
+      window.mylocaldev?.projects?.getAll?.().then(projects => {
         if (projects) {
           dispatch({ type: 'SET_PROJECTS', payload: projects });
         }
@@ -160,7 +160,7 @@ export function AppProvider({ children }) {
     });
 
     // Database import/export progress listeners - now with multi-operation support
-    const unsubImport = window.devbox?.database.onImportProgress?.((progress) => {
+    const unsubImport = window.mylocaldev?.database.onImportProgress?.((progress) => {
       if (!progress.operationId) return; // Ignore progress without operationId
       dispatch({ type: 'SET_DATABASE_OPERATION', payload: { type: 'import', ...progress } });
       // Auto-clear on complete/cancelled after 5 seconds, but NOT errors (user must dismiss manually)
@@ -170,7 +170,7 @@ export function AppProvider({ children }) {
         }, 5000);
       }
     });
-    const unsubExport = window.devbox?.database.onExportProgress?.((progress) => {
+    const unsubExport = window.mylocaldev?.database.onExportProgress?.((progress) => {
       if (!progress.operationId) return; // Ignore progress without operationId
       dispatch({ type: 'SET_DATABASE_OPERATION', payload: { type: 'export', ...progress } });
       // Auto-clear on complete/cancelled after 5 seconds, but NOT errors (user must dismiss manually)
@@ -182,7 +182,7 @@ export function AppProvider({ children }) {
     });
 
     // Binary download progress listener - persistent across navigation
-    const unsubBinaryProgress = window.devbox?.binaries.onProgress?.((id, progressData) => {
+    const unsubBinaryProgress = window.mylocaldev?.binaries.onProgress?.((id, progressData) => {
       dispatch({ type: 'SET_DOWNLOAD_PROGRESS', payload: { id, progress: progressData } });
 
       if (progressData.status === 'completed' || progressData.status === 'error') {
@@ -200,8 +200,8 @@ export function AppProvider({ children }) {
     // Also validate against installed binaries to clean up stale entries
     const syncActiveDownloads = async () => {
       try {
-        const activeDownloads = await window.devbox?.binaries.getActiveDownloads();
-        const installedBinaries = await window.devbox?.binaries.getInstalled();
+        const activeDownloads = await window.mylocaldev?.binaries.getActiveDownloads();
+        const installedBinaries = await window.mylocaldev?.binaries.getInstalled();
 
         if (activeDownloads && Object.keys(activeDownloads).length > 0) {
           for (const [id, progress] of Object.entries(activeDownloads)) {
@@ -240,7 +240,7 @@ export function AppProvider({ children }) {
   // Actions
   const refreshProjects = useCallback(async () => {
     try {
-      const projects = await window.devbox?.projects.getAll();
+      const projects = await window.mylocaldev?.projects.getAll();
       dispatch({ type: 'SET_PROJECTS', payload: projects || [] });
     } catch (error) {
       // Error refreshing projects
@@ -249,7 +249,7 @@ export function AppProvider({ children }) {
 
   const refreshServices = useCallback(async () => {
     try {
-      const services = await window.devbox?.services.getStatus();
+      const services = await window.mylocaldev?.services.getStatus();
       dispatch({ type: 'SET_SERVICES', payload: services || {} });
     } catch (error) {
       // Error refreshing services
@@ -258,7 +258,7 @@ export function AppProvider({ children }) {
 
   const refreshSettings = useCallback(async () => {
     try {
-      const settings = await window.devbox?.settings.getAll();
+      const settings = await window.mylocaldev?.settings.getAll();
       dispatch({ type: 'SET_SETTINGS', payload: settings || {} });
     } catch (error) {
       // Error refreshing settings
@@ -266,7 +266,7 @@ export function AppProvider({ children }) {
   }, []);
 
   const createProject = useCallback(async (config) => {
-    const project = await window.devbox?.projects.create(config);
+    const project = await window.mylocaldev?.projects.create(config);
     if (project) {
       dispatch({ type: 'ADD_PROJECT', payload: project });
     }
@@ -274,7 +274,7 @@ export function AppProvider({ children }) {
   }, []);
 
   const deleteProject = useCallback(async (id, deleteFiles = false) => {
-    await window.devbox?.projects.delete(id, deleteFiles);
+    await window.mylocaldev?.projects.delete(id, deleteFiles);
     dispatch({ type: 'REMOVE_PROJECT', payload: id });
   }, []);
 
@@ -284,7 +284,7 @@ export function AppProvider({ children }) {
     }
 
     try {
-      await window.devbox?.projects.reorder(projectIds);
+      await window.mylocaldev?.projects.reorder(projectIds);
       // Wait a moment then refresh to ensure we are in sync with the backend
       setTimeout(() => refreshProjects(), 100);
     } catch (error) {
@@ -296,7 +296,7 @@ export function AppProvider({ children }) {
 
   const startProject = useCallback(async (id) => {
     try {
-      const result = await window.devbox?.projects.start(id);
+      const result = await window.mylocaldev?.projects.start(id);
       await refreshProjects();
       return { success: true, ...result };
     } catch (error) {
@@ -308,7 +308,7 @@ export function AppProvider({ children }) {
 
   const stopProject = useCallback(async (id) => {
     try {
-      await window.devbox?.projects.stop(id);
+      await window.mylocaldev?.projects.stop(id);
       await refreshProjects();
       return { success: true };
     } catch (error) {
@@ -319,12 +319,12 @@ export function AppProvider({ children }) {
   }, [refreshProjects]);
 
   const startService = useCallback(async (name, version = null) => {
-    await window.devbox?.services.start(name, version);
+    await window.mylocaldev?.services.start(name, version);
     await refreshServices();
   }, [refreshServices]);
 
   const stopService = useCallback(async (name, version = null) => {
-    await window.devbox?.services.stop(name, version);
+    await window.mylocaldev?.services.stop(name, version);
     await refreshServices();
   }, [refreshServices]);
 
@@ -338,7 +338,7 @@ export function AppProvider({ children }) {
 
   const cancelDatabaseOperation = useCallback(async (operationId) => {
     try {
-      await window.devbox?.database.cancelOperation(operationId);
+      await window.mylocaldev?.database.cancelOperation(operationId);
       // The progress callback will handle the state update with 'cancelled' status
     } catch (error) {
       // If cancel fails, just remove the operation from state

@@ -6,11 +6,11 @@ import path from 'path';
 const pathResolver = require('../../../src/main/utils/PathResolver');
 
 describe('PathResolver', () => {
-    const exeDir = path.join(os.tmpdir(), 'devboxpro-portable-test');
-    const exePath = path.join(exeDir, 'DevBox Pro.exe');
-    const userDataPath = path.join(os.tmpdir(), 'devboxpro-electron-userdata');
-    const portableDir = path.join(os.tmpdir(), 'devboxpro-electron-builder-portable');
-    const mockedHomeDir = path.join(os.tmpdir(), 'devboxpro-pathresolver-home');
+    const exeDir = path.join(os.tmpdir(), 'MyLocalDev-portable-test');
+    const exePath = path.join(exeDir, 'MyLocalDev.exe');
+    const userDataPath = path.join(os.tmpdir(), 'MyLocalDev-electron-userdata');
+    const portableDir = path.join(os.tmpdir(), 'MyLocalDev-electron-builder-portable');
+    const mockedHomeDir = path.join(os.tmpdir(), 'MyLocalDev-pathresolver-home');
     const app = {
         getPath(name) {
             if (name === 'exe') return exePath;
@@ -26,6 +26,10 @@ describe('PathResolver', () => {
         fs.rmSync(portableDir, { recursive: true, force: true });
         fs.rmSync(mockedHomeDir, { recursive: true, force: true });
         fs.mkdirSync(exeDir, { recursive: true });
+        fs.mkdirSync(mockedHomeDir, { recursive: true });
+        // Keep the tests hermetic: the host machine may still have a legacy
+        // ~/.devbox-pro directory left by a previous installation.
+        vi.spyOn(os, 'homedir').mockReturnValue(mockedHomeDir);
         delete process.env.PORTABLE_EXECUTABLE_DIR;
     });
 
@@ -66,12 +70,12 @@ describe('PathResolver', () => {
         pathResolver.__resetForTests();
 
         expect(pathResolver.getPortableRoot(app)).toBeNull();
-        expect(pathResolver.getDataPath(app)).toBe(path.join(os.homedir(), '.devbox-pro'));
+        expect(pathResolver.getDataPath(app)).toBe(path.join(os.homedir(), '.mylocaldev'));
         expect(pathResolver.getResourcesPath(app)).toBe(path.join(userDataPath, 'resources'));
     });
 
     it('returns standard paths when not portable', () => {
-        expect(pathResolver.getDataPath(app)).toBe(path.join(os.homedir(), '.devbox-pro'));
+        expect(pathResolver.getDataPath(app)).toBe(path.join(os.homedir(), '.mylocaldev'));
         expect(pathResolver.getResourcesPath(app)).toBe(path.join(userDataPath, 'resources'));
         expect(pathResolver.getAppCachePath(app, 'binaries-config.json')).toBe(path.join(userDataPath, 'binaries-config.json'));
     });
@@ -86,9 +90,9 @@ describe('PathResolver', () => {
 
     it('ignores stale portable.flag files in the standard Windows install directory', () => {
         const originalLocalAppData = process.env.LOCALAPPDATA;
-        const standardInstallRoot = path.join(os.tmpdir(), 'devboxpro-standard-install-root');
-        const standardExeDir = path.join(standardInstallRoot, 'Programs', 'DevBox Pro', 'DevBoxPro');
-        const standardExePath = path.join(standardExeDir, 'DevBoxPro.exe');
+        const standardInstallRoot = path.join(os.tmpdir(), 'MyLocalDev-standard-install-root');
+        const standardExeDir = path.join(standardInstallRoot, 'Programs', 'MyLocalDev', 'MyLocalDev');
+        const standardExePath = path.join(standardExeDir, 'MyLocalDev.exe');
         const standardApp = {
             getPath(name) {
                 if (name === 'exe') return standardExePath;
@@ -104,7 +108,7 @@ describe('PathResolver', () => {
 
         try {
             expect(pathResolver.getPortableRoot(standardApp)).toBeNull();
-            expect(pathResolver.getDataPath(standardApp)).toBe(path.join(os.homedir(), '.devbox-pro'));
+            expect(pathResolver.getDataPath(standardApp)).toBe(path.join(os.homedir(), '.mylocaldev'));
         } finally {
             process.env.LOCALAPPDATA = originalLocalAppData;
             fs.rmSync(standardInstallRoot, { recursive: true, force: true });

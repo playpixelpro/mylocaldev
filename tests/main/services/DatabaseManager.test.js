@@ -325,10 +325,10 @@ describe('DatabaseManager', () => {
 
         it('uses the binary runtime directory as cwd for mysql client processes', () => {
             const { mgr } = makeDbManager({ activeDatabaseType: 'mysql' });
-            const binaryPath = 'C:/Users/test/AppData/Roaming/devbox-pro/resources/mysql/8.4/win/bin/mysql.exe';
+            const binaryPath = 'C:/Users/test/AppData/Roaming/MyLocalDev/resources/mysql/8.4/win/bin/mysql.exe';
             const options = mgr.buildBinarySpawnOptions(binaryPath, { stdio: ['pipe', 'pipe', 'pipe'] });
 
-            expect(options.cwd).toBe('C:/Users/test/AppData/Roaming/devbox-pro/resources/mysql/8.4/win');
+            expect(options.cwd).toBe('C:/Users/test/AppData/Roaming/MyLocalDev/resources/mysql/8.4/win');
             expect(options.windowsHide).toBe(true);
         });
     });

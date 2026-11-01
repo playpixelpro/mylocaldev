@@ -1,4 +1,4 @@
-# DevBox Pro - Icon Resources
+# MyLocalDev - Icon Resources
 
 This directory should contain the following icon files for building the application:
 
@@ -31,5 +31,5 @@ This directory should contain the following icon files for building the applicat
 
 - Use a clean, modern design
 - Ensure visibility at small sizes
-- Use the DevBox Pro brand colors (blue gradient #2563eb to #3b82f6)
+- Use the MyLocalDev brand colors (blue gradient #2563eb to #3b82f6)
 - Include transparency where appropriate

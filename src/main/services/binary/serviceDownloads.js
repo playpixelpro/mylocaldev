@@ -13,7 +13,7 @@ module.exports = {
         hostname: 'api.github.com',
         path: `/repos/${repo}/releases/latest`,
         headers: {
-          'User-Agent': 'DevBoxPro-App',
+          'User-Agent': 'MyLocalDev-App',
           Accept: 'application/vnd.github.v3+json',
         },
       }, (response) => {
@@ -382,7 +382,7 @@ module.exports = {
   async createPhpMyAdminConfig(pmaPath) {
     const configContent = `<?php
 /**
- * phpMyAdmin configuration for DevBox Pro
+ * phpMyAdmin configuration for MyLocalDev
  */
 
 $cfg['blowfish_secret'] = '${this.generateSecret(32)}';
@@ -472,7 +472,7 @@ http {
     await fs.writeFile(path.join(confDir, 'nginx.conf'), mainConfig);
 
     const defaultSite = `
-# Default DevBox Pro Site
+# Default MyLocalDev Site
 # Copy this file and modify for each project
 
 server {
@@ -621,10 +621,10 @@ server {
 
     const phpConfig = `
 # PHP Configuration for Apache
-# DevBox Pro will configure the correct PHP path automatically
+# MyLocalDev will configure the correct PHP path automatically
 
 # Load PHP module (Windows example - adjust path based on PHP version)
-# LoadModule php_module "C:/devbox/php/8.3/win/php8apache2_4.dll"
+# LoadModule php_module "C:/MyLocalDev/php/8.3/win/php8apache2_4.dll"
 
 # For PHP-FPM (recommended)
 <FilesMatch \.php$>
@@ -643,7 +643,7 @@ AddType application/x-httpd-php-source .phps
     await fs.writeFile(path.join(extraDir, 'httpd-php.conf'), phpConfig);
 
     const vhostTemplate = `
-# DevBox Pro Virtual Host Template
+# MyLocalDev Virtual Host Template
 # Copy and modify for each project
 
 <VirtualHost *:80>

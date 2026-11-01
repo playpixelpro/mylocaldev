@@ -1,9 +1,9 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro SSL Configuration', () => {
+test.describe('MyLocalDev SSL Configuration', () => {
     test('Can toggle SSL setting', async ({ page }) => {
         // Wait for the app to load
-        await expect(page.locator('text=DevBox Pro')).toBeVisible();
+        await expect(page.locator('text=MyLocalDev')).toBeVisible();
 
         // Go to Settings
         await page.click('a:has-text("Settings")');

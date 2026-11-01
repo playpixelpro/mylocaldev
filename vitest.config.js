@@ -5,7 +5,7 @@ export default defineConfig({
     // Global define for build-time constants (applies to all projects)
     define: {
         '__APP_VERSION__': JSON.stringify('1.0.0-test'),
-        '__APP_NAME__': JSON.stringify('devbox-pro'),
+        '__APP_NAME__': JSON.stringify('MyLocalDev'),
     },
     test: {
         globals: true,
@@ -17,7 +17,7 @@ export default defineConfig({
             {
                 define: {
                     '__APP_VERSION__': JSON.stringify('1.0.0-test'),
-                    '__APP_NAME__': JSON.stringify('devbox-pro'),
+                    '__APP_NAME__': JSON.stringify('MyLocalDev'),
                 },
                 test: {
                     name: 'main',
@@ -29,7 +29,7 @@ export default defineConfig({
             {
                 define: {
                     '__APP_VERSION__': JSON.stringify('1.0.0-test'),
-                    '__APP_NAME__': JSON.stringify('devbox-pro'),
+                    '__APP_NAME__': JSON.stringify('MyLocalDev'),
                 },
                 test: {
                     name: 'renderer',

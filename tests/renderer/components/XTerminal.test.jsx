@@ -21,29 +21,37 @@ afterEach(cleanup);
 // ─────────────────────────────────────────────────────────────────────────────
 
 vi.mock('xterm', () => {
-    const Terminal = vi.fn().mockImplementation(() => ({
-        open: vi.fn(),
-        write: vi.fn(),
-        writeln: vi.fn(),
-        clear: vi.fn(),
-        focus: vi.fn(),
-        dispose: vi.fn(),
-        onData: vi.fn(),
-        loadAddon: vi.fn(),
-        options: {},
-    }));
+    class Terminal {
+        constructor() {
+            this.open = vi.fn();
+            this.write = vi.fn();
+            this.writeln = vi.fn();
+            this.clear = vi.fn();
+            this.focus = vi.fn();
+            this.dispose = vi.fn();
+            this.onData = vi.fn();
+            this.onSelectionChange = vi.fn();
+            this.getSelection = vi.fn(() => '');
+            this.hasSelection = vi.fn(() => false);
+            this.clearSelection = vi.fn();
+            this.loadAddon = vi.fn();
+            this.options = {};
+        }
+    }
     return { Terminal };
 });
 
 vi.mock('@xterm/addon-fit', () => ({
-    FitAddon: vi.fn().mockImplementation(() => ({
-        fit: vi.fn(),
-        dispose: vi.fn(),
-    })),
+    FitAddon: class {
+        constructor() {
+            this.fit = vi.fn();
+            this.dispose = vi.fn();
+        }
+    },
 }));
 
 vi.mock('@xterm/addon-web-links', () => ({
-    WebLinksAddon: vi.fn().mockImplementation(() => ({})),
+    WebLinksAddon: class {},
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────

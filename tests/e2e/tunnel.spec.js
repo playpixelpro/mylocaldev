@@ -38,7 +38,7 @@ async function createCustomProject(page, uniqueProjectName) {
   await expect(page.locator(`h1:has-text("${uniqueProjectName}")`).or(page.locator(`h2:has-text("${uniqueProjectName}")`))).toBeVisible({ timeout: 15000 });
 }
 
-test.describe('DevBoxPro Tunnel Smoke Tests', () => {
+test.describe('MyLocalDev Tunnel Smoke Tests', () => {
   test('shows tunnel tools in Binaries and readiness in Services', async ({ page }) => {
     await page.click('a:has-text("Binaries")');
     await expect(page.locator('h1:has-text("Binary")').or(page.locator('h2:has-text("Binary")'))).toBeVisible();

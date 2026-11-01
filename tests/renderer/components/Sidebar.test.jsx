@@ -31,7 +31,7 @@ describe('Sidebar', () => {
     describe('Rendering', () => {
         it('renders the app name', () => {
             renderSidebar();
-            expect(screen.getByText('DevBox Pro')).toBeInTheDocument();
+            expect(screen.getByText('MyLocalDev')).toBeInTheDocument();
         });
 
         it('renders all navigation items', () => {

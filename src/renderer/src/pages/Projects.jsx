@@ -35,7 +35,7 @@ import clsx from 'clsx';
 import ImportProjectModal from '../components/ImportProjectModal';
 import { formatPhpRuntimeLabel } from '../utils/phpRuntime';
 
-const VIEW_MODE_KEY = 'devbox_projects_view_mode';
+const VIEW_MODE_KEY = 'mylocaldev_projects_view_mode';
 
 function ServiceBadges({ project, compact = false }) {
   const badges = [];
@@ -319,7 +319,7 @@ function Projects() {
 
     try {
       // Open folder picker dialog
-      const newFolderPath = await window.devbox?.system.selectDirectory();
+      const newFolderPath = await window.mylocaldev?.system.selectDirectory();
       if (!newFolderPath) {
         return; // User cancelled
       }
@@ -330,7 +330,7 @@ function Projects() {
 
       setIsMoving(true);
 
-      await window.devbox?.projects.move(moveModal.project.id, newPath);
+      await window.mylocaldev?.projects.move(moveModal.project.id, newPath);
 
       setMoveModal({ open: false, project: null });
       refreshProjects?.();
@@ -358,7 +358,7 @@ function Projects() {
   const handleScanProjects = async () => {
     setIsScanning(true);
     try {
-      const discovered = await window.devbox?.projects.scanUnregistered();
+      const discovered = await window.mylocaldev?.projects.scanUnregistered();
       setDiscoveredProjects(discovered || []);
       if (discovered?.length > 0) {
         setShowDiscovered(true);
@@ -373,7 +373,7 @@ function Projects() {
   const handleImportFolder = async () => {
     try {
       // Open folder picker dialog
-      const folderPath = await window.devbox?.system.selectDirectory();
+      const folderPath = await window.mylocaldev?.system.selectDirectory();
       if (!folderPath) return; // User cancelled
 
       // Check if project is already registered
@@ -384,7 +384,7 @@ function Projects() {
       }
 
       // Detect project type from folder contents
-      const projectInfo = await window.devbox?.projects.detectType(folderPath);
+      const projectInfo = await window.mylocaldev?.projects.detectType(folderPath);
 
       // Open import modal with detected info
       setImportModal({
@@ -403,7 +403,7 @@ function Projects() {
 
   const handleImportProject = async (config) => {
     try {
-      await window.devbox?.projects.registerExisting(config);
+      await window.mylocaldev?.projects.registerExisting(config);
       // Remove from discovered list
       setDiscoveredProjects((prev) => prev.filter((p) => p.path !== config.path));
       setImportModal({ open: false, project: null });
@@ -1001,7 +1001,7 @@ function ProjectCard({ project, onStart, onStop, onDelete, onMove, defaultEditor
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      window.devbox?.projects.openFolder(project.id);
+                      window.mylocaldev?.projects.openFolder(project.id);
                       setShowMenu(false);
                     }}
                     className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
@@ -1027,7 +1027,7 @@ function ProjectCard({ project, onStart, onStop, onDelete, onMove, defaultEditor
                       e.preventDefault();
                       setError(null);
                       try {
-                        await window.devbox?.projects.openInEditor(project.id, defaultEditor || 'vscode');
+                        await window.mylocaldev?.projects.openInEditor(project.id, defaultEditor || 'vscode');
                       } catch (err) {
                         setError(err.message || 'Failed to open in editor');
                       }
@@ -1141,7 +1141,7 @@ function ProjectCard({ project, onStart, onStop, onDelete, onMove, defaultEditor
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();
-              window.devbox?.projects.openInBrowser(project.id);
+              window.mylocaldev?.projects.openInBrowser(project.id);
             }}
             className="btn-ghost btn-sm"
           >
@@ -1292,7 +1292,7 @@ function ProjectTableRow({ project, onStart, onStop, onDelete, onMove, defaultEd
           {project.isRunning ? (
             <>
               <button
-                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.devbox?.projects.openInBrowser(project.id); }}
+                onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.mylocaldev?.projects.openInBrowser(project.id); }}
                 className="btn-ghost btn-icon btn-sm"
                 title="Open in browser"
               >
@@ -1334,7 +1334,7 @@ function ProjectTableRow({ project, onStart, onStop, onDelete, onMove, defaultEd
                 onMouseLeave={() => setShowMenu(false)}
               >
                 <button
-                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.devbox?.projects.openFolder(project.id); setShowMenu(false); }}
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); window.mylocaldev?.projects.openFolder(project.id); setShowMenu(false); }}
                   className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                 >
                   <Folder className="w-4 h-4" /> Open Folder
@@ -1346,7 +1346,7 @@ function ProjectTableRow({ project, onStart, onStop, onDelete, onMove, defaultEd
                   <FolderOutput className="w-4 h-4" /> Move Project
                 </button>
                 <button
-                  onClick={async (e) => { e.stopPropagation(); e.preventDefault(); setError(null); try { await window.devbox?.projects.openInEditor(project.id, defaultEditor || 'vscode'); } catch (err) { setError(err.message || 'Failed to open in editor'); } setShowMenu(false); }}
+                  onClick={async (e) => { e.stopPropagation(); e.preventDefault(); setError(null); try { await window.mylocaldev?.projects.openInEditor(project.id, defaultEditor || 'vscode'); } catch (err) { setError(err.message || 'Failed to open in editor'); } setShowMenu(false); }}
                   className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
                 >
                   <Code className="w-4 h-4" /> Open in Editor

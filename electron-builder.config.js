@@ -3,9 +3,9 @@
  * @see https://www.electron.build/configuration/configuration
  */
 module.exports = {
-  appId: 'com.devbox.pro',
-  productName: 'DevBox Pro',
-  copyright: 'Copyright © 2024 DevBox Pro',
+  appId: 'com.playpixelpro.mylocaldev',
+  productName: 'MyLocalDev',
+  copyright: 'Copyright © 2026 PlayPixelPro',
   asar: true,
   // Use the Electron binary already downloaded by `npm install` (node_modules/electron/dist)
   // This avoids re-downloading 138MB from GitHub during every build.
@@ -37,6 +37,14 @@ module.exports = {
     'node_modules/universalify/**/*',
   ],
   extraFiles: [
+    {
+      from: 'NOTICE',
+      to: 'NOTICE',
+    },
+    {
+      from: 'LICENSE',
+      to: 'LICENSE',
+    },
     {
       from: 'build/icon.png',
       to: 'icon.png',
@@ -79,7 +87,7 @@ module.exports = {
     },
   ],
   win: {
-    executableName: 'DevBoxPro',
+    executableName: 'MyLocalDev',
     target: [
       {
         target: 'nsis',
@@ -97,12 +105,12 @@ module.exports = {
     allowToChangeInstallationDirectory: true,
     createDesktopShortcut: true,
     createStartMenuShortcut: true,
-    shortcutName: 'DevBox Pro',
+    shortcutName: 'MyLocalDev',
     include: 'resources/installer.nsh',
-    artifactName: 'DevBox-Pro-Setup-${version}.${ext}',
+    artifactName: 'MyLocalDev-Setup-${version}.${ext}',
   },
   portable: {
-    artifactName: 'DevBox-Pro-${version}.${ext}',
+    artifactName: 'MyLocalDev-${version}.${ext}',
   },
   mac: {
     target: [
@@ -115,7 +123,7 @@ module.exports = {
         arch: ['x64', 'arm64'],
       },
     ],
-    icon: 'resources/icons/icon.icns',
+    icon: 'build/icon.png',
     category: 'public.app-category.developer-tools',
     hardenedRuntime: true,
     gatekeeperAssess: false,
@@ -152,13 +160,13 @@ module.exports = {
         arch: ['x64'],
       },
     ],
-    icon: 'resources/icons',
+    icon: 'build/icon.png',
     category: 'Development',
     artifactName: '${productName}-${version}-${os}-${arch}.${ext}',
   },
   publish: {
     provider: 'github',
-    owner: 'JeffGepiga',
-    repo: 'DevBoxPro',
+    owner: 'playpixelpro',
+    repo: 'mylocaldev',
   },
 };

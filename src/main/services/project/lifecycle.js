@@ -422,11 +422,15 @@ module.exports = {
       ? this.managers.php.getProductionPhpCgiArgs(phpVersion)
       : [];
 
+    const projectEnvOverrides = typeof this.getEnvOverrides === 'function'
+      ? await this.getEnvOverrides(project)
+      : {};
+
     const phpCgiProcess = spawnHidden(phpCgiPath, [...prodPhpArgs, '-b', `127.0.0.1:${actualPort}`], {
       cwd: project.path,
       env: {
         ...process.env,
-        ...project.environment,
+        ...projectEnvOverrides,
         PHP_FCGI_MAX_REQUESTS: '0',
         PHP_FCGI_CHILDREN: isProd ? '8' : '4',
       },

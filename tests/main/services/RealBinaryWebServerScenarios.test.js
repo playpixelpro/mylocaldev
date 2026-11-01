@@ -6,9 +6,9 @@ import net from 'net';
 import { randomUUID } from 'crypto';
 import fs from 'fs-extra';
 
-let currentUserDataPath = path.join(os.tmpdir(), 'devboxpro-real-binary-tests', 'default');
-let currentProjectRootPath = path.join(os.tmpdir(), 'devboxpro-real-binary-projects');
-let currentAppDataPath = path.join(os.tmpdir(), 'devboxpro-real-binary-appdata', 'default');
+let currentUserDataPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-tests', 'default');
+let currentProjectRootPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-projects');
+let currentAppDataPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-appdata', 'default');
 let activeScenario = null;
 
 const mockApp = {
@@ -20,7 +20,7 @@ const mockApp = {
             temp: os.tmpdir(),
         };
 
-        return paths[name] || path.join(os.tmpdir(), `devboxpro-real-binary-${name}`);
+        return paths[name] || path.join(os.tmpdir(), `MyLocalDev-real-binary-${name}`);
     },
     getVersion: () => '1.0.0-test',
     isPackaged: false,
@@ -65,10 +65,10 @@ const { ServiceManager } = require('../../../src/main/services/ServiceManager');
 const { ProjectManager } = require('../../../src/main/services/ProjectManager');
 const { isPortAvailable } = require('../../../src/main/utils/PortUtils');
 
-const resourcesRoot = process.env.DEVBOX_REAL_RESOURCES_PATH
+const resourcesRoot = process.env.mylocaldev_REAL_RESOURCES_PATH
     || (process.platform === 'win32' && process.env.APPDATA
-        ? path.join(process.env.APPDATA, 'devbox-pro', 'resources')
-        : path.join(os.homedir(), '.devbox-pro', 'resources'));
+        ? path.join(process.env.APPDATA, 'MyLocalDev', 'resources')
+        : path.join(os.homedir(), '.mylocaldev', 'resources'));
 
 const platform = process.platform === 'win32' ? 'win' : process.platform === 'darwin' ? 'mac' : 'linux';
 
@@ -369,9 +369,9 @@ function getFrontDoorInfo(serviceManager) {
 }
 
 async function prepareScenarioPaths(scenarioId = randomUUID()) {
-    currentUserDataPath = path.join(os.tmpdir(), 'devboxpro-real-binary-tests', scenarioId, 'userData');
-    currentProjectRootPath = path.join(os.tmpdir(), 'devboxpro-real-binary-projects', scenarioId);
-    currentAppDataPath = path.join(os.tmpdir(), 'devboxpro-real-binary-appdata', scenarioId);
+    currentUserDataPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-tests', scenarioId, 'userData');
+    currentProjectRootPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-projects', scenarioId);
+    currentAppDataPath = path.join(os.tmpdir(), 'MyLocalDev-real-binary-appdata', scenarioId);
 
     await fs.remove(currentUserDataPath);
     await fs.remove(currentProjectRootPath);
@@ -489,7 +489,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
 
         activeScenario = null;
 
-        if (process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+        if (process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
             return;
         }
 
@@ -554,7 +554,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             });
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             await stopProjectIfRunning(projectManager, project.id);
@@ -671,7 +671,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             });
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [nginx128ProjectB, nginx126Project, nginx128ProjectA, apacheProject]) {
@@ -758,7 +758,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             });
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [nginxProjectB, nginxProjectA, apacheProjectB, apacheProjectA]) {
@@ -833,7 +833,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             await waitForResponse(serviceManager.getServicePorts('nginx', '1.28').httpPort, nginxProject.domain, nginxProject.name);
             testPassed = true;
         } catch (error) {
-            if (process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 await dumpScenarioDiagnostics('rapid-toggle-standard-port-failure', activeScenario, {
                     error: error.message,
                     apacheProjectId: apacheProject.id,
@@ -842,7 +842,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             }
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [nginxProject, apacheProject]) {
@@ -914,7 +914,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             });
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [apacheProject, nginxProject]) {
@@ -980,7 +980,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
 
             testPassed = true;
         } catch (error) {
-            if (process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 await dumpScenarioDiagnostics('manual-service-restart-front-door-failure', activeScenario, {
                     error: error.message,
                     nginxProjectId: nginxProject.id,
@@ -989,7 +989,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             }
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [apacheProject, nginxProject]) {
@@ -1051,7 +1051,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             });
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             await stopProjectIfRunning(projectManager, redisProject.id);
@@ -1144,7 +1144,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             await waitForResponse(serviceManager.getServicePorts('nginx', '1.24').httpPort, nginx124Project.domain, nginx124Project.name);
             testPassed = true;
         } catch (error) {
-            if (process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 await dumpScenarioDiagnostics('mixed-front-door-nginx124-failure', activeScenario, {
                     error: error.message,
                     nginx128ProjectId: nginx128Project.id,
@@ -1154,7 +1154,7 @@ describeIfBinariesInstalled('Real Binary Web Server Scenarios', () => {
             }
             throw error;
         } finally {
-            if (!testPassed && process.env.DEVBOX_KEEP_REAL_BINARY_ARTIFACTS === '1') {
+            if (!testPassed && process.env.mylocaldev_KEEP_REAL_BINARY_ARTIFACTS === '1') {
                 return;
             }
             for (const project of [nginx124Project, apacheProject, nginx128Project]) {

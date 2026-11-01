@@ -16,14 +16,14 @@ function setPlatform(value) {
 function makeContext(overrides = {}) {
   return {
     ...cliShims,
-    resourcesPath: 'C:/DevBox/resources',
+    resourcesPath: 'C:/MyLocalDev/resources',
     configStore: {
       get: vi.fn((key, fallback) => fallback),
       set: vi.fn(),
     },
-    getCliPath: vi.fn(() => 'C:/DevBox/cli'),
-    syncProjectsFile: vi.fn(async () => 'C:/DevBox/cli/projects.json'),
-    getProjectsFilePath: vi.fn(() => 'C:/DevBox/cli/projects.json'),
+    getCliPath: vi.fn(() => 'C:/MyLocalDev/cli'),
+    syncProjectsFile: vi.fn(async () => 'C:/MyLocalDev/cli/projects.json'),
+    getProjectsFilePath: vi.fn(() => 'C:/MyLocalDev/cli/projects.json'),
     getDefaultPhpVersion: vi.fn(() => '8.4'),
     getFirstInstalledPhpVersion: vi.fn(() => '8.3'),
     getDefaultNodeVersion: vi.fn(() => '22'),
@@ -75,50 +75,50 @@ describe('cli/shims', () => {
 
     const result = await ctx.installDirectShims();
 
-    expect(fs.ensureDir).toHaveBeenCalledWith('C:/DevBox/cli');
+    expect(fs.ensureDir).toHaveBeenCalledWith('C:/MyLocalDev/cli');
     expect(ctx.syncProjectsFile).toHaveBeenCalled();
-    expect(ctx.installWindowsDirectShims).toHaveBeenCalledWith('C:/DevBox/cli');
-    expect(result).toEqual({ success: true, path: 'C:/DevBox/cli' });
+    expect(ctx.installWindowsDirectShims).toHaveBeenCalledWith('C:/MyLocalDev/cli');
+    expect(result).toEqual({ success: true, path: 'C:/MyLocalDev/cli' });
   });
 
   it('removes existing shim files for the active platform extension', async () => {
     const ctx = makeContext();
     vi.spyOn(fs, 'pathExists').mockImplementation(async (targetPath) => {
-      return [path.join('C:/DevBox/cli', 'php.cmd'), path.join('C:/DevBox/cli', 'composer.cmd')].includes(targetPath);
+      return [path.join('C:/MyLocalDev/cli', 'php.cmd'), path.join('C:/MyLocalDev/cli', 'composer.cmd')].includes(targetPath);
     });
     const removeSpy = vi.spyOn(fs, 'remove').mockResolvedValue(undefined);
 
     const result = await ctx.removeDirectShims();
 
     expect(result).toEqual({ success: true });
-    expect(removeSpy).toHaveBeenCalledWith(path.join('C:/DevBox/cli', 'php.cmd'));
-    expect(removeSpy).toHaveBeenCalledWith(path.join('C:/DevBox/cli', 'composer.cmd'));
+    expect(removeSpy).toHaveBeenCalledWith(path.join('C:/MyLocalDev/cli', 'php.cmd'));
+    expect(removeSpy).toHaveBeenCalledWith(path.join('C:/MyLocalDev/cli', 'composer.cmd'));
   });
 
   it('writes Windows direct shim files with the configured default runtime values', async () => {
     const ctx = makeContext();
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
 
-    const result = await ctx.installWindowsDirectShims('C:/DevBox/cli');
+    const result = await ctx.installWindowsDirectShims('C:/MyLocalDev/cli');
 
     expect(result).toBe(true);
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('C:/DevBox/cli', 'php.cmd'),
+      path.join('C:/MyLocalDev/cli', 'php.cmd'),
       expect.stringContaining('set "DEFAULT_PHP=8.4"'),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('C:/DevBox/cli', 'php.cmd'),
+      path.join('C:/MyLocalDev/cli', 'php.cmd'),
       expect.stringContaining("for /f \"tokens=*\" %%i in ('where php 2^>nul') do ("),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('C:/DevBox/cli', 'composer.cmd'),
-      expect.stringContaining('set "COMPOSER_PATH=%DEVBOX_RESOURCES%\\composer\\composer.phar"'),
+      path.join('C:/MyLocalDev/cli', 'composer.cmd'),
+      expect.stringContaining('set "COMPOSER_PATH=%MYLOCALDEV_RESOURCES%\\composer\\composer.phar"'),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('C:/DevBox/cli', 'pip.cmd'),
+      path.join('C:/MyLocalDev/cli', 'pip.cmd'),
       expect.stringContaining('set "DEFAULT_PYTHON=3.13"'),
       'utf8'
     );
@@ -127,27 +127,27 @@ describe('cli/shims', () => {
   it('writes a Unix php shim that skips its own shim path before falling back to system php', async () => {
     setPlatform('linux');
     const ctx = makeContext({
-      resourcesPath: '/opt/devbox/resources',
-      getCliPath: vi.fn(() => '/opt/devbox/cli'),
-      syncProjectsFile: vi.fn(async () => '/opt/devbox/cli/projects.json'),
-      getProjectsFilePath: vi.fn(() => '/opt/devbox/cli/projects.json'),
+      resourcesPath: '/opt/MyLocalDev/resources',
+      getCliPath: vi.fn(() => '/opt/MyLocalDev/cli'),
+      syncProjectsFile: vi.fn(async () => '/opt/MyLocalDev/cli/projects.json'),
+      getProjectsFilePath: vi.fn(() => '/opt/MyLocalDev/cli/projects.json'),
     });
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
     const chmodSpy = vi.spyOn(fs, 'chmod').mockResolvedValue(undefined);
 
-    const result = await ctx.installUnixDirectShims('/opt/devbox/cli');
+    const result = await ctx.installUnixDirectShims('/opt/MyLocalDev/cli');
 
     expect(result).toBe(true);
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('/opt/devbox/cli', 'php'),
+      path.join('/opt/MyLocalDev/cli', 'php'),
       expect.stringContaining('SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"'),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('/opt/devbox/cli', 'php'),
+      path.join('/opt/MyLocalDev/cli', 'php'),
       expect.stringContaining('if [ "$candidate_dir" != "$SCRIPT_DIR" ]; then'),
       'utf8'
     );
-    expect(chmodSpy).toHaveBeenCalledWith(path.join('/opt/devbox/cli', 'php'), 0o755);
+    expect(chmodSpy).toHaveBeenCalledWith(path.join('/opt/MyLocalDev/cli', 'php'), 0o755);
   });
 });

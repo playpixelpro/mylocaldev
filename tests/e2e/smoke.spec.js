@@ -1,13 +1,13 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro Core Smoke Tests', () => {
+test.describe('MyLocalDev Core Smoke Tests', () => {
 
     test('App launches and displays the dashboard', async ({ page }) => {
         // Wait for the window title to be set (App title is managed by Main process usually, or Document title)
-        await expect(page).toHaveTitle(/DevBox Pro|Dashboard/i);
+        await expect(page).toHaveTitle(/MyLocalDev|Dashboard/i);
 
         // Sidebar should be visible
-        await expect(page.locator('text=DevBox Pro')).toBeVisible();
+        await expect(page.locator('text=MyLocalDev')).toBeVisible();
         await expect(page.locator('a:has-text("Dashboard")')).toBeVisible();
 
         // Main content area should say Dashboard

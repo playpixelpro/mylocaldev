@@ -1,6 +1,6 @@
-# DevBox Pro Remote Configuration
+# MyLocalDev Remote Configuration
 
-This folder contains remote configuration files that can be updated without releasing a new app version. Users can check for updates from the **Settings > Advanced** section in DevBox Pro.
+This folder contains remote configuration files that can be updated without releasing a new app version. Users can check for updates from the **Settings > Advanced** section in MyLocalDev.
 
 ## Files
 
@@ -155,8 +155,8 @@ You can use placeholders in messages that get replaced with actual values:
 ## Remote URLs
 
 The app fetches from these URLs:
-- Binaries: `https://raw.githubusercontent.com/JeffGepiga/DevBoxPro/main/config/binaries.json`
-- Compatibility: `https://raw.githubusercontent.com/JeffGepiga/DevBoxPro/main/config/compatibility.json`
+- Binaries: `https://raw.githubusercontent.com/playpixelpro/mylocaldev/main/config/binaries.json`
+- Compatibility: `https://raw.githubusercontent.com/playpixelpro/mylocaldev/main/config/compatibility.json`
 
 ## Testing Changes
 

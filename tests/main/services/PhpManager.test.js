@@ -352,4 +352,54 @@ describe('PhpManager', () => {
             expect(exts).toEqual([]);
         });
     });
+
+    // ─────────────────────────────────────────────────────────────
+    // ensureVariablesOrderIncludesEnv()
+    // ─────────────────────────────────────────────────────────────
+
+    describe('ensureVariablesOrderIncludesEnv()', () => {
+        it('adds the E flag to the bundled GPCS default', async () => {
+            const phpDir = path.join(tmpDir, 'php84');
+            await fs.ensureDir(phpDir);
+            await fs.writeFile(path.join(phpDir, 'php.ini'), '[PHP]\nvariables_order = "GPCS"\nrequest_order = "GP"\n');
+
+            const changed = await pm.ensureVariablesOrderIncludesEnv(phpDir);
+
+            expect(changed).toBe(true);
+            const content = await fs.readFile(path.join(phpDir, 'php.ini'), 'utf-8');
+            expect(content).toContain('variables_order = "EGPCS"');
+            expect(content).toContain('request_order = "GP"');
+        });
+
+        it('is a no-op when the E flag is already present', async () => {
+            const phpDir = path.join(tmpDir, 'php83e');
+            await fs.ensureDir(phpDir);
+            const original = 'variables_order = "EGPCS"\n';
+            await fs.writeFile(path.join(phpDir, 'php.ini'), original);
+
+            const changed = await pm.ensureVariablesOrderIncludesEnv(phpDir);
+
+            expect(changed).toBe(false);
+            await expect(fs.readFile(path.join(phpDir, 'php.ini'), 'utf-8')).resolves.toBe(original);
+        });
+
+        it('appends the directive when php.ini does not define it', async () => {
+            const phpDir = path.join(tmpDir, 'php82');
+            await fs.ensureDir(phpDir);
+            await fs.writeFile(path.join(phpDir, 'php.ini'), '[PHP]\nmemory_limit = 512M\n');
+
+            const changed = await pm.ensureVariablesOrderIncludesEnv(phpDir);
+
+            expect(changed).toBe(true);
+            const content = await fs.readFile(path.join(phpDir, 'php.ini'), 'utf-8');
+            expect(content.trimEnd().endsWith('variables_order = "EGPCS"')).toBe(true);
+        });
+
+        it('returns false when php.ini is missing', async () => {
+            const phpDir = path.join(tmpDir, 'php-missing');
+            await fs.ensureDir(phpDir);
+
+            await expect(pm.ensureVariablesOrderIncludesEnv(phpDir)).resolves.toBe(false);
+        });
+    });
 });

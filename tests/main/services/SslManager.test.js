@@ -59,7 +59,7 @@ describe('SslManager', () => {
         it('returns a string with instructions', () => {
             const instructions = ssl.getTrustInstructions();
             expect(typeof instructions).toBe('string');
-            expect(instructions).toContain('DevBox Pro');
+            expect(instructions).toContain('MyLocalDev');
         });
 
         it('includes the CA cert path', () => {

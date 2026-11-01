@@ -9,7 +9,7 @@ class MigrationManager {
     this.portableRoot = pathResolver.getPortableRoot(app);
     this.newDataPath = pathResolver.getDataPath(app);
     this.newResourcesPath = pathResolver.getResourcesPath(app);
-    this.oldDataPath = path.join(os.homedir(), '.devbox-pro');
+    this.oldDataPath = path.join(os.homedir(), '.mylocaldev');
     this.oldResourcesPath = path.join(app.getPath('userData'), 'resources');
     this.legacyUserDataPath = path.join(app.getPath('userData'), 'data');
   }
@@ -53,16 +53,16 @@ class MigrationManager {
       const programFilesX86 = process.env['ProgramFiles(x86)'];
 
       roots.push(
-        path.join(localPrograms, 'DevBox Pro'),
-        path.join(localPrograms, 'DevBoxPro'),
-        path.join(programFiles, 'DevBox Pro'),
-        path.join(programFiles, 'DevBoxPro')
+        path.join(localPrograms, 'MyLocalDev'),
+        path.join(localPrograms, 'MyLocalDev'),
+        path.join(programFiles, 'MyLocalDev'),
+        path.join(programFiles, 'MyLocalDev')
       );
 
       if (programFilesX86) {
         roots.push(
-          path.join(programFilesX86, 'DevBox Pro'),
-          path.join(programFilesX86, 'DevBoxPro')
+          path.join(programFilesX86, 'MyLocalDev'),
+          path.join(programFilesX86, 'MyLocalDev')
         );
       }
     }
@@ -134,7 +134,7 @@ class MigrationManager {
 
     for (const source of sources) {
       if (source.hasData) {
-        onProgress?.(`Importing existing DevBox data from ${source.root}...`);
+        onProgress?.(`Importing existing MyLocalDev data from ${source.root}...`);
         await fs.copy(source.dataPath, this.newDataPath, { overwrite: false });
       }
 

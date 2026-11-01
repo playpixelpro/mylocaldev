@@ -54,19 +54,19 @@ try {
     const batchContent = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro CLI Wrapper
-REM This script routes commands through DevBox Pro to use project-specific versions
+REM MyLocalDev CLI Wrapper
+REM This script routes commands through MyLocalDev to use project-specific versions
 
-set "DEVBOX_RESOURCES=${resourcesPath.replace(/\\/g, '\\')}"
-set "DEVBOX_CLI=${cliPath.replace(/\\/g, '\\')}"
-set "DEVBOX_PROJECTS=${projectsFilePath.replace(/\\/g, '\\')}"
+set "MYLOCALDEV_RESOURCES=${resourcesPath.replace(/\\/g, '\\')}"
+set "MYLOCALDEV_CLI=${cliPath.replace(/\\/g, '\\')}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath.replace(/\\/g, '\\')}"
 
 REM Get current directory
 set "CURRENT_DIR=%CD%"
 
 REM Check if we have arguments
 if "%~1"=="" (
-  echo DevBox Pro CLI Wrapper
+  echo MyLocalDev CLI Wrapper
   echo.
   echo Usage: ${alias} ^<command^> [arguments]
   echo.
@@ -90,9 +90,9 @@ if "%~1"=="" (
 )
 
 REM Check if projects.json exists
-if not exist "%DEVBOX_PROJECTS%" (
-  echo Warning: DevBox Pro projects file not found.
-  echo Please open DevBox Pro and ensure CLI is installed.
+if not exist "%MYLOCALDEV_PROJECTS%" (
+  echo Warning: MyLocalDev projects file not found.
+  echo Please open MyLocalDev and ensure CLI is installed.
   echo Running command with system defaults...
   %*
   exit /b %ERRORLEVEL%
@@ -105,7 +105,7 @@ set "NODE_VERSION="
 set "MYSQL_TYPE=mysql"
 set "MYSQL_VERSION=8.4"
 
-for /f "tokens=1,2,3,4,5,6 delims=|" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%DEVBOX_CLI%\\find-project.ps1" "%DEVBOX_PROJECTS%" "%CURRENT_DIR%"') do (
+for /f "tokens=1,2,3,4,5,6 delims=|" %%a in ('powershell -NoProfile -ExecutionPolicy Bypass -File "%MYLOCALDEV_CLI%\\find-project.ps1" "%MYLOCALDEV_PROJECTS%" "%CURRENT_DIR%"') do (
   set "PROJECT_STATUS=%%a"
   set "PHP_VERSION=%%b"
   set "NODE_VERSION=%%c"
@@ -115,21 +115,21 @@ for /f "tokens=1,2,3,4,5,6 delims=|" %%a in ('powershell -NoProfile -ExecutionPo
 )
 
 if "%PROJECT_STATUS%"=="NOTFOUND" (
-  echo Error: Not in a DevBox Pro project directory.
+  echo Error: Not in a MyLocalDev project directory.
   echo.
   echo Current directory: %CURRENT_DIR%
   echo.
-  echo To use this command, navigate to a folder registered in DevBox Pro,
-  echo or register this folder as a project in DevBox Pro.
+  echo To use this command, navigate to a folder registered in MyLocalDev,
+  echo or register this folder as a project in MyLocalDev.
   exit /b 1
 )
 
 REM Set up paths based on detected versions
-set "PHP_PATH=%DEVBOX_RESOURCES%\\php\\%PHP_VERSION%\\win"
-set "NODE_PATH=%DEVBOX_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
-set "COMPOSER_PATH=%DEVBOX_RESOURCES%\\composer"
-set "MYSQL_BIN_PATH=%DEVBOX_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
-set "PYTHON_PATH=%DEVBOX_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
+set "PHP_PATH=%MYLOCALDEV_RESOURCES%\\php\\%PHP_VERSION%\\win"
+set "NODE_PATH=%MYLOCALDEV_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
+set "COMPOSER_PATH=%MYLOCALDEV_RESOURCES%\\composer"
+set "MYSQL_BIN_PATH=%MYLOCALDEV_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
+set "PYTHON_PATH=%MYLOCALDEV_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
 set "PYTHON_SCRIPTS_PATH=%PYTHON_PATH%\\Scripts"
 
 REM Prepend to PATH
@@ -143,7 +143,7 @@ if /i "%CMD%"=="php" (
   if exist "%PHP_PATH%\\php.exe" (
     "%PHP_PATH%\\php.exe" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo PHP %PHP_VERSION% not found. Install it from DevBox Pro Binaries page.
+    echo PHP %PHP_VERSION% not found. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -158,7 +158,7 @@ if /i "%CMD%"=="composer" (
       exit /b 1
     )
   ) else (
-    echo Composer not found. Install it from DevBox Pro Binaries page.
+    echo Composer not found. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -172,7 +172,7 @@ if /i "%CMD%"=="node" (
   if exist "%NODE_PATH%\\node.exe" (
     "%NODE_PATH%\\node.exe" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo Node.js %NODE_VERSION% not found. Install it from DevBox Pro Binaries page.
+    echo Node.js %NODE_VERSION% not found. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -186,7 +186,7 @@ if /i "%CMD%"=="npm" (
   if exist "%NODE_PATH%\\npm.cmd" (
     call "%NODE_PATH%\\npm.cmd" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo npm not found. Install Node.js from DevBox Pro Binaries page.
+    echo npm not found. Install Node.js from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -200,7 +200,7 @@ if /i "%CMD%"=="npx" (
   if exist "%NODE_PATH%\\npx.cmd" (
     call "%NODE_PATH%\\npx.cmd" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo npx not found. Install Node.js from DevBox Pro Binaries page.
+    echo npx not found. Install Node.js from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -210,7 +210,7 @@ if /i "%CMD%"=="mysql" (
   if exist "%MYSQL_BIN_PATH%\\mysql.exe" (
     "%MYSQL_BIN_PATH%\\mysql.exe" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo MySQL client not found for %MYSQL_TYPE% %MYSQL_VERSION%. Install it from DevBox Pro Binaries page.
+    echo MySQL client not found for %MYSQL_TYPE% %MYSQL_VERSION%. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -220,7 +220,7 @@ if /i "%CMD%"=="mysqldump" (
   if exist "%MYSQL_BIN_PATH%\\mysqldump.exe" (
     "%MYSQL_BIN_PATH%\\mysqldump.exe" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo mysqldump not found for %MYSQL_TYPE% %MYSQL_VERSION%. Install it from DevBox Pro Binaries page.
+    echo mysqldump not found for %MYSQL_TYPE% %MYSQL_VERSION%. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -234,7 +234,7 @@ if /i "%CMD%"=="python" (
   if exist "%PYTHON_PATH%\\python.exe" (
     "%PYTHON_PATH%\\python.exe" %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo Python %PYTHON_VERSION% not found. Install it from DevBox Pro Binaries page.
+    echo Python %PYTHON_VERSION% not found. Install it from MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -250,7 +250,7 @@ if /i "%CMD%"=="pip" (
   ) else if exist "%PYTHON_PATH%\\python.exe" (
     "%PYTHON_PATH%\\python.exe" -m pip %1 %2 %3 %4 %5 %6 %7 %8 %9
   ) else (
-    echo pip not found for Python %PYTHON_VERSION%. Install Python from the DevBox Pro Binaries page.
+    echo pip not found for Python %PYTHON_VERSION%. Install Python from the MyLocalDev Binaries page.
     exit /b 1
   )
   exit /b %ERRORLEVEL%
@@ -274,16 +274,16 @@ exit /b %ERRORLEVEL%
 
     const shellContent = `#!/bin/bash
 
-# DevBox Pro CLI Wrapper
-# This script routes commands through DevBox Pro to use project-specific versions
+# MyLocalDev CLI Wrapper
+# This script routes commands through MyLocalDev to use project-specific versions
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 CURRENT_DIR="$(pwd)"
 
 # Show help if no arguments
 if [ $# -eq 0 ]; then
-    echo "DevBox Pro CLI Wrapper"
+    echo "MyLocalDev CLI Wrapper"
     echo ""
     echo "Usage: ${alias} <command> [arguments]"
     echo ""
@@ -307,9 +307,9 @@ if [ $# -eq 0 ]; then
 fi
 
 # Check if projects.json exists
-if [ ! -f "$DEVBOX_PROJECTS" ]; then
-    echo "Warning: DevBox Pro projects file not found."
-    echo "Please open DevBox Pro and ensure CLI is installed."
+if [ ! -f "$MYLOCALDEV_PROJECTS" ]; then
+    echo "Warning: MyLocalDev projects file not found."
+    echo "Please open MyLocalDev and ensure CLI is installed."
     echo "Running command with system defaults..."
     exec "$@"
 fi
@@ -323,7 +323,7 @@ if command -v python3 &> /dev/null; then
 import json
 import os
 current_dir = '$CURRENT_DIR_LOWER'
-with open('$DEVBOX_PROJECTS', 'r') as f:
+with open('$MYLOCALDEV_PROJECTS', 'r') as f:
     projects = json.load(f)
 for proj_path, config in projects.items():
     proj_path_lower = proj_path.lower()
@@ -339,10 +339,10 @@ else:
     print('8.3  mysql 8.4 ')
 " 2>/dev/null)
 elif command -v jq &> /dev/null; then
-    PHP_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.phpVersion // "8.3"' "$DEVBOX_PROJECTS" 2>/dev/null | head -1)
-    NODE_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.nodejsVersion // ""' "$DEVBOX_PROJECTS" 2>/dev/null | head -1)
-    MYSQL_TYPE=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.mysqlType // "mysql"' "$DEVBOX_PROJECTS" 2>/dev/null | head -1)
-    MYSQL_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.mysqlVersion // "8.4"' "$DEVBOX_PROJECTS" 2>/dev/null | head -1)
+    PHP_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.phpVersion // "8.3"' "$MYLOCALDEV_PROJECTS" 2>/dev/null | head -1)
+    NODE_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.nodejsVersion // ""' "$MYLOCALDEV_PROJECTS" 2>/dev/null | head -1)
+    MYSQL_TYPE=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.mysqlType // "mysql"' "$MYLOCALDEV_PROJECTS" 2>/dev/null | head -1)
+    MYSQL_VERSION=$(jq -r 'to_entries[] | select(.key | ascii_downcase | startswith("'"$CURRENT_DIR_LOWER"'")) | .value.mysqlVersion // "8.4"' "$MYLOCALDEV_PROJECTS" 2>/dev/null | head -1)
 else
     echo "Warning: python3 or jq required to parse project config."
     echo "Running command with system defaults..."
@@ -354,11 +354,11 @@ MYSQL_TYPE=\${MYSQL_TYPE:-mysql}
 MYSQL_VERSION=\${MYSQL_VERSION:-8.4}
 
 # Set up paths
-PHP_PATH="$DEVBOX_RESOURCES/php/$PHP_VERSION/${platform}"
-NODE_PATH="$DEVBOX_RESOURCES/nodejs/$NODE_VERSION/${platform}"
-COMPOSER_PATH="$DEVBOX_RESOURCES/composer"
-MYSQL_BIN_PATH="$DEVBOX_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin"
-PYTHON_PATH="$DEVBOX_RESOURCES/python/$PYTHON_VERSION/${platform}"
+PHP_PATH="$MYLOCALDEV_RESOURCES/php/$PHP_VERSION/${platform}"
+NODE_PATH="$MYLOCALDEV_RESOURCES/nodejs/$NODE_VERSION/${platform}"
+COMPOSER_PATH="$MYLOCALDEV_RESOURCES/composer"
+MYSQL_BIN_PATH="$MYLOCALDEV_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin"
+PYTHON_PATH="$MYLOCALDEV_RESOURCES/python/$PYTHON_VERSION/${platform}"
 
 # Get the command
 CMD="$1"
@@ -369,7 +369,7 @@ case "$CMD" in
         if [ -x "$PHP_PATH/php" ]; then
             exec "$PHP_PATH/php" "$@"
         else
-            echo "PHP $PHP_VERSION not found. Install it from DevBox Pro Binaries page."
+            echo "PHP $PHP_VERSION not found. Install it from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -377,7 +377,7 @@ case "$CMD" in
         if [ -f "$COMPOSER_PATH/composer.phar" ] && [ -x "$PHP_PATH/php" ]; then
             exec "$PHP_PATH/php" "$COMPOSER_PATH/composer.phar" "$@"
         else
-            echo "Composer or PHP not found. Install from DevBox Pro Binaries page."
+            echo "Composer or PHP not found. Install from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -389,7 +389,7 @@ case "$CMD" in
         if [ -x "$NODE_PATH/node" ]; then
             exec "$NODE_PATH/node" "$@"
         else
-            echo "Node.js $NODE_VERSION not found. Install it from DevBox Pro Binaries page."
+            echo "Node.js $NODE_VERSION not found. Install it from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -402,7 +402,7 @@ case "$CMD" in
             export PATH="$NODE_PATH:$PATH"
             exec "$NODE_PATH/npm" "$@"
         else
-            echo "npm not found. Install Node.js from DevBox Pro Binaries page."
+            echo "npm not found. Install Node.js from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -415,7 +415,7 @@ case "$CMD" in
             export PATH="$NODE_PATH:$PATH"
             exec "$NODE_PATH/npx" "$@"
         else
-            echo "npx not found. Install Node.js from DevBox Pro Binaries page."
+            echo "npx not found. Install Node.js from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -423,7 +423,7 @@ case "$CMD" in
         if [ -x "$MYSQL_BIN_PATH/mysql" ]; then
             exec "$MYSQL_BIN_PATH/mysql" "$@"
         else
-            echo "MySQL client not found for $MYSQL_TYPE $MYSQL_VERSION. Install from DevBox Pro Binaries page."
+            echo "MySQL client not found for $MYSQL_TYPE $MYSQL_VERSION. Install from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -431,7 +431,7 @@ case "$CMD" in
         if [ -x "$MYSQL_BIN_PATH/mysqldump" ]; then
             exec "$MYSQL_BIN_PATH/mysqldump" "$@"
         else
-            echo "mysqldump not found for $MYSQL_TYPE $MYSQL_VERSION. Install from DevBox Pro Binaries page."
+            echo "mysqldump not found for $MYSQL_TYPE $MYSQL_VERSION. Install from MyLocalDev Binaries page."
             exit 1
         fi
         ;;
@@ -445,7 +445,7 @@ case "$CMD" in
         elif [ -x "$PYTHON_PATH/python.exe" ]; then
             exec "$PYTHON_PATH/python.exe" "$@"
         else
-            echo "Python $PYTHON_VERSION not found. Install it from DevBox Pro Binaries page."
+            echo "Python $PYTHON_VERSION not found. Install it from MyLocalDev Binaries page."
             exit 1
         fi
         ;;

@@ -236,7 +236,7 @@ module.exports = {
         hostname: 'api.github.com',
         path: `/repos/${repo}/releases/latest`,
         headers: {
-          'User-Agent': 'DevBoxPro-App',
+          'User-Agent': 'MyLocalDev-App',
           Accept: 'application/vnd.github.v3+json',
         },
       }, (response) => {

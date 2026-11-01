@@ -94,8 +94,8 @@ function Databases() {
   }, [runningProjectDatabaseVersions, servicesStatus]);
 
   const syncSelectedDatabaseInfo = React.useCallback(async (type, version) => {
-    await window.devbox?.database.setActiveDatabaseType(type, version);
-    const info = await window.devbox?.database.getDatabaseInfo();
+    await window.mylocaldev?.database.setActiveDatabaseType(type, version);
+    const info = await window.mylocaldev?.database.getDatabaseInfo();
     setDbInfo(info || null);
     return info;
   }, []);
@@ -137,7 +137,7 @@ function Databases() {
 
   const loadServicesStatus = async () => {
     try {
-      const status = await window.devbox?.services.getStatus();
+      const status = await window.mylocaldev?.services.getStatus();
       const resolvedStatus = status || {};
       setServicesStatus(resolvedStatus);
       return resolvedStatus;
@@ -151,9 +151,9 @@ function Databases() {
     setLoading(true);
     try {
       const [status, services, config] = await Promise.all([
-        window.devbox?.binaries.getStatus(),
-        window.devbox?.services.getStatus(),
-        window.devbox?.binaries.getServiceConfig(),
+        window.mylocaldev?.binaries.getStatus(),
+        window.mylocaldev?.services.getStatus(),
+        window.mylocaldev?.binaries.getServiceConfig(),
       ]);
       setBinariesStatus(status);
       setServicesStatus(services || {});
@@ -253,7 +253,7 @@ function Databases() {
 
     setLoadingDatabases(true);
     try {
-      const dbs = await window.devbox?.database.getDatabases();
+      const dbs = await window.mylocaldev?.database.getDatabases();
 
       if (requestId !== databaseLoadRequestRef.current) {
         return;
@@ -302,7 +302,7 @@ function Databases() {
     setStartingVersion(key);
     setServiceError(null);
     try {
-      await window.devbox?.services.start(type, version);
+      await window.mylocaldev?.services.start(type, version);
       await new Promise(resolve => setTimeout(resolve, 1500));
       const refreshedStatus = await loadServicesStatus();
       // Auto-select this database after starting
@@ -323,7 +323,7 @@ function Databases() {
     const key = `${type}-${version}`;
     setStoppingVersion(key);
     try {
-      await window.devbox?.services.stop(type, version);
+      await window.mylocaldev?.services.stop(type, version);
       await new Promise(resolve => setTimeout(resolve, 500));
       await loadServicesStatus();
     } catch (error) {
@@ -339,7 +339,7 @@ function Databases() {
 
     setCreating(true);
     try {
-      await window.devbox?.database.createDatabase(newDbName);
+      await window.mylocaldev?.database.createDatabase(newDbName);
       setShowCreateModal(false);
       setNewDbName('');
       await loadDatabases();
@@ -364,7 +364,7 @@ function Databases() {
     }
 
     try {
-      await window.devbox?.database.deleteDatabase(name);
+      await window.mylocaldev?.database.deleteDatabase(name);
       loadDatabases();
     } catch (error) {
       // Error deleting database
@@ -377,7 +377,7 @@ function Databases() {
       // Sanitize database name for use in filename (trim and remove invalid characters)
       const safeName = name.trim().replace(/[<>:"/\\|?*\r\n]/g, '_');
       // Use save dialog for export
-      const filePath = await window.devbox?.system.saveFile({
+      const filePath = await window.mylocaldev?.system.saveFile({
         defaultPath: `${safeName}_backup_${new Date().toISOString().slice(0, 10)}.sql.gz`,
         filters: [
           { name: 'Compressed SQL', extensions: ['sql.gz', 'gz'] },
@@ -387,7 +387,7 @@ function Databases() {
 
       if (filePath) {
         // Progress will be updated via the global context listener (backend sends operationId)
-        await window.devbox?.database.exportDatabase(name, filePath);
+        await window.mylocaldev?.database.exportDatabase(name, filePath);
       }
     } catch (error) {
       // Error handled - user may have cancelled file dialog
@@ -396,7 +396,7 @@ function Databases() {
 
   const handleImportDatabase = async (name) => {
     try {
-      const filePath = await window.devbox?.system.selectFile([
+      const filePath = await window.mylocaldev?.system.selectFile([
         { name: 'SQL Files', extensions: ['sql', 'gz'] },
       ]);
 
@@ -417,7 +417,7 @@ function Databases() {
 
     try {
       // Progress will be updated via the global context listener (backend sends operationId)
-      await window.devbox?.database.importDatabase(dbName, filePath, mode);
+      await window.mylocaldev?.database.importDatabase(dbName, filePath, mode);
       loadDatabases();
     } catch (error) {
       // Error handled via backend progress callback
@@ -431,9 +431,9 @@ function Databases() {
 
     setPhpMyAdminLoading(true);
     try {
-      const url = await window.devbox?.database.getPhpMyAdminUrl(selectedDatabase.type, selectedDatabase.version);
+      const url = await window.mylocaldev?.database.getPhpMyAdminUrl(selectedDatabase.type, selectedDatabase.version);
       if (url) {
-        await window.devbox?.system.openExternal(url);
+        await window.mylocaldev?.system.openExternal(url);
       }
     } finally {
       setPhpMyAdminLoading(false);

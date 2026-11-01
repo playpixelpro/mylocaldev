@@ -38,8 +38,8 @@ describe('WindowsSchedulerManager', () => {
 
   describe('task name & paths', () => {
     it('generates a clean sanitized task name', () => {
-      expect(mgr.getTaskName('my-laravel-app')).toBe('DevBoxPro_Schedule_my-laravel-app');
-      expect(mgr.getTaskName('proj@123!#')).toBe('DevBoxPro_Schedule_proj_123__');
+      expect(mgr.getTaskName('my-laravel-app')).toBe('MyLocalDev-Schedule-my-laravel-app');
+      expect(mgr.getTaskName('proj@123!#')).toBe('MyLocalDev-Schedule-proj_123__');
     });
 
     it('resolves scheduler dir inside dataPath', async () => {
@@ -157,7 +157,7 @@ describe('WindowsSchedulerManager', () => {
     it('parses CSV output from schtasks /query correctly', async () => {
       if (process.platform !== 'win32') return;
 
-      const mockCsv = `"HostName","TaskName","Next Run Time","Status","Logon Mode","Last Run Time","Last Result","Author"\n"PC","\\DevBoxPro_Schedule_proj1","Sep 11, 2026 2:15:00 AM","Ready","Interactive only","Sep 11, 2026 2:14:00 AM","0","Author"`;
+      const mockCsv = `"HostName","TaskName","Next Run Time","Status","Logon Mode","Last Run Time","Last Result","Author"\n"PC","\\MyLocalDev-Schedule-proj1","Sep 11, 2026 2:15:00 AM","Ready","Interactive only","Sep 11, 2026 2:14:00 AM","0","Author"`;
 
       execFileSpy.mockImplementation((cmd, args, cb) => {
         cb(null, mockCsv, '');

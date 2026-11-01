@@ -1,5 +1,5 @@
 /**
- * DevBox Pro appearance/theme configuration
+ * MyLocalDev appearance/theme configuration
  * Defines accent color palettes, background textures, and dark surface variants.
  */
 

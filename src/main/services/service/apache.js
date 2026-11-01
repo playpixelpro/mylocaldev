@@ -77,7 +77,7 @@ module.exports = {
           const { killProcessesByPath, isProcessRunning } = require('../../utils/SpawnUtils');
           if (isProcessRunning('httpd.exe')) {
             const apacheResourcesPath = path.join(this.resourcePath, 'apache');
-            this.managers.log?.systemInfo('Killing stale DevBox Apache processes before start');
+            this.managers.log?.systemInfo('Killing stale MyLocalDev Apache processes before start');
             await killProcessesByPath('httpd.exe', apacheResourcesPath);
             await new Promise(resolve => setTimeout(resolve, 500));
           }
@@ -483,7 +483,7 @@ module.exports = {
     const sslCatchAll = caExists ? `
 # Default SSL catch-all (must be first, before project vhosts)
 <VirtualHost *:${httpsPort}>
-    ServerName _devbox_catchall_
+    ServerName _mylocaldev_catchall_
     SSLEngine on
     SSLCertificateFile "${caCertFile}"
     SSLCertificateKeyFile "${caKeyFile}"

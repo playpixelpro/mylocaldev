@@ -1,5 +1,5 @@
 /* ============================================================
-   DevBox Pro Documentation — Shared JavaScript
+   MyLocalDev Documentation — Shared JavaScript
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -49,7 +49,7 @@ function pickReleaseAsset(assets, matcher, releaseVersion) {
 
 async function updateDownloadLinks() {
   try {
-    const response = await fetch('https://api.github.com/repos/JeffGepiga/DevBoxPro/releases/latest');
+    const response = await fetch('https://api.github.com/repos/playpixelpro/mylocaldev/releases/latest');
     const data = await response.json();
     
     if (data && data.assets) {

@@ -35,18 +35,18 @@ For macOS, nginx is typically compiled from source or installed via Homebrew:
 brew install nginx
 ```
 
-DevBox Pro will automatically download and configure nginx for each platform.
+MyLocalDev will automatically download and configure nginx for each platform.
 
 ## PHP Integration
 
-Nginx connects to PHP via FastCGI. DevBox Pro automatically:
+Nginx connects to PHP via FastCGI. MyLocalDev automatically:
 1. Starts PHP-CGI or PHP-FPM for each project
 2. Generates nginx server blocks that proxy `.php` requests to PHP
 3. Configures proper `fastcgi_params` for Laravel, Symfony, WordPress, etc.
 
 ## Default Configuration
 
-DevBox Pro generates nginx configurations with:
+MyLocalDev generates nginx configurations with:
 - FastCGI pass to `127.0.0.1:9000` (PHP-FPM)
 - Proper `try_files` for Laravel/Symfony routing
 - SSL support with auto-generated certificates
@@ -55,5 +55,5 @@ DevBox Pro generates nginx configurations with:
 ## Manual Configuration
 
 Advanced users can edit configurations in:
-- Windows: `%APPDATA%/devbox-pro/data/nginx/sites/`
-- macOS: `~/Library/Application Support/devbox-pro/data/nginx/sites/`
+- Windows: `%APPDATA%/MyLocalDev/data/nginx/sites/`
+- macOS: `~/Library/Application Support/MyLocalDev/data/nginx/sites/`

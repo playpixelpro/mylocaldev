@@ -65,15 +65,15 @@ module.exports = {
     const phpShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro PHP Shim - Auto-detects project PHP version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev PHP Shim - Auto-detects project PHP version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_PHP=${defaultPhpVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project PHP version
-set "TEMP_PS=%TEMP%\\devbox_php_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_php_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -94,13 +94,13 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%PHP_VERSION%"=="" set "PHP_VERSION=%DEFAULT_PHP%"
 
-set "PHP_PATH=%DEVBOX_RESOURCES%\\php\\%PHP_VERSION%\\win"
+set "PHP_PATH=%MYLOCALDEV_RESOURCES%\\php\\%PHP_VERSION%\\win"
 
 if exist "%PHP_PATH%\\php.exe" (
     "%PHP_PATH%\\php.exe" %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro PHP not installed - fall back to system php
+    REM MyLocalDev PHP not installed - fall back to system php
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where php 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -108,7 +108,7 @@ if exist "%PHP_PATH%\\php.exe" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] PHP %PHP_VERSION% not found. Install it from the DevBox Pro Binaries page.
+    echo [MyLocalDev] PHP %PHP_VERSION% not found. Install it from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -116,15 +116,15 @@ if exist "%PHP_PATH%\\php.exe" (
     const nodeShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro Node Shim - Auto-detects project Node version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev Node Shim - Auto-detects project Node version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_NODE=${defaultNodeVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project Node version
-set "TEMP_PS=%TEMP%\\devbox_node_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_node_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -145,13 +145,13 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%NODE_VERSION%"=="" set "NODE_VERSION=%DEFAULT_NODE%"
 
-set "NODE_PATH=%DEVBOX_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
+set "NODE_PATH=%MYLOCALDEV_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
 
 if exist "%NODE_PATH%\\node.exe" (
     "%NODE_PATH%\\node.exe" %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro Node.js not installed - fall back to system node
+    REM MyLocalDev Node.js not installed - fall back to system node
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where node 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -159,7 +159,7 @@ if exist "%NODE_PATH%\\node.exe" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] Node.js %NODE_VERSION% not found. Install it from the DevBox Pro Binaries page.
+    echo [MyLocalDev] Node.js %NODE_VERSION% not found. Install it from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -167,15 +167,15 @@ if exist "%NODE_PATH%\\node.exe" (
     const npmShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro npm Shim - Auto-detects project Node version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev npm Shim - Auto-detects project Node version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_NODE=${defaultNodeVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project Node version
-set "TEMP_PS=%TEMP%\\devbox_npm_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_npm_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -196,13 +196,13 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%NODE_VERSION%"=="" set "NODE_VERSION=%DEFAULT_NODE%"
 
-set "NODE_PATH=%DEVBOX_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
+set "NODE_PATH=%MYLOCALDEV_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
 
 if exist "%NODE_PATH%\\npm.cmd" (
     call "%NODE_PATH%\\npm.cmd" %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro Node.js not installed - fall back to system npm
+    REM MyLocalDev Node.js not installed - fall back to system npm
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where npm 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -210,7 +210,7 @@ if exist "%NODE_PATH%\\npm.cmd" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] npm not found. Install Node.js from the DevBox Pro Binaries page.
+    echo [MyLocalDev] npm not found. Install Node.js from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -218,15 +218,15 @@ if exist "%NODE_PATH%\\npm.cmd" (
     const npxShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro npx Shim - Auto-detects project Node version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev npx Shim - Auto-detects project Node version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_NODE=${defaultNodeVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project Node version
-set "TEMP_PS=%TEMP%\\devbox_npx_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_npx_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -247,13 +247,13 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%NODE_VERSION%"=="" set "NODE_VERSION=%DEFAULT_NODE%"
 
-set "NODE_PATH=%DEVBOX_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
+set "NODE_PATH=%MYLOCALDEV_RESOURCES%\\nodejs\\%NODE_VERSION%\\win"
 
 if exist "%NODE_PATH%\\npx.cmd" (
     call "%NODE_PATH%\\npx.cmd" %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro Node.js not installed - fall back to system npx
+    REM MyLocalDev Node.js not installed - fall back to system npx
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where npx 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -261,7 +261,7 @@ if exist "%NODE_PATH%\\npx.cmd" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] npx not found. Install Node.js from the DevBox Pro Binaries page.
+    echo [MyLocalDev] npx not found. Install Node.js from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -269,15 +269,15 @@ if exist "%NODE_PATH%\\npx.cmd" (
     const composerShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro Composer Shim - Uses project PHP version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev Composer Shim - Uses project PHP version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_PHP=${defaultPhpVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project PHP version
-set "TEMP_PS=%TEMP%\\devbox_composer_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_composer_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -298,19 +298,19 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%PHP_VERSION%"=="" set "PHP_VERSION=%DEFAULT_PHP%"
 
-set "PHP_PATH=%DEVBOX_RESOURCES%\\php\\%PHP_VERSION%\\win"
-set "COMPOSER_PATH=%DEVBOX_RESOURCES%\\composer\\composer.phar"
+set "PHP_PATH=%MYLOCALDEV_RESOURCES%\\php\\%PHP_VERSION%\\win"
+set "COMPOSER_PATH=%MYLOCALDEV_RESOURCES%\\composer\\composer.phar"
 
 if exist "%PHP_PATH%\\php.exe" (
     if exist "%COMPOSER_PATH%" (
         "%PHP_PATH%\\php.exe" "%COMPOSER_PATH%" %*
         exit /b %ERRORLEVEL%
     ) else (
-        echo [DevBox Pro] Composer not found.
+        echo [MyLocalDev] Composer not found.
         exit /b 1
     )
 ) else (
-    echo [DevBox Pro] PHP %PHP_VERSION% not found.
+    echo [MyLocalDev] PHP %PHP_VERSION% not found.
     exit /b 1
 )
 `;
@@ -318,16 +318,16 @@ if exist "%PHP_PATH%\\php.exe" (
     const mysqlShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro MySQL Client Shim - Uses active database type and version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev MySQL Client Shim - Uses active database type and version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_MYSQL_TYPE=${defaultMysqlType}"
 set "DEFAULT_MYSQL_VERSION=${defaultMysqlVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project MySQL info
-set "TEMP_PS=%TEMP%\\devbox_mysql_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_mysql_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -355,13 +355,13 @@ REM Use project version or default
 if "%MYSQL_TYPE%"=="" set "MYSQL_TYPE=%DEFAULT_MYSQL_TYPE%"
 if "%MYSQL_VERSION%"=="" set "MYSQL_VERSION=%DEFAULT_MYSQL_VERSION%"
 
-set "MYSQL_BIN_PATH=%DEVBOX_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
+set "MYSQL_BIN_PATH=%MYLOCALDEV_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
 
 if exist "%MYSQL_BIN_PATH%\\mysql.exe" (
     "%MYSQL_BIN_PATH%\\mysql.exe" %*
     exit /b %ERRORLEVEL%
 ) else (
-    echo [DevBox Pro] MySQL client not found for %MYSQL_TYPE% %MYSQL_VERSION%.
+    echo [MyLocalDev] MySQL client not found for %MYSQL_TYPE% %MYSQL_VERSION%.
     exit /b 1
 )
 `;
@@ -369,16 +369,16 @@ if exist "%MYSQL_BIN_PATH%\\mysql.exe" (
     const mysqldumpShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro mysqldump Shim - Uses active database type and version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev mysqldump Shim - Uses active database type and version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_MYSQL_TYPE=${defaultMysqlType}"
 set "DEFAULT_MYSQL_VERSION=${defaultMysqlVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project MySQL info
-set "TEMP_PS=%TEMP%\\devbox_mysqldump_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_mysqldump_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -406,13 +406,13 @@ REM Use project version or default
 if "%MYSQL_TYPE%"=="" set "MYSQL_TYPE=%DEFAULT_MYSQL_TYPE%"
 if "%MYSQL_VERSION%"=="" set "MYSQL_VERSION=%DEFAULT_MYSQL_VERSION%"
 
-set "MYSQL_BIN_PATH=%DEVBOX_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
+set "MYSQL_BIN_PATH=%MYLOCALDEV_RESOURCES%\\%MYSQL_TYPE%\\%MYSQL_VERSION%\\win\\bin"
 
 if exist "%MYSQL_BIN_PATH%\\mysqldump.exe" (
     "%MYSQL_BIN_PATH%\\mysqldump.exe" %*
     exit /b %ERRORLEVEL%
 ) else (
-    echo [DevBox Pro] mysqldump not found for %MYSQL_TYPE% %MYSQL_VERSION%.
+    echo [MyLocalDev] mysqldump not found for %MYSQL_TYPE% %MYSQL_VERSION%.
     exit /b 1
 )
 `;
@@ -420,15 +420,15 @@ if exist "%MYSQL_BIN_PATH%\\mysqldump.exe" (
     const pythonShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro Python Shim - Auto-detects project Python version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev Python Shim - Auto-detects project Python version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_PYTHON=${defaultPythonVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project Python version
-set "TEMP_PS=%TEMP%\\devbox_python_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_python_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -449,13 +449,13 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%PYTHON_VERSION%"=="" set "PYTHON_VERSION=%DEFAULT_PYTHON%"
 
-set "PYTHON_PATH=%DEVBOX_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
+set "PYTHON_PATH=%MYLOCALDEV_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
 
 if exist "%PYTHON_PATH%\\python.exe" (
     "%PYTHON_PATH%\\python.exe" %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro Python not installed - fall back to system python
+    REM MyLocalDev Python not installed - fall back to system python
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where python 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -463,7 +463,7 @@ if exist "%PYTHON_PATH%\\python.exe" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] Python %PYTHON_VERSION% not found. Install it from the DevBox Pro Binaries page.
+    echo [MyLocalDev] Python %PYTHON_VERSION% not found. Install it from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -471,15 +471,15 @@ if exist "%PYTHON_PATH%\\python.exe" (
     const pipShim = `@echo off
 setlocal enabledelayedexpansion
 
-REM DevBox Pro pip Shim - Auto-detects project Python version
-set "DEVBOX_RESOURCES=${resourcesPath}"
-set "DEVBOX_PROJECTS=${projectsFilePath}"
+REM MyLocalDev pip Shim - Auto-detects project Python version
+set "MYLOCALDEV_RESOURCES=${resourcesPath}"
+set "MYLOCALDEV_PROJECTS=${projectsFilePath}"
 set "DEFAULT_PYTHON=${defaultPythonVersion}"
 set "CURRENT_DIR=%CD%"
 
 REM Create temp PowerShell script to find project Python version
-set "TEMP_PS=%TEMP%\\devbox_pip_lookup.ps1"
-echo $p = Get-Content '%DEVBOX_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
+set "TEMP_PS=%TEMP%\\mylocaldev_pip_lookup.ps1"
+echo $p = Get-Content '%MYLOCALDEV_PROJECTS%' -Raw ^| ConvertFrom-Json > "%TEMP_PS%"
 echo $d = '%CURRENT_DIR%'.ToLower().Replace('/', '\\') >> "%TEMP_PS%"
 echo $best = $null >> "%TEMP_PS%"
 echo $bestLen = 0 >> "%TEMP_PS%"
@@ -500,7 +500,7 @@ del "%TEMP_PS%" 2>nul
 REM Use project version or default
 if "%PYTHON_VERSION%"=="" set "PYTHON_VERSION=%DEFAULT_PYTHON%"
 
-set "PYTHON_PATH=%DEVBOX_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
+set "PYTHON_PATH=%MYLOCALDEV_RESOURCES%\\python\\%PYTHON_VERSION%\\win"
 set "PYTHON_SCRIPTS=%PYTHON_PATH%\\Scripts"
 
 if exist "%PYTHON_SCRIPTS%\\pip.exe" (
@@ -510,7 +510,7 @@ if exist "%PYTHON_SCRIPTS%\\pip.exe" (
     "%PYTHON_PATH%\\python.exe" -m pip %*
     exit /b %ERRORLEVEL%
 ) else (
-    REM DevBox Pro Python not installed - fall back to system pip
+    REM MyLocalDev Python not installed - fall back to system pip
     set "SHIM_DIR=%~dp0"
     for /f "tokens=*" %%i in ('where pip 2^>nul') do (
         if /i not "%%~dpi"=="%SHIM_DIR%" (
@@ -518,7 +518,7 @@ if exist "%PYTHON_SCRIPTS%\\pip.exe" (
             exit /b %ERRORLEVEL%
         )
     )
-    echo [DevBox Pro] pip not found for Python %PYTHON_VERSION%. Install Python from the DevBox Pro Binaries page.
+    echo [MyLocalDev] pip not found for Python %PYTHON_VERSION%. Install Python from the MyLocalDev Binaries page.
     exit /b 1
 )
 `;
@@ -548,21 +548,21 @@ if exist "%PYTHON_SCRIPTS%\\pip.exe" (
     const defaultMysqlVersion = defaultMysqlInfo.version;
 
     const phpShim = `#!/bin/bash
-# DevBox Pro PHP Shim - Auto-detects project PHP version
+# MyLocalDev PHP Shim - Auto-detects project PHP version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_PHP="${defaultPhpVersion}"
 CURRENT_DIR="$(pwd)"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Find project for current directory
 PHP_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -581,7 +581,7 @@ fi
 
 [ -z "$PHP_VERSION" ] && PHP_VERSION="$DEFAULT_PHP"
 
-PHP_PATH="$DEVBOX_RESOURCES/php/$PHP_VERSION/${platform}"
+PHP_PATH="$MYLOCALDEV_RESOURCES/php/$PHP_VERSION/${platform}"
 SYSTEM_PHP=""
 
 OLD_IFS="$IFS"
@@ -604,26 +604,26 @@ if [ -x "$PHP_PATH/php" ]; then
 elif [ -n "$SYSTEM_PHP" ]; then
     exec "$SYSTEM_PHP" "$@"
 else
-    echo "[DevBox Pro] PHP $PHP_VERSION not found. Install from Binaries page or set a default version."
+    echo "[MyLocalDev] PHP $PHP_VERSION not found. Install from Binaries page or set a default version."
     exit 1
 fi
 `;
 
     const nodeShim = `#!/bin/bash
-# DevBox Pro Node Shim - Auto-detects project Node version
+# MyLocalDev Node Shim - Auto-detects project Node version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_NODE="${defaultNodeVersion}"
 CURRENT_DIR="$(pwd)"
 
 # Find project for current directory
 NODE_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -644,7 +644,7 @@ fi
 
 [ -z "$NODE_VERSION" ] && NODE_VERSION="$DEFAULT_NODE"
 
-NODE_PATH="$DEVBOX_RESOURCES/nodejs/$NODE_VERSION/${platform}"
+NODE_PATH="$MYLOCALDEV_RESOURCES/nodejs/$NODE_VERSION/${platform}"
 
 if [ -x "$NODE_PATH/bin/node" ]; then
     exec "$NODE_PATH/bin/node" "$@"
@@ -653,7 +653,7 @@ elif [ -x "$NODE_PATH/node" ]; then
 elif command -v node &> /dev/null; then
     exec node "$@"
 else
-    echo "[DevBox Pro] Node.js $NODE_VERSION not found. Install from Binaries page or set a default version."
+    echo "[MyLocalDev] Node.js $NODE_VERSION not found. Install from Binaries page or set a default version."
     exit 1
 fi
 `;
@@ -670,23 +670,23 @@ fi
     }
 
     const npmShim = `#!/bin/bash
-# DevBox Pro npm Shim
+# MyLocalDev npm Shim
 SCRIPT_DIR="$(dirname "$0")"
 NODE_CMD="$SCRIPT_DIR/node"
-DEVBOX_RESOURCES="${resourcesPath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
 
 # Get node version from the node shim logic, then find npm
 NODE_VERSION=$($NODE_CMD -e "console.log(process.version)" 2>/dev/null | sed 's/v//')
 if [ -n "$NODE_VERSION" ]; then
     MAJOR_VERSION=\${NODE_VERSION%%.*}
-    NPM_PATH="$DEVBOX_RESOURCES/nodejs/$MAJOR_VERSION/${platform}/bin/npm"
+    NPM_PATH="$MYLOCALDEV_RESOURCES/nodejs/$MAJOR_VERSION/${platform}/bin/npm"
     [ -x "$NPM_PATH" ] && exec "$NODE_CMD" "$NPM_PATH" "$@"
-    NPM_PATH="$DEVBOX_RESOURCES/nodejs/$MAJOR_VERSION/${platform}/npm"
+    NPM_PATH="$MYLOCALDEV_RESOURCES/nodejs/$MAJOR_VERSION/${platform}/npm"
     [ -x "$NPM_PATH" ] && exec "$NODE_CMD" "$NPM_PATH" "$@"
 fi
 
 command -v npm &> /dev/null && exec npm "$@"
-echo "[DevBox Pro] npm not found."
+echo "[MyLocalDev] npm not found."
 exit 1
 `;
 
@@ -696,18 +696,18 @@ exit 1
     await fs.chmod(path.join(cliPath, 'npx'), 0o755);
 
     const composerShim = `#!/bin/bash
-# DevBox Pro Composer Shim
+# MyLocalDev Composer Shim
 SCRIPT_DIR="$(dirname "$0")"
 PHP_CMD="$SCRIPT_DIR/php"
-DEVBOX_RESOURCES="${resourcesPath}"
-COMPOSER_PATH="$DEVBOX_RESOURCES/composer/composer.phar"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+COMPOSER_PATH="$MYLOCALDEV_RESOURCES/composer/composer.phar"
 
 if [ -f "$COMPOSER_PATH" ]; then
     exec "$PHP_CMD" "$COMPOSER_PATH" "$@"
 elif command -v composer &> /dev/null; then
     exec composer "$@"
 else
-    echo "[DevBox Pro] Composer not found. Install from Binaries page."
+    echo "[MyLocalDev] Composer not found. Install from Binaries page."
     exit 1
 fi
 `;
@@ -716,21 +716,21 @@ fi
     await fs.chmod(path.join(cliPath, 'composer'), 0o755);
 
     const mysqlShim = `#!/bin/bash
-# DevBox Pro MySQL Client Shim - Uses active database type and version
+# MyLocalDev MySQL Client Shim - Uses active database type and version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_MYSQL_TYPE="${defaultMysqlType}"
 DEFAULT_MYSQL_VERSION="${defaultMysqlVersion}"
 CURRENT_DIR="$(pwd)"
 
 MYSQL_TYPE=""
 MYSQL_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -753,14 +753,14 @@ fi
 [ -z "$MYSQL_TYPE" ] && MYSQL_TYPE="$DEFAULT_MYSQL_TYPE"
 [ -z "$MYSQL_VERSION" ] && MYSQL_VERSION="$DEFAULT_MYSQL_VERSION"
 
-MYSQL_BIN="$DEVBOX_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin/mysql"
+MYSQL_BIN="$MYLOCALDEV_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin/mysql"
 
 if [ -x "$MYSQL_BIN" ]; then
     exec "$MYSQL_BIN" "$@"
 elif command -v mysql &> /dev/null; then
     exec mysql "$@"
 else
-    echo "[DevBox Pro] MySQL client not found for $MYSQL_TYPE $MYSQL_VERSION."
+    echo "[MyLocalDev] MySQL client not found for $MYSQL_TYPE $MYSQL_VERSION."
     exit 1
 fi
 `;
@@ -769,21 +769,21 @@ fi
     await fs.chmod(path.join(cliPath, 'mysql'), 0o755);
 
     const mysqldumpShim = `#!/bin/bash
-# DevBox Pro mysqldump Shim - Uses active database type and version
+# MyLocalDev mysqldump Shim - Uses active database type and version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_MYSQL_TYPE="${defaultMysqlType}"
 DEFAULT_MYSQL_VERSION="${defaultMysqlVersion}"
 CURRENT_DIR="$(pwd)"
 
 MYSQL_TYPE=""
 MYSQL_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -806,14 +806,14 @@ fi
 [ -z "$MYSQL_TYPE" ] && MYSQL_TYPE="$DEFAULT_MYSQL_TYPE"
 [ -z "$MYSQL_VERSION" ] && MYSQL_VERSION="$DEFAULT_MYSQL_VERSION"
 
-MYSQLDUMP_BIN="$DEVBOX_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin/mysqldump"
+MYSQLDUMP_BIN="$MYLOCALDEV_RESOURCES/$MYSQL_TYPE/$MYSQL_VERSION/${platform}/bin/mysqldump"
 
 if [ -x "$MYSQLDUMP_BIN" ]; then
     exec "$MYSQLDUMP_BIN" "$@"
 elif command -v mysqldump &> /dev/null; then
     exec mysqldump "$@"
 else
-    echo "[DevBox Pro] mysqldump not found for $MYSQL_TYPE $MYSQL_VERSION."
+    echo "[MyLocalDev] mysqldump not found for $MYSQL_TYPE $MYSQL_VERSION."
     exit 1
 fi
 `;
@@ -822,20 +822,20 @@ fi
     await fs.chmod(path.join(cliPath, 'mysqldump'), 0o755);
 
     const pythonShim = `#!/bin/bash
-# DevBox Pro Python Shim - Auto-detects project Python version
+# MyLocalDev Python Shim - Auto-detects project Python version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_PYTHON="${defaultPythonVersion}"
 CURRENT_DIR="$(pwd)"
 
 # Find project for current directory
 PYTHON_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -856,14 +856,14 @@ fi
 
 [ -z "$PYTHON_VERSION" ] && PYTHON_VERSION="$DEFAULT_PYTHON"
 
-PYTHON_PATH="$DEVBOX_RESOURCES/python/$PYTHON_VERSION/${platform}"
+PYTHON_PATH="$MYLOCALDEV_RESOURCES/python/$PYTHON_VERSION/${platform}"
 
 if [ -x "$PYTHON_PATH/bin/python3" ]; then
     exec "$PYTHON_PATH/bin/python3" "$@"
 elif command -v python3 &> /dev/null; then
     exec python3 "$@"
 else
-    echo "[DevBox Pro] Python $PYTHON_VERSION not found. Install from Binaries page or set a default version."
+    echo "[MyLocalDev] Python $PYTHON_VERSION not found. Install from Binaries page or set a default version."
     exit 1
 fi
 `;
@@ -874,20 +874,20 @@ fi
     await fs.chmod(path.join(cliPath, 'python3'), 0o755);
 
     const pipShim = `#!/bin/bash
-# DevBox Pro pip Shim - Auto-detects project Python version
+# MyLocalDev pip Shim - Auto-detects project Python version
 
-DEVBOX_RESOURCES="${resourcesPath}"
-DEVBOX_PROJECTS="${projectsFilePath}"
+MYLOCALDEV_RESOURCES="${resourcesPath}"
+MYLOCALDEV_PROJECTS="${projectsFilePath}"
 DEFAULT_PYTHON="${defaultPythonVersion}"
 CURRENT_DIR="$(pwd)"
 
 # Find project for current directory
 PYTHON_VERSION=""
-if [ -f "$DEVBOX_PROJECTS" ]; then
+if [ -f "$MYLOCALDEV_PROJECTS" ]; then
     RESULT=$(python3 -c "
 import json, sys
 try:
-    with open('$DEVBOX_PROJECTS') as f:
+    with open('$MYLOCALDEV_PROJECTS') as f:
         projects = json.load(f)
     current = '$CURRENT_DIR'.lower()
     for path, config in projects.items():
@@ -908,7 +908,7 @@ fi
 
 [ -z "$PYTHON_VERSION" ] && PYTHON_VERSION="$DEFAULT_PYTHON"
 
-PYTHON_PATH="$DEVBOX_RESOURCES/python/$PYTHON_VERSION/${platform}"
+PYTHON_PATH="$MYLOCALDEV_RESOURCES/python/$PYTHON_VERSION/${platform}"
 
 if [ -x "$PYTHON_PATH/bin/pip3" ]; then
     exec "$PYTHON_PATH/bin/pip3" "$@"
@@ -917,7 +917,7 @@ elif [ -x "$PYTHON_PATH/bin/python3" ]; then
 elif command -v pip3 &> /dev/null; then
     exec pip3 "$@"
 else
-    echo "[DevBox Pro] pip not found for Python $PYTHON_VERSION. Install from Binaries page or set a default version."
+    echo "[MyLocalDev] pip not found for Python $PYTHON_VERSION. Install from Binaries page or set a default version."
     exit 1
 fi
 `;

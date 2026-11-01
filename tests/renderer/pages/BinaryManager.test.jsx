@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 afterEach(cleanup);
 
-const mockDevbox = {
+const mockMyLocalDev = {
     binaries: {
         getStatus: vi.fn().mockResolvedValue({
             php: {},
@@ -77,12 +77,12 @@ const modalMock = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
-    mockDevbox.binaries.getStatus.mockResolvedValue({ php: {}, nginx: {}, apache: {}, mysql: {}, mariadb: {}, redis: {}, nodejs: {}, phpmyadmin: {}, mailpit: {} });
-    mockDevbox.git.isAvailable.mockResolvedValue({ available: false, source: null, version: null });
-    mockDevbox.binaries.getInstalled.mockResolvedValue({});
-    mockDevbox.system.selectFile.mockResolvedValue(null);
+    mockMyLocalDev.binaries.getStatus.mockResolvedValue({ php: {}, nginx: {}, apache: {}, mysql: {}, mariadb: {}, redis: {}, nodejs: {}, phpmyadmin: {}, mailpit: {} });
+    mockMyLocalDev.git.isAvailable.mockResolvedValue({ available: false, source: null, version: null });
+    mockMyLocalDev.binaries.getInstalled.mockResolvedValue({});
+    mockMyLocalDev.system.selectFile.mockResolvedValue(null);
 });
 
 vi.mock('@/context/AppContext', () => ({
@@ -134,12 +134,12 @@ describe('BinaryManager', () => {
         fireEvent.click(gitDownloadButton);
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.downloadGit).toHaveBeenCalledTimes(1);
+            expect(mockMyLocalDev.binaries.downloadGit).toHaveBeenCalledTimes(1);
         });
     });
 
     it('preserves the ts suffix when importing a PHP archive', async () => {
-        mockDevbox.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.4.21-ts-Win32-vs17-x64.zip');
+        mockMyLocalDev.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.4.21-ts-Win32-vs17-x64.zip');
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -156,7 +156,7 @@ describe('BinaryManager', () => {
         fireEvent.click(screen.getByRole('button', { name: /^Import$/ }));
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.importBinary).toHaveBeenCalledWith(
+            expect(mockMyLocalDev.binaries.importBinary).toHaveBeenCalledWith(
                 'php',
                 '8.4.21-ts',
                 'C:\\Downloads\\php-8.4.21-ts-Win32-vs17-x64.zip'
@@ -165,7 +165,7 @@ describe('BinaryManager', () => {
     });
 
     it('treats official Windows TS PHP zip names without an explicit ts suffix as thread-safe', async () => {
-        mockDevbox.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.3.31-Win32-vs16-x64.zip');
+        mockMyLocalDev.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.3.31-Win32-vs16-x64.zip');
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -182,7 +182,7 @@ describe('BinaryManager', () => {
         fireEvent.click(screen.getByRole('button', { name: /^Import$/ }));
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.importBinary).toHaveBeenCalledWith(
+            expect(mockMyLocalDev.binaries.importBinary).toHaveBeenCalledWith(
                 'php',
                 '8.3.31-ts',
                 'C:\\Downloads\\php-8.3.31-Win32-vs16-x64.zip'
@@ -191,7 +191,7 @@ describe('BinaryManager', () => {
     });
 
     it('keeps patch-level NTS imports as distinct PHP versions', async () => {
-        mockDevbox.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.2.28-nts-Win32-vs17-x64.zip');
+        mockMyLocalDev.system.selectFile.mockResolvedValueOnce('C:\\Downloads\\php-8.2.28-nts-Win32-vs17-x64.zip');
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -209,7 +209,7 @@ describe('BinaryManager', () => {
         fireEvent.click(screen.getByRole('button', { name: /^Import$/ }));
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.importBinary).toHaveBeenCalledWith(
+            expect(mockMyLocalDev.binaries.importBinary).toHaveBeenCalledWith(
                 'php',
                 '8.2.28',
                 'C:\\Downloads\\php-8.2.28-nts-Win32-vs17-x64.zip'
@@ -234,12 +234,12 @@ describe('BinaryManager', () => {
         fireEvent.click(downloadButton);
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.downloadCloudflared).toHaveBeenCalledTimes(1);
+            expect(mockMyLocalDev.binaries.downloadCloudflared).toHaveBeenCalledTimes(1);
         });
     });
 
     it('enables zrok app-wide from the tools tab', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValue({ zrok: true });
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValue({ zrok: true });
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -263,12 +263,12 @@ describe('BinaryManager', () => {
         fireEvent.click(screen.getByRole('button', { name: /Enable zrok/i }));
 
         await waitFor(() => {
-            expect(mockDevbox.tunnel.zrokEnable).toHaveBeenCalledWith('zrok-token-123');
+            expect(mockMyLocalDev.tunnel.zrokEnable).toHaveBeenCalledWith('zrok-token-123');
         });
     });
 
     it('opens the zrok token help links from the setup modal', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValue({ zrok: true });
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValue({ zrok: true });
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -282,12 +282,12 @@ describe('BinaryManager', () => {
         fireEvent.click(await screen.findByRole('button', { name: /Open myzrok\.io/i }));
         fireEvent.click(await screen.findByRole('button', { name: /Open API Console/i }));
 
-        expect(mockDevbox.system.openExternal).toHaveBeenCalledWith('https://myzrok.io/');
-        expect(mockDevbox.system.openExternal).toHaveBeenCalledWith('https://api-v2.zrok.io/');
+        expect(mockMyLocalDev.system.openExternal).toHaveBeenCalledWith('https://myzrok.io/');
+        expect(mockMyLocalDev.system.openExternal).toHaveBeenCalledWith('https://api-v2.zrok.io/');
     });
 
     it('shows tunnel update checks when the binaries are installed', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValue({ cloudflared: true, zrok: true });
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValue({ cloudflared: true, zrok: true });
 
         render(
             <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -307,12 +307,12 @@ describe('BinaryManager', () => {
         fireEvent.click(within(cloudflareRow).getByRole('button', { name: /Check Updates/i }));
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.checkForServiceUpdates).toHaveBeenCalledTimes(1);
+            expect(mockMyLocalDev.binaries.checkForServiceUpdates).toHaveBeenCalledTimes(1);
         });
     });
 
     it('treats system Git as available without showing a remove action', async () => {
-        mockDevbox.git.isAvailable.mockResolvedValueOnce({
+        mockMyLocalDev.git.isAvailable.mockResolvedValueOnce({
             available: true,
             source: 'system',
             version: '2.49.0',
@@ -333,13 +333,13 @@ describe('BinaryManager', () => {
     });
 
     it('shows update badge and opens safe update modal with modification inspection for PHP', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValueOnce({
             php: { '8.2': true },
         });
-        mockDevbox.binaries.getServiceConfig.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getServiceConfig.mockResolvedValueOnce({
             versions: { php: ['8.2'] },
         });
-        mockDevbox.binaries.getAllPhpVersionDetails.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getAllPhpVersionDetails.mockResolvedValueOnce({
             '8.2': {
                 version: '8.2',
                 installed: true,
@@ -348,7 +348,7 @@ describe('BinaryManager', () => {
                 hasUpdate: true,
             },
         });
-        mockDevbox.binaries.checkPhpModifications.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.checkPhpModifications.mockResolvedValueOnce({
             hasModifications: true,
             modifiedFiles: ['php.ini', 'ext/php_xdebug.dll'],
             hasCustomIni: true,
@@ -393,7 +393,7 @@ describe('BinaryManager', () => {
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.updatePhp).toHaveBeenCalledWith('8.2', {
+            expect(mockMyLocalDev.binaries.updatePhp).toHaveBeenCalledWith('8.2', {
                 preserveModifications: true,
                 force: true,
             });
@@ -401,13 +401,13 @@ describe('BinaryManager', () => {
     });
 
     it('displays update badge and modal for Node.js with package preservation option', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValueOnce({
             nodejs: { '20': true },
         });
-        mockDevbox.binaries.getServiceConfig.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getServiceConfig.mockResolvedValueOnce({
             versions: { nodejs: ['20'] },
         });
-        mockDevbox.binaries.getAllPackageVersionDetails = vi.fn().mockResolvedValue({
+        mockMyLocalDev.binaries.getAllPackageVersionDetails = vi.fn().mockResolvedValue({
             nodejs: {
                 '20': {
                     service: 'nodejs',
@@ -419,14 +419,14 @@ describe('BinaryManager', () => {
                 },
             },
         });
-        mockDevbox.binaries.checkPackageModifications = vi.fn().mockResolvedValue({
+        mockMyLocalDev.binaries.checkPackageModifications = vi.fn().mockResolvedValue({
             hasModifications: true,
             reasons: ['2 global npm package(s) installed (e.g. pnpm, yarn)'],
             customPackages: ['pnpm', 'yarn'],
             customFiles: ['.npmrc'],
             modifiedFiles: ['node_modules', '.npmrc'],
         });
-        mockDevbox.binaries.updatePackage = vi.fn().mockResolvedValue({
+        mockMyLocalDev.binaries.updatePackage = vi.fn().mockResolvedValue({
             success: true,
             service: 'nodejs',
             version: '20',
@@ -457,7 +457,7 @@ describe('BinaryManager', () => {
         fireEvent.click(confirmBtn);
 
         await waitFor(() => {
-            expect(mockDevbox.binaries.updatePackage).toHaveBeenCalledWith('nodejs', '20', {
+            expect(mockMyLocalDev.binaries.updatePackage).toHaveBeenCalledWith('nodejs', '20', {
                 preserveModifications: true,
                 force: true,
             });
@@ -465,10 +465,10 @@ describe('BinaryManager', () => {
     });
 
     it('displays update badges on category tabs, service card headers, and version pills when updates are available', async () => {
-        mockDevbox.binaries.getInstalled.mockResolvedValue({
+        mockMyLocalDev.binaries.getInstalled.mockResolvedValue({
             mysql: { '8.4': true, '8.0': true },
         });
-        mockDevbox.binaries.getAllPackageVersionDetails.mockResolvedValue({
+        mockMyLocalDev.binaries.getAllPackageVersionDetails.mockResolvedValue({
             mysql: {
                 '8.4': {
                     hasUpdate: true,

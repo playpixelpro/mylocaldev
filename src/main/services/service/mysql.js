@@ -722,7 +722,7 @@ FLUSH PRIVILEGES;
     const escapedPassword = this.escapeMySqlStringLiteral(dbPassword);
 
     const sqlLines = [
-      '-- Auto-generated credentials from DevBox Pro ConfigStore',
+      '-- Auto-generated credentials from MyLocalDev ConfigStore',
       '-- This file runs on every startup to ensure credentials match settings',
       '',
       "-- Create users if they don't exist (fresh install case)",

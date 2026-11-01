@@ -17,7 +17,7 @@ function makeContext(overrides = {}) {
         return defaultValue;
       }),
     },
-    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.devbox-pro'),
+    getDataPath: vi.fn(() => 'C:/Users/Jeffrey/.mylocaldev'),
     getDefaultWebServerVersion: vi.fn((webServer) => webServer === 'apache' ? '2.4' : '1.28'),
     getEffectiveWebServer: vi.fn((project) => project.webServer),
     getEffectiveWebServerVersion: vi.fn((project) => project.webServerVersion),

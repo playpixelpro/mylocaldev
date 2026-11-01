@@ -2,11 +2,11 @@
  * Global test setup file.
  *
  * - Extends expect with jest-dom matchers for DOM assertions
- * - Sets up global window.devbox mock for renderer tests
+ * - Sets up global window.mylocaldev mock for renderer tests
  */
 import '@testing-library/jest-dom';
 
-// Mock window.devbox API for renderer tests (only in jsdom env)
+// Mock window.mylocaldev API for renderer tests (only in jsdom env)
 if (typeof window !== 'undefined') {
     Object.defineProperty(window, 'matchMedia', {
         writable: true,
@@ -22,7 +22,7 @@ if (typeof window !== 'undefined') {
         })),
     });
 
-    window.devbox = {
+    window.mylocaldev = {
         projects: {
             getAll: async () => [],
             getById: async () => null,

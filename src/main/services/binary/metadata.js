@@ -63,7 +63,7 @@ module.exports = {
         method: 'HEAD',
         family: 4,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) DevBoxPro/1.0',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) MyLocalDev/1.0',
         },
       };
 

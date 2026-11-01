@@ -50,9 +50,9 @@ describe('Settings', () => {
             showConfirm: mockShowConfirm,
         });
 
-        // Setup window.devbox mock for settings
-        window.devbox = {
-            ...window.devbox,
+        // Setup window.mylocaldev mock for settings
+        window.mylocaldev = {
+            ...window.mylocaldev,
             settings: {
                 set: vi.fn().mockResolvedValue(),
                 reset: vi.fn().mockResolvedValue(),
@@ -66,7 +66,7 @@ describe('Settings', () => {
                 getDirectShimsEnabled: vi.fn().mockResolvedValue(false),
             },
             system: {
-                getAppDataPath: vi.fn().mockResolvedValue('C:\\Users\\Jeffrey\\AppData\\Roaming\\devbox-pro'),
+                getAppDataPath: vi.fn().mockResolvedValue('C:\\Users\\Jeffrey\\AppData\\Roaming\\MyLocalDev'),
                 openPath: vi.fn().mockResolvedValue(true),
                 getAppVersion: vi.fn().mockResolvedValue('1.0.0'),
             }
@@ -102,8 +102,8 @@ describe('Settings', () => {
         fireEvent.click(screen.getByRole('button', { name: /Save Changes/i }));
 
         await waitFor(() => {
-            expect(window.devbox.settings.set).toHaveBeenCalledWith('settings.defaultProjectsPath', 'C:\\test\\projects');
-            expect(window.devbox.settings.set).toHaveBeenCalledWith('settings.dbUser', 'root');
+            expect(window.mylocaldev.settings.set).toHaveBeenCalledWith('settings.defaultProjectsPath', 'C:\\test\\projects');
+            expect(window.mylocaldev.settings.set).toHaveBeenCalledWith('settings.dbUser', 'root');
             expect(mockRefreshSettings).toHaveBeenCalled();
         });
     });
@@ -123,7 +123,7 @@ describe('Settings', () => {
         fireEvent.click(screen.getByRole('button', { name: /Save Changes/i }));
 
         await waitFor(() => {
-            expect(window.devbox.database.syncCredentialsToAllVersions).toHaveBeenCalledWith('root', 'newpass', '');
+            expect(window.mylocaldev.database.syncCredentialsToAllVersions).toHaveBeenCalledWith('root', 'newpass', '');
         });
     });
 
@@ -135,7 +135,7 @@ describe('Settings', () => {
 
         await waitFor(() => {
             expect(mockShowConfirm).toHaveBeenCalled();
-            expect(window.devbox.settings.reset).toHaveBeenCalled();
+            expect(window.mylocaldev.settings.reset).toHaveBeenCalled();
             expect(mockRefreshSettings).toHaveBeenCalled();
         });
     });
@@ -146,13 +146,13 @@ describe('Settings', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Advanced' }));
 
         const locationButton = await screen.findByTitle('Click to open folder');
-        expect(await screen.findByText('C:\\Users\\Jeffrey\\AppData\\Roaming\\devbox-pro')).toBeInTheDocument();
+        expect(await screen.findByText('C:\\Users\\Jeffrey\\AppData\\Roaming\\MyLocalDev')).toBeInTheDocument();
 
         fireEvent.click(locationButton);
 
         await waitFor(() => {
-            expect(window.devbox.system.getAppDataPath).toHaveBeenCalled();
-            expect(window.devbox.system.openPath).toHaveBeenCalledWith('C:\\Users\\Jeffrey\\AppData\\Roaming\\devbox-pro');
+            expect(window.mylocaldev.system.getAppDataPath).toHaveBeenCalled();
+            expect(window.mylocaldev.system.openPath).toHaveBeenCalledWith('C:\\Users\\Jeffrey\\AppData\\Roaming\\MyLocalDev');
         });
     });
 });

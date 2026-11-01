@@ -79,7 +79,7 @@ describe('database/helpers', () => {
           serviceStatus: new Map([['mysql', { status: 'running', version: '8.4' }]]),
         },
       },
-      resourcePath: 'C:/DevBox/resources',
+      resourcePath: 'C:/MyLocalDev/resources',
     });
 
     vi.spyOn(path, 'join');
@@ -94,26 +94,26 @@ describe('database/helpers', () => {
   it('falls back to the active database version path when the service is not running', () => {
     const context = makeContext({
       settings: { activeDatabaseType: 'mongodb', activeDatabaseVersion: '8.0' },
-      resourcePath: 'C:/DevBox/resources',
+      resourcePath: 'C:/MyLocalDev/resources',
     });
-    const existsSync = vi.spyOn(require('fs-extra'), 'existsSync').mockImplementation((filePath) => filePath === path.join('C:/DevBox/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
+    const existsSync = vi.spyOn(require('fs-extra'), 'existsSync').mockImplementation((filePath) => filePath === path.join('C:/MyLocalDev/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
 
     const binaryPath = databaseHelpers._getBinaryPath.call(context, 'mongosh');
 
-    expect(binaryPath).toBe(path.join('C:/DevBox/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
-    expect(existsSync).toHaveBeenCalledWith(path.join('C:/DevBox/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
+    expect(binaryPath).toBe(path.join('C:/MyLocalDev/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
+    expect(existsSync).toHaveBeenCalledWith(path.join('C:/MyLocalDev/resources', 'mongodb', '8.0', 'win', 'bin', 'mongosh.exe'));
   });
 
   it('uses the legacy mongo shell when mongosh is not present', () => {
     const context = makeContext({
       settings: { activeDatabaseType: 'mongodb', activeDatabaseVersion: '8.0' },
-      resourcePath: 'C:/DevBox/resources',
+      resourcePath: 'C:/MyLocalDev/resources',
     });
-    vi.spyOn(require('fs-extra'), 'existsSync').mockImplementation((filePath) => filePath === path.join('C:/DevBox/resources', 'mongodb', '8.0', 'win', 'bin', 'mongo.exe'));
+    vi.spyOn(require('fs-extra'), 'existsSync').mockImplementation((filePath) => filePath === path.join('C:/MyLocalDev/resources', 'mongodb', '8.0', 'win', 'bin', 'mongo.exe'));
 
     const binaryPath = databaseHelpers.getDbClientPath.call(context);
 
-    expect(binaryPath).toBe(path.join('C:/DevBox/resources', 'mongodb', '8.0', 'win', 'bin', 'mongo.exe'));
+    expect(binaryPath).toBe(path.join('C:/MyLocalDev/resources', 'mongodb', '8.0', 'win', 'bin', 'mongo.exe'));
   });
 
   it('uses runtime directory as cwd for MySQL spawn options', () => {
@@ -121,11 +121,11 @@ describe('database/helpers', () => {
 
     const options = databaseHelpers.buildBinarySpawnOptions.call(
       context,
-      'C:/Users/test/AppData/Roaming/devbox-pro/resources/mysql/8.4/win/bin/mysql.exe',
+      'C:/Users/test/AppData/Roaming/MyLocalDev/resources/mysql/8.4/win/bin/mysql.exe',
       { stdio: ['pipe', 'pipe', 'pipe'] }
     );
 
-    expect(options.cwd).toBe('C:/Users/test/AppData/Roaming/devbox-pro/resources/mysql/8.4/win');
+    expect(options.cwd).toBe('C:/Users/test/AppData/Roaming/MyLocalDev/resources/mysql/8.4/win');
     expect(options.windowsHide).toBe(true);
   });
 

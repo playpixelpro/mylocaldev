@@ -136,7 +136,7 @@ module.exports = {
 
       sendOutput('', 'info');
       sendOutput(divider, 'info');
-      sendOutput('Thank you for using DevBox Pro!', 'success');
+      sendOutput('Thank you for using MyLocalDev!', 'success');
       sendOutput('', 'info');
       sendOutput(`Your project "${project.name}" is now available at:`, 'info');
       sendOutput(`   HTTP:  http://${project.domain}`, 'info');

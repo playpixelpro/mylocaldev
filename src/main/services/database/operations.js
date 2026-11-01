@@ -88,7 +88,7 @@ module.exports = {
 
     if (dbType === 'mongodb') {
       await this._runMongoQuery(
-        `db.getSiblingDB("${safeName}").getCollection("_devbox_meta").updateOne({_id:"init"},{$set:{createdAt:new Date()}},{upsert:true})`,
+        `db.getSiblingDB("${safeName}").getCollection("_mylocaldev_meta").updateOne({_id:"init"},{$set:{createdAt:new Date()}},{upsert:true})`,
         'admin'
       );
       return { success: true, name: safeName };

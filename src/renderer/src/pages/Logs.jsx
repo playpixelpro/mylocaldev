@@ -45,7 +45,7 @@ function Logs() {
       if (selectedSource === 'all') {
         // Load logs from all sources
         for (const project of projects) {
-          const projectLogs = await window.devbox?.logs.getProjectLogs(project.id, 50);
+          const projectLogs = await window.mylocaldev?.logs.getProjectLogs(project.id, 50);
           if (projectLogs) {
             logEntries.push(
               ...projectLogs.map((line) => ({
@@ -60,7 +60,7 @@ function Logs() {
         }
 
         for (const [name] of Object.entries(services)) {
-          const serviceLogs = await window.devbox?.logs.getServiceLogs(name, 50);
+          const serviceLogs = await window.mylocaldev?.logs.getServiceLogs(name, 50);
           if (serviceLogs) {
             logEntries.push(
               ...serviceLogs.map((line) => ({
@@ -75,7 +75,7 @@ function Logs() {
         }
       } else if (selectedSource.startsWith('project:')) {
         const projectId = selectedSource.replace('project:', '');
-        const projectLogs = await window.devbox?.logs.getProjectLogs(projectId, 200);
+        const projectLogs = await window.mylocaldev?.logs.getProjectLogs(projectId, 200);
         const project = projects.find((p) => p.id === projectId);
         if (projectLogs) {
           logEntries = projectLogs.map((line) => ({
@@ -88,7 +88,7 @@ function Logs() {
         }
       } else if (selectedSource.startsWith('service:')) {
         const serviceName = selectedSource.replace('service:', '');
-        const serviceLogs = await window.devbox?.logs.getServiceLogs(serviceName, 200);
+        const serviceLogs = await window.mylocaldev?.logs.getServiceLogs(serviceName, 200);
         if (serviceLogs) {
           logEntries = serviceLogs.map((line) => ({
             source: 'service',
@@ -100,7 +100,7 @@ function Logs() {
         }
       } else if (selectedSource === 'system') {
         // Load system logs (critical errors, warnings, startup issues)
-        const systemLogs = await window.devbox?.logs.getSystemLogs(200);
+        const systemLogs = await window.mylocaldev?.logs.getSystemLogs(200);
         if (systemLogs) {
           logEntries = systemLogs.map((line) => ({
             source: 'system',
@@ -170,20 +170,20 @@ function Logs() {
       }
       // Clear all project logs
       for (const project of projects) {
-        await window.devbox?.logs.clearProjectLogs(project.id);
+        await window.mylocaldev?.logs.clearProjectLogs(project.id);
       }
       // Clear all service logs
       for (const name of Object.keys(services)) {
-        await window.devbox?.logs.clearServiceLogs(name);
+        await window.mylocaldev?.logs.clearServiceLogs(name);
       }
     } else if (selectedSource.startsWith('project:')) {
       const projectId = selectedSource.replace('project:', '');
-      await window.devbox?.logs.clearProjectLogs(projectId);
+      await window.mylocaldev?.logs.clearProjectLogs(projectId);
     } else if (selectedSource.startsWith('service:')) {
       const serviceName = selectedSource.replace('service:', '');
-      await window.devbox?.logs.clearServiceLogs(serviceName);
+      await window.mylocaldev?.logs.clearServiceLogs(serviceName);
     } else if (selectedSource === 'system') {
-      await window.devbox?.logs.clearSystemLogs();
+      await window.mylocaldev?.logs.clearSystemLogs();
     }
     loadLogs();
   };
@@ -194,7 +194,7 @@ function Logs() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `devbox-logs-${new Date().toISOString().split('T')[0]}.log`;
+    a.download = `MyLocalDev-logs-${new Date().toISOString().split('T')[0]}.log`;
     a.click();
     URL.revokeObjectURL(url);
   };

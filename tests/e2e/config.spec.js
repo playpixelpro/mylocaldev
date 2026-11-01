@@ -1,9 +1,9 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro Config Export', () => {
+test.describe('MyLocalDev Config Export', () => {
     test('Can access Advanced Settings', async ({ page }) => {
         // Wait for Dashboard
-        await expect(page.locator('text=DevBox Pro')).toBeVisible();
+        await expect(page.locator('text=MyLocalDev')).toBeVisible();
 
         // Go to Settings 
         await page.click('a:has-text("Settings")');

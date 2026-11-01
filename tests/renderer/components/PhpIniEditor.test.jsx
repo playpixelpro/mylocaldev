@@ -12,8 +12,8 @@ import PhpIniEditor from '@/components/PhpIniEditor';
 
 afterEach(cleanup);
 
-// Mock window.devbox
-const mockDevbox = {
+// Mock window.mylocaldev
+const mockMyLocalDev = {
     binaries: {
         getPhpIni: vi.fn(),
         savePhpIni: vi.fn(),
@@ -26,7 +26,7 @@ const mockDevbox = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
 });
 
@@ -54,13 +54,13 @@ describe('PhpIniEditor', () => {
         });
 
         it('renders the header with version', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue('[PHP]\nmemory_limit=128M');
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue('[PHP]\nmemory_limit=128M');
             renderEditor();
             await waitFor(() => expect(screen.getByText(/PHP 8.3 Configuration/)).toBeInTheDocument());
         });
 
         it('shows loading indicator initially', () => {
-            mockDevbox.binaries.getPhpIni.mockReturnValue(new Promise(() => { })); // never resolves
+            mockMyLocalDev.binaries.getPhpIni.mockReturnValue(new Promise(() => { })); // never resolves
             renderEditor();
             // Loading spinner should be visible
             const spinner = document.querySelector('.animate-spin');
@@ -69,7 +69,7 @@ describe('PhpIniEditor', () => {
 
         it('shows textarea with INI content after loading', async () => {
             const iniContent = '[PHP]\nmemory_limit=256M\nmax_execution_time=30';
-            mockDevbox.binaries.getPhpIni.mockResolvedValue(iniContent);
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue(iniContent);
             renderEditor();
             // Wait for content to load, then switch to Raw Editor tab
             await waitFor(() => screen.getByText(/Extensions/));
@@ -81,13 +81,13 @@ describe('PhpIniEditor', () => {
         });
 
         it('shows error when getPhpIni fails', async () => {
-            mockDevbox.binaries.getPhpIni.mockRejectedValue(new Error('File not found'));
+            mockMyLocalDev.binaries.getPhpIni.mockRejectedValue(new Error('File not found'));
             renderEditor();
             await waitFor(() => expect(screen.getByText('File not found')).toBeInTheDocument());
         });
 
         it('shows error when INI returns null', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue(null);
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue(null);
             renderEditor();
             await waitFor(() => expect(screen.getByText('php.ini file not found')).toBeInTheDocument());
         });
@@ -99,7 +99,7 @@ describe('PhpIniEditor', () => {
 
     describe('Edit and Save', () => {
         it('Save button is disabled when content is unchanged', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
             renderEditor();
             await waitFor(() => screen.getByText(/Extensions/));
             const saveBtn = screen.getByRole('button', { name: /Save Changes/i });
@@ -107,7 +107,7 @@ describe('PhpIniEditor', () => {
         });
 
         it('Save button enabled after content change', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue('[PHP]\nmemory_limit=128M');
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue('[PHP]\nmemory_limit=128M');
             renderEditor();
             await waitFor(() => screen.getByText(/Extensions/));
             fireEvent.click(screen.getByText('Raw Editor'));
@@ -121,9 +121,9 @@ describe('PhpIniEditor', () => {
         });
 
         it('calls savePhpIni when save is clicked', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
-            mockDevbox.binaries.savePhpIni.mockResolvedValue(undefined);
-            mockDevbox.projects.getAll.mockResolvedValue([]);
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
+            mockMyLocalDev.binaries.savePhpIni.mockResolvedValue(undefined);
+            mockMyLocalDev.projects.getAll.mockResolvedValue([]);
             renderEditor();
 
             await waitFor(() => screen.getByText(/Extensions/));
@@ -133,7 +133,7 @@ describe('PhpIniEditor', () => {
             fireEvent.change(textarea, { target: { value: '[PHP]\nupdated=true' } });
 
             fireEvent.click(screen.getByRole('button', { name: /Save Changes/i }));
-            await waitFor(() => expect(mockDevbox.binaries.savePhpIni).toHaveBeenCalledWith('8.3', '[PHP]\nupdated=true'));
+            await waitFor(() => expect(mockMyLocalDev.binaries.savePhpIni).toHaveBeenCalledWith('8.3', '[PHP]\nupdated=true'));
         });
     });
 
@@ -143,7 +143,7 @@ describe('PhpIniEditor', () => {
 
     describe('Reset', () => {
         it('Reset to Default button is visible', async () => {
-            mockDevbox.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
+            mockMyLocalDev.binaries.getPhpIni.mockResolvedValue('[PHP]\n');
             renderEditor();
             await waitFor(() => screen.getByText(/Extensions/));
             expect(screen.getByRole('button', { name: /Reset to Default/i })).toBeInTheDocument();

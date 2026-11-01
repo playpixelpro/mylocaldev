@@ -1,0 +1,30 @@
+MyLocalDev
+==========
+
+MyLocalDev is a rebranded fork of DevBox Pro.
+
+Original work
+-------------
+DevBox Pro
+Copyright (c) 2025 Jeffrey Gepiga
+https://github.com/JeffGepiga/DevBoxPro
+
+The original project is licensed under the MIT License. A copy of that license
+is included in the LICENSE file and applies to all original portions of this
+software.
+
+This fork
+---------
+Copyright (c) 2026 PlayPixelPro
+Modifications: rebranding (name, icons, installer, user-facing strings), project
+environment handling fixes, and dependency updates.
+
+Third-party components
+----------------------
+This application bundles Electron and Chromium. Their license texts ship with the
+application as LICENSE.electron.txt and LICENSES.chromium.html.
+
+Runtime binaries (PHP, MySQL, MariaDB, Redis, Nginx, Apache, Node.js, Python,
+PostgreSQL, MongoDB, MinIO, Memcached, Mailpit, phpMyAdmin, Composer, Git) are
+downloaded from their respective vendors at the user's request and are governed by
+their own licenses.

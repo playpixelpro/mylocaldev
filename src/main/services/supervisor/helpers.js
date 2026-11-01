@@ -180,9 +180,13 @@ module.exports = {
     const pythonScriptsDir = process.platform === 'win32' ? path.join(pythonDir, 'Scripts') : path.join(pythonDir, 'bin');
     const composerPhar = path.join(this.resourcePath, 'composer', 'composer.phar');
 
+    const projectEnvOverrides = typeof this.getEnvOverrides === 'function'
+      ? await this.getEnvOverrides(project)
+      : {};
+
     const envBase = this.getEffectiveProcessEnvironment(project, config, {
       ...process.env,
-      ...project.environment,
+      ...projectEnvOverrides,
       ...config.environment,
       PYTHONUNBUFFERED: '1',
       NODE_NO_READLINE: '1',

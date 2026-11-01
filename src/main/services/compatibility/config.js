@@ -1,7 +1,7 @@
 const https = require('https');
 const fs = require('fs-extra');
 
-const REMOTE_COMPATIBILITY_URL = 'https://raw.githubusercontent.com/JeffGepiga/DevBoxPro/main/config/compatibility.json';
+const REMOTE_COMPATIBILITY_URL = 'https://raw.githubusercontent.com/playpixelpro/mylocaldev/main/config/compatibility.json';
 
 module.exports = {
   async initialize() {
@@ -98,7 +98,7 @@ module.exports = {
   async fetchRemoteConfig() {
     return new Promise((resolve, reject) => {
       https.get(REMOTE_COMPATIBILITY_URL, {
-        headers: { 'User-Agent': 'DevBoxPro' }
+        headers: { 'User-Agent': 'MyLocalDev' }
       }, (res) => {
         if (res.statusCode !== 200) {
           reject(new Error(`HTTP ${res.statusCode}: Failed to fetch compatibility config`));

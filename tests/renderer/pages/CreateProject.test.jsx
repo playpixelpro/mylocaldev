@@ -11,7 +11,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 afterEach(cleanup);
 
-const mockDevbox = {
+const mockMyLocalDev = {
     projects: {
         create: vi.fn().mockResolvedValue({ id: 'new-project' }),
         registerExisting: vi.fn().mockResolvedValue({ id: 'imported-project' }),
@@ -49,10 +49,10 @@ const mockShowAlert = vi.fn();
 const mockCreateProject = vi.fn().mockResolvedValue({ id: 'new-project' });
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
     mockCreateProject.mockResolvedValue({ id: 'new-project' });
-    mockDevbox.binaries.getStatus.mockResolvedValue({
+    mockMyLocalDev.binaries.getStatus.mockResolvedValue({
         php: { '8.3': { installed: true } },
         nginx: { '1.28': { installed: true } },
         apache: {},
@@ -137,7 +137,7 @@ describe('CreateProject', () => {
                     type: 'warning',
                 }));
             });
-            expect(mockDevbox.projects.detectType).not.toHaveBeenCalled();
+            expect(mockMyLocalDev.projects.detectType).not.toHaveBeenCalled();
         });
 
         it('hides clone repository when git is unavailable and shows install guidance', async () => {
@@ -154,7 +154,7 @@ describe('CreateProject', () => {
         });
 
         it('registers an imported project through the existing-project flow', async () => {
-            mockDevbox.system.selectDirectory.mockResolvedValueOnce('/projects/fresh-app');
+            mockMyLocalDev.system.selectDirectory.mockResolvedValueOnce('/projects/fresh-app');
             renderCreate();
 
             fireEvent.click(await screen.findByRole('button', { name: /Import Project/i }));
@@ -163,12 +163,12 @@ describe('CreateProject', () => {
             fireEvent.click(screen.getByRole('button', { name: 'SubmitImport' }));
 
             await waitFor(() => {
-                expect(mockDevbox.projects.registerExisting).toHaveBeenCalledWith(expect.objectContaining({
+                expect(mockMyLocalDev.projects.registerExisting).toHaveBeenCalledWith(expect.objectContaining({
                     name: 'Imported App',
                     path: '/projects/fresh-app',
                 }));
             });
-            expect(mockDevbox.projects.create).not.toHaveBeenCalled();
+            expect(mockMyLocalDev.projects.create).not.toHaveBeenCalled();
         });
 
         it('submits the wizard through the createProject app action', async () => {

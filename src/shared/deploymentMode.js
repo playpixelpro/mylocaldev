@@ -1,5 +1,5 @@
 /**
- * Deployment Mode utilities for DevBox Pro
+ * Deployment Mode utilities for MyLocalDev
  *
  * Provides helpers to resolve the effective deployment mode for a project
  * and centralized production configuration constants.
@@ -145,7 +145,7 @@ const PRODUCTION_MYSQL = {
  * Redis production config overrides
  */
 const PRODUCTION_REDIS = {
-  requirepass: 'devbox-pro-redis',
+  requirepass: 'MyLocalDev-redis',
   maxmemory: '256mb',
   'maxmemory-policy': 'allkeys-lru',
   // Rename dangerous commands to empty string to disable them

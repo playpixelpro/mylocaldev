@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 afterEach(cleanup);
 
-const mockDevbox = {
+const mockMyLocalDev = {
     projects: {
         stopAll: vi.fn().mockResolvedValue({ success: true }),
     },
@@ -53,10 +53,10 @@ const mockAppContext = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
-    mockDevbox.binaries.getStatus.mockResolvedValue({});
-    mockDevbox.binaries.getServiceConfig.mockResolvedValue({ versions: {}, defaultPorts: {}, portOffsets: {} });
+    mockMyLocalDev.binaries.getStatus.mockResolvedValue({});
+    mockMyLocalDev.binaries.getServiceConfig.mockResolvedValue({ versions: {}, defaultPorts: {}, portOffsets: {} });
     mockAppContext.projects = [];
     mockAppContext.services = {};
     mockAppContext.refreshServices = vi.fn();
@@ -99,7 +99,7 @@ describe('Services', () => {
     });
 
     it('stops running projects in bulk before stopping standalone services', async () => {
-        mockDevbox.binaries.getStatus.mockResolvedValueOnce({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValueOnce({
             mailpit: { installed: true },
         });
         mockAppContext.projects = [{
@@ -125,17 +125,17 @@ describe('Services', () => {
         fireEvent.click(stopAllButton);
 
         await waitFor(() => {
-            expect(mockDevbox.projects.stopAll).toHaveBeenCalledTimes(1);
+            expect(mockMyLocalDev.projects.stopAll).toHaveBeenCalledTimes(1);
         });
-        expect(mockDevbox.services.stopAll).not.toHaveBeenCalled();
-        expect(mockDevbox.services.stop).toHaveBeenCalledWith('mailpit', null);
+        expect(mockMyLocalDev.services.stopAll).not.toHaveBeenCalled();
+        expect(mockMyLocalDev.services.stop).toHaveBeenCalledWith('mailpit', null);
     });
 
     it('marks database versions used by running projects as running', async () => {
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.0': { installed: true } },
         });
-        mockDevbox.binaries.getServiceConfig.mockResolvedValue({
+        mockMyLocalDev.binaries.getServiceConfig.mockResolvedValue({
             versions: { mysql: ['8.0'] },
             defaultPorts: { mysql: 3306 },
             portOffsets: { mysql: { '8.0': 1 } },
@@ -162,11 +162,11 @@ describe('Services', () => {
     });
 
     it('shows active public tunnels and allows stopping them', async () => {
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             cloudflared: { installed: true },
             zrok: { installed: true },
         });
-        mockDevbox.tunnel.getAllStatuses.mockResolvedValue({
+        mockMyLocalDev.tunnel.getAllStatuses.mockResolvedValue({
             'proj-1': {
                 projectId: 'proj-1',
                 provider: 'cloudflared',
@@ -174,7 +174,7 @@ describe('Services', () => {
                 publicUrl: 'https://myapp.trycloudflare.com',
             },
         });
-        mockDevbox.tunnel.zrokStatus.mockResolvedValue({ enabled: true, configuredAt: '2026-04-01T10:00:00.000Z' });
+        mockMyLocalDev.tunnel.zrokStatus.mockResolvedValue({ enabled: true, configuredAt: '2026-04-01T10:00:00.000Z' });
         mockAppContext.projects = [{ id: 'proj-1', name: 'My App', isRunning: true, webServer: 'nginx', services: {} }];
 
         render(
@@ -190,7 +190,7 @@ describe('Services', () => {
         fireEvent.click(screen.getAllByRole('button', { name: /^Stop$/i })[0]);
 
         await waitFor(() => {
-            expect(mockDevbox.tunnel.stop).toHaveBeenCalledWith('proj-1');
+            expect(mockMyLocalDev.tunnel.stop).toHaveBeenCalledWith('proj-1');
         });
     });
 });

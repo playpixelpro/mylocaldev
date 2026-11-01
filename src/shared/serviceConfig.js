@@ -1,9 +1,9 @@
 /**
- * Centralized service configuration for DevBox Pro
+ * Centralized service configuration for MyLocalDev
  * This file is the single source of truth for all service versions and port configurations
  * 
  * NOTE: This file uses CommonJS syntax for compatibility with Electron's main process.
- * The renderer process should get this config via IPC (window.devbox.binaries.getServiceConfig())
+ * The renderer process should get this config via IPC (window.mylocaldev.binaries.getServiceConfig())
  */
 
 // Service version definitions - these are the versions we support downloading

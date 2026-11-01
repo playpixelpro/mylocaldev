@@ -92,7 +92,7 @@ class SslManager {
         // Windows: Use certutil with sudo-prompt for elevation
         const sudo = require('sudo-prompt');
         const options = {
-          name: 'DevBox Pro',
+          name: 'MyLocalDev',
         };
 
         return new Promise((resolve) => {
@@ -134,8 +134,8 @@ class SslManager {
       } else {
         // Linux: Copy to system trust store and update
         const sudo = require('sudo-prompt');
-        const options = { name: 'DevBox Pro' };
-        const certDest = `/usr/local/share/ca-certificates/devbox-pro-ca.crt`;
+        const options = { name: 'MyLocalDev' };
+        const certDest = `/usr/local/share/ca-certificates/MyLocalDev-ca.crt`;
         const command = `cp "${caCertPath}" "${certDest}" && update-ca-certificates`;
 
         return new Promise((resolve) => {
@@ -169,11 +169,11 @@ class SslManager {
 
     // Set subject and issuer (same for self-signed CA)
     const attrs = [
-      { name: 'commonName', value: 'DevBox Pro Root CA' },
+      { name: 'commonName', value: 'MyLocalDev Root CA' },
       { name: 'countryName', value: 'US' },
       { shortName: 'ST', value: 'Local' },
       { name: 'localityName', value: 'Local' },
-      { name: 'organizationName', value: 'DevBox Pro' },
+      { name: 'organizationName', value: 'MyLocalDev' },
       { shortName: 'OU', value: 'Development' }
     ];
     cert.setSubject(attrs);
@@ -292,7 +292,7 @@ class SslManager {
 
       try {
         await this.createCertificate(certificateInfo?.domains?.length ? certificateInfo.domains : [domain]);
-        this.managers.log?.systemInfo(`Regenerated SSL certificate for ${domain} to match the current DevBox Root CA`);
+        this.managers.log?.systemInfo(`Regenerated SSL certificate for ${domain} to match the current MyLocalDev Root CA`);
       } catch (error) {
         this.managers.log?.systemWarn(`Failed to regenerate SSL certificate for ${domain}`, { error: error.message });
       }
@@ -336,7 +336,7 @@ class SslManager {
       { name: 'countryName', value: 'US' },
       { shortName: 'ST', value: 'Local' },
       { name: 'localityName', value: 'Local' },
-      { name: 'organizationName', value: 'DevBox Pro' },
+      { name: 'organizationName', value: 'MyLocalDev' },
       { shortName: 'OU', value: 'Development' }
     ];
     cert.setSubject(attrs);
@@ -454,7 +454,7 @@ class SslManager {
           const sudo = require('sudo-prompt');
           const command = `security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${caCertPath}"`;
 
-          sudo.exec(command, { name: 'DevBox Pro' }, (error) => {
+          sudo.exec(command, { name: 'MyLocalDev' }, (error) => {
             if (error) {
               resolve({
                 success: false,
@@ -472,7 +472,7 @@ class SslManager {
 
         return new Promise((resolve) => {
           const command = `certutil -addstore -f "Root" "${caCertPath}"`;
-          sudo.exec(command, { name: 'DevBox Pro' }, (error) => {
+          sudo.exec(command, { name: 'MyLocalDev' }, (error) => {
             if (error) {
               resolve({
                 success: false,
@@ -487,11 +487,11 @@ class SslManager {
       } else {
         // Linux: Copy to system trust store and update
         const sudo = require('sudo-prompt');
-        const certDest = `/usr/local/share/ca-certificates/devbox-pro-ca.crt`;
+        const certDest = `/usr/local/share/ca-certificates/MyLocalDev-ca.crt`;
         const command = `cp "${caCertPath}" "${certDest}" && update-ca-certificates`;
 
         return new Promise((resolve) => {
-          sudo.exec(command, { name: 'DevBox Pro' }, (error) => {
+          sudo.exec(command, { name: 'MyLocalDev' }, (error) => {
             if (error) {
               resolve({
                 success: false,
@@ -519,14 +519,14 @@ class SslManager {
     const caCertPath = path.join(this.caPath, 'rootCA.pem');
 
     if (process.platform === 'darwin') {
-      return `To trust the DevBox Pro certificate manually:
+      return `To trust the MyLocalDev certificate manually:
 1. Open Keychain Access
 2. File > Import Items
 3. Select: ${caCertPath}
 4. Double-click the imported certificate
 5. Expand "Trust" and set "When using this certificate" to "Always Trust"`;
     } else if (process.platform === 'win32') {
-      return `To trust the DevBox Pro certificate manually:
+      return `To trust the MyLocalDev certificate manually:
 1. Double-click: ${caCertPath}
 2. Click "Install Certificate"
 3. Select "Current User" or "Local Machine"
@@ -534,9 +534,9 @@ class SslManager {
 5. Browse and select "Trusted Root Certification Authorities"
 6. Click "Finish"`;
     } else {
-      return `To trust the DevBox Pro certificate manually (Linux):
+      return `To trust the MyLocalDev certificate manually (Linux):
 1. Copy the certificate to the system trust store:
-   sudo cp "${caCertPath}" /usr/local/share/ca-certificates/devbox-pro-ca.crt
+   sudo cp "${caCertPath}" /usr/local/share/ca-certificates/MyLocalDev-ca.crt
 2. Update the CA store:
    sudo update-ca-certificates
 3. For Firefox, you may need to import it manually via Settings > Privacy & Security > Certificates > Import`;

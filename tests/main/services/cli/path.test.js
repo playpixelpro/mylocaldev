@@ -19,7 +19,7 @@ function setPlatform(value) {
 function makeContext(overrides = {}) {
   return {
     ...cliPathMixin,
-    getAlias: vi.fn(() => 'dvp'),
+    getAlias: vi.fn(() => 'mylocaldev'),
     getCliPath: vi.fn(() => '/cli/bin'),
     managers: {
       log: {
@@ -66,7 +66,7 @@ describe('cli/path', () => {
     expect(result).toEqual(expect.objectContaining({ success: true, message: 'Added to .bashrc' }));
     expect(writeFileSpy).toHaveBeenCalledWith(
       path.join('/home/tester', '.bashrc'),
-      'export PATH="/cli/bin:$PATH"  # DevBox Pro CLI\nexport PATH="/usr/local/bin:$PATH"\n',
+      'export PATH="/cli/bin:$PATH"  # MyLocalDev CLI\nexport PATH="/usr/local/bin:$PATH"\n',
       'utf8'
     );
   });
@@ -75,7 +75,7 @@ describe('cli/path', () => {
     const ctx = makeContext();
     vi.spyOn(os, 'homedir').mockReturnValue('/home/tester');
     vi.spyOn(fs, 'pathExists').mockResolvedValue(true);
-    vi.spyOn(fs, 'readFile').mockResolvedValue('export PATH="/cli/bin:$PATH"  # DevBox Pro CLI\n');
+    vi.spyOn(fs, 'readFile').mockResolvedValue('export PATH="/cli/bin:$PATH"  # MyLocalDev CLI\n');
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
 
     const result = await ctx.addToUnixPath('/cli/bin');
@@ -84,12 +84,12 @@ describe('cli/path', () => {
     expect(writeFileSpy).not.toHaveBeenCalled();
   });
 
-  it('removes the DevBox CLI marker line from a Unix rc file', async () => {
+  it('removes the MyLocalDev CLI marker line from a Unix rc file', async () => {
     const ctx = makeContext();
     vi.spyOn(os, 'homedir').mockReturnValue('/home/tester');
     vi.spyOn(fs, 'pathExists').mockResolvedValue(true);
     vi.spyOn(fs, 'readFile').mockResolvedValue(
-      'export PATH="/cli/bin:$PATH"  # DevBox Pro CLI\nexport PATH="/usr/local/bin:$PATH"\n'
+      'export PATH="/cli/bin:$PATH"  # MyLocalDev CLI\nexport PATH="/usr/local/bin:$PATH"\n'
     );
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
 
@@ -110,25 +110,25 @@ describe('cli/path', () => {
     const result = await ctx.checkCliInstalled();
 
     expect(result).toEqual(expect.objectContaining({
-      alias: 'dvp',
+      alias: 'mylocaldev',
       installed: true,
       inPath: true,
-      scriptPath: path.join('/cli/bin', 'dvp'),
+      scriptPath: path.join('/cli/bin', 'mylocaldev'),
     }));
   });
 
   it('delegates Windows PATH installation and reports which scope won priority', async () => {
     setPlatform('win32');
     const ctx = makeContext({
-      getCliPath: vi.fn(() => 'C:/DevBox/cli/'),
+      getCliPath: vi.fn(() => 'C:/MyLocalDev/cli/'),
       tryAddToSystemPath: vi.fn(async () => ({ success: false, reason: 'uac_cancelled' })),
       addToUserPath: vi.fn(async () => ({ success: true, message: 'Added to User PATH' })),
     });
 
     const result = await ctx.addToPath();
 
-    expect(ctx.tryAddToSystemPath).toHaveBeenCalledWith('C:/DevBox/cli');
-    expect(ctx.addToUserPath).toHaveBeenCalledWith('C:/DevBox/cli');
+    expect(ctx.tryAddToSystemPath).toHaveBeenCalledWith('C:/MyLocalDev/cli');
+    expect(ctx.addToUserPath).toHaveBeenCalledWith('C:/MyLocalDev/cli');
     expect(result).toEqual(expect.objectContaining({
       success: true,
       message: 'Added to User PATH (at the beginning for priority)',

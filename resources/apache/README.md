@@ -59,7 +59,7 @@ Loads PHP as an Apache module:
 LoadModule php_module "path/to/php8apache2_4.dll"
 ```
 
-DevBox Pro uses PHP-FPM by default for better performance and flexibility.
+MyLocalDev uses PHP-FPM by default for better performance and flexibility.
 
 ## Features
 
@@ -70,7 +70,7 @@ DevBox Pro uses PHP-FPM by default for better performance and flexibility.
 
 ## Default Configuration
 
-DevBox Pro generates Apache configurations with:
+MyLocalDev generates Apache configurations with:
 - `mod_rewrite` enabled for URL rewriting
 - `AllowOverride All` for .htaccess support
 - PHP-FPM proxy configuration
@@ -79,7 +79,7 @@ DevBox Pro generates Apache configurations with:
 
 ## Required Modules
 
-DevBox Pro enables these Apache modules:
+MyLocalDev enables these Apache modules:
 - mod_authz_core
 - mod_dir
 - mod_log_config
@@ -92,5 +92,5 @@ DevBox Pro enables these Apache modules:
 ## Manual Configuration
 
 Advanced users can edit configurations in:
-- Windows: `%APPDATA%/devbox-pro/data/apache/vhosts/`
-- macOS: `~/Library/Application Support/devbox-pro/data/apache/vhosts/`
+- Windows: `%APPDATA%/MyLocalDev/data/apache/vhosts/`
+- macOS: `~/Library/Application Support/MyLocalDev/data/apache/vhosts/`

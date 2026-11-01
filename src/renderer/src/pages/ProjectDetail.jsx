@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { useModal } from '../context/ModalContext';
@@ -82,7 +82,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
 
   const loadLogs = useCallback(async () => {
     try {
-      const projectLogs = await window.devbox?.logs.getProjectLogs(id, 100);
+      const projectLogs = await window.mylocaldev?.logs.getProjectLogs(id, 100);
       setLogs(projectLogs || []);
     } catch (error) {
       // Error loading logs
@@ -91,7 +91,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
 
   const loadProcesses = useCallback(async () => {
     try {
-      const supervisorProcesses = await window.devbox?.supervisor.getProcesses(id);
+      const supervisorProcesses = await window.mylocaldev?.supervisor.getProcesses(id);
       setProcesses(supervisorProcesses || []);
     } catch (error) {
       // Error loading processes
@@ -112,7 +112,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
       // Fetch actual runtime ports for this specific project so fallback ports are reflected in the UI.
       const fetchWebServerPorts = async () => {
         try {
-          const ports = await window.devbox?.services?.getProjectNetworkPort(foundProject.id);
+          const ports = await window.mylocaldev?.services?.getProjectNetworkPort(foundProject.id);
           if (ports) {
             setWebServerPorts(ports);
           }
@@ -164,7 +164,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
   const handleOpenInEditor = async () => {
     setActionError(null);
     try {
-      await window.devbox?.projects.openInEditor(id, settings?.settings?.defaultEditor || 'vscode');
+      await window.mylocaldev?.projects.openInEditor(id, settings?.settings?.defaultEditor || 'vscode');
     } catch (err) {
       setActionError(err.message || 'Failed to open in editor');
     }
@@ -173,7 +173,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
   const handleExportConfig = async () => {
     setActionError(null);
     try {
-      const result = await window.devbox?.projects.exportConfig(id);
+      const result = await window.mylocaldev?.projects.exportConfig(id);
       if (result && result.success) {
         // Optional: show a success toast or alert
       }
@@ -210,7 +210,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
 
     setIsSavingName(true);
     try {
-      await window.devbox?.projects.update(id, { name: editedName.trim() });
+      await window.mylocaldev?.projects.update(id, { name: editedName.trim() });
       await refreshProjects();
       setIsEditingName(false);
     } catch (err) {
@@ -330,7 +330,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
             {project.isRunning ? (
               <>
                 <button
-                  onClick={() => window.devbox?.projects.openInBrowser(project.id)}
+                  onClick={() => window.mylocaldev?.projects.openInBrowser(project.id)}
                   className="btn-secondary"
                 >
                   <ExternalLink className="w-4 h-4" />
@@ -446,7 +446,7 @@ function ProjectDetail({ projectId: propProjectId, onCloseTerminal }) {
               <div>
                 <p className="font-medium text-red-600">Danger Zone</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Remove the project from DevBox Pro. You can optionally delete the project files.
+                  Remove the project from MyLocalDev. You can optionally delete the project files.
                 </p>
               </div>
               <button onClick={handleDeleteClick} className="btn-danger btn-sm">
@@ -606,8 +606,8 @@ function OverviewTab({ project, processes, refreshProjects }) {
   const loadBinariesData = useCallback(async () => {
     try {
       const [status, config] = await Promise.all([
-        window.devbox?.binaries.getStatus(),
-        window.devbox?.binaries.getServiceConfig(),
+        window.mylocaldev?.binaries.getStatus(),
+        window.mylocaldev?.binaries.getServiceConfig(),
       ]);
       setBinariesStatus(status || {});
       setServiceConfig({
@@ -662,8 +662,8 @@ function OverviewTab({ project, processes, refreshProjects }) {
 
       try {
         const [currentTunnelStatus, currentZrokStatus] = await Promise.all([
-          window.devbox?.tunnel?.getStatus?.(project.id),
-          window.devbox?.tunnel?.zrokStatus?.(),
+          window.mylocaldev?.tunnel?.getStatus?.(project.id),
+          window.mylocaldev?.tunnel?.zrokStatus?.(),
         ]);
 
         applyTunnelStatus(project.id, currentTunnelStatus || null);
@@ -683,7 +683,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
   }, [project?.id, project?.isRunning]);
 
   useEffect(() => {
-    const unsubscribe = window.devbox?.tunnel?.onStatusChanged?.((payload) => {
+    const unsubscribe = window.mylocaldev?.tunnel?.onStatusChanged?.((payload) => {
       if (payload?.projectId === project?.id) {
         setTunnelStatus(payload);
       }
@@ -694,7 +694,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
 
   // Re-fetch binaries status whenever a binary download completes (e.g. Python install)
   useEffect(() => {
-    const unsubscribe = window.devbox?.binaries.onProgress((id, progressData) => {
+    const unsubscribe = window.mylocaldev?.binaries.onProgress((id, progressData) => {
       if (progressData.status === 'completed') {
         loadBinariesData();
       }
@@ -706,22 +706,22 @@ function OverviewTab({ project, processes, refreshProjects }) {
   useEffect(() => {
     const loadLocalIps = async () => {
       try {
-        const ips = await window.devbox?.system.getLocalIpAddresses();
+        const ips = await window.mylocaldev?.system.getLocalIpAddresses();
         setLocalIpAddresses(ips || []);
 
         // Check other projects for network access to determine port 80 usage
-        const allProjects = await window.devbox?.projects.getAll();
+        const allProjects = await window.mylocaldev?.projects.getAll();
         const others = allProjects?.filter(p => p.id !== project?.id && p.networkAccess) || [];
         setOtherNetworkProjectsCount(others.length);
 
         // Fetch actual network port for THIS project (considers per-project port 80 ownership)
         if (project?.id) {
-          const localPorts = await window.devbox?.services?.getProjectLocalAccessPorts(project.id);
+          const localPorts = await window.mylocaldev?.services?.getProjectLocalAccessPorts(project.id);
           if (localPorts) {
             setLocalAccessPorts(localPorts);
           }
 
-          const ports = await window.devbox?.services?.getProjectNetworkPort(project.id);
+          const ports = await window.mylocaldev?.services?.getProjectNetworkPort(project.id);
           if (ports) {
             setWebServerPorts(ports);
           }
@@ -827,12 +827,12 @@ function OverviewTab({ project, processes, refreshProjects }) {
     const nextTunnelAutoStart = 'tunnelAutoStart' in changes ? changes.tunnelAutoStart : (getLatestSettingValue('tunnelAutoStart') || false);
 
     if (nextShareOnInternet && nextTunnelAutoStart && nextTunnelProvider) {
-      const nextStatus = await window.devbox?.tunnel?.start?.(currentProject.id, nextTunnelProvider);
+      const nextStatus = await window.mylocaldev?.tunnel?.start?.(currentProject.id, nextTunnelProvider);
       applyTunnelStatus(currentProject.id, nextStatus || null);
       return;
     }
 
-    await window.devbox?.tunnel?.stop?.(currentProject.id);
+    await window.mylocaldev?.tunnel?.stop?.(currentProject.id);
     setTunnelStatus((current) => current ? { ...current, status: 'stopped' } : null);
   };
 
@@ -857,7 +857,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
         }
 
         try {
-          await window.devbox?.projects.update(currentProject.id, changes, { deferRestart: true });
+          await window.mylocaldev?.projects.update(currentProject.id, changes, { deferRestart: true });
 
           if (options.syncTunnel) {
             await syncTunnelWithSettings(changes);
@@ -874,7 +874,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
             });
 
             if (shouldRestart) {
-              await window.devbox?.projects.restart(currentProject.id);
+              await window.mylocaldev?.projects.restart(currentProject.id);
               await refreshProjects?.();
             }
           }
@@ -946,7 +946,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
 
     setTunnelAction('starting');
     try {
-      const nextStatus = await window.devbox?.tunnel?.start?.(project.id, effectiveTunnelProvider);
+      const nextStatus = await window.mylocaldev?.tunnel?.start?.(project.id, effectiveTunnelProvider);
       applyTunnelStatus(project.id, nextStatus || null);
     } catch (error) {
       await showAlert({
@@ -962,7 +962,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
   const handleStopInternetShare = async () => {
     setTunnelAction('stopping');
     try {
-      await window.devbox?.tunnel?.stop?.(project.id);
+      await window.mylocaldev?.tunnel?.stop?.(project.id);
       setTunnelStatus((current) => current ? { ...current, status: 'stopped' } : null);
     } catch (error) {
       await showAlert({
@@ -1096,9 +1096,9 @@ function OverviewTab({ project, processes, refreshProjects }) {
     setPhpMyAdminLoading(dbType);
     try {
       // getPhpMyAdminUrl already polls until phpMyAdmin is ready before returning
-      const url = await window.devbox?.database.getPhpMyAdminUrl(dbType, version);
+      const url = await window.mylocaldev?.database.getPhpMyAdminUrl(dbType, version);
       if (url) {
-        window.devbox?.system.openExternal(url);
+        window.mylocaldev?.system.openExternal(url);
       }
     } finally {
       setPhpMyAdminLoading(null);
@@ -1117,7 +1117,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
 
       // If web server is changing, use switchWebServer API
       if (pendingChanges.webServer) {
-        await window.devbox?.projects.switchWebServer(
+        await window.mylocaldev?.projects.switchWebServer(
           project.id,
           pendingChanges.webServer,
           pendingChanges.webServerVersion
@@ -1130,15 +1130,15 @@ function OverviewTab({ project, processes, refreshProjects }) {
         delete otherChanges.webServerVersion;
       }
       if (Object.keys(otherChanges).length > 0) {
-        await window.devbox?.projects.update(project.id, otherChanges, { deferRestart: true });
+        await window.mylocaldev?.projects.update(project.id, otherChanges, { deferRestart: true });
       }
 
       if (project.isRunning && hasTunnelConfigChanges) {
         if (nextShareOnInternet && nextTunnelAutoStart && nextTunnelProvider) {
-          const nextStatus = await window.devbox?.tunnel?.start?.(project.id, nextTunnelProvider);
+          const nextStatus = await window.mylocaldev?.tunnel?.start?.(project.id, nextTunnelProvider);
           applyTunnelStatus(project.id, nextStatus || null);
         } else {
-          await window.devbox?.tunnel?.stop?.(project.id);
+          await window.mylocaldev?.tunnel?.stop?.(project.id);
           setTunnelStatus((current) => current ? { ...current, status: 'stopped' } : null);
         }
       }
@@ -1158,7 +1158,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
           type: 'question'
         });
         if (shouldRestart) {
-          await window.devbox?.projects.restart(project.id);
+          await window.mylocaldev?.projects.restart(project.id);
         }
       }
     } catch (error) {
@@ -1570,7 +1570,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
                   </button>
                   {tunnelStatus?.publicUrl && (
                     <button
-                      onClick={() => window.devbox?.system.openExternal(tunnelStatus.publicUrl)}
+                      onClick={() => window.mylocaldev?.system.openExternal(tunnelStatus.publicUrl)}
                       className="btn-secondary"
                     >
                       <ExternalLink className="w-4 h-4" />
@@ -1950,7 +1950,7 @@ function LogsTab({ logs, onRefresh, projectId }) {
           </button>
           <button
             onClick={async () => {
-              await window.devbox?.logs.clearProjectLogs(projectId);
+              await window.mylocaldev?.logs.clearProjectLogs(projectId);
               onRefresh();
             }}
             className="btn-ghost btn-sm"
@@ -1987,7 +1987,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
     if (project?.type !== 'laravel') return;
     setSchedulerLoading(true);
     try {
-      const res = await window.devbox?.scheduler?.getStatus(projectId);
+      const res = await window.mylocaldev?.scheduler?.getStatus(projectId);
       setSchedulerStatus(res);
     } catch {
       // ignore
@@ -2063,7 +2063,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
   // Load logs for expanded workers
   const loadWorkerLogs = async (processName) => {
     try {
-      const logs = await window.devbox?.supervisor?.getWorkerLogs?.(projectId, processName, 200);
+      const logs = await window.mylocaldev?.supervisor?.getWorkerLogs?.(projectId, processName, 200);
       setWorkerLogs(prev => ({ ...prev, [processName]: logs || [] }));
     } catch (error) {
       console.error('Error loading worker logs:', error);
@@ -2073,7 +2073,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
   // Subscribe to real-time output (only when project is running)
   useEffect(() => {
     if (!isRunning) return;
-    const unsubscribe = window.devbox?.supervisor?.onOutput?.((data) => {
+    const unsubscribe = window.mylocaldev?.supervisor?.onOutput?.((data) => {
       // Use strict equality and ensure both are strings for comparison
       if (String(data.projectId) === String(projectId)) {
         const timestamp = data.timestamp; // Match file log format (ISO)
@@ -2110,7 +2110,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
   }, [expandedLogs, autoRefresh, projectId]);
 
   useEffect(() => {
-    const unsubscribe = window.devbox?.supervisor?.onStatusChange?.((data) => {
+    const unsubscribe = window.mylocaldev?.supervisor?.onStatusChange?.((data) => {
       if (String(data.projectId) !== String(projectId)) {
         return;
       }
@@ -2132,7 +2132,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
 
   const clearWorkerLogs = async (processName) => {
     try {
-      await window.devbox?.supervisor?.clearWorkerLogs?.(projectId, processName);
+      await window.mylocaldev?.supervisor?.clearWorkerLogs?.(projectId, processName);
       setWorkerLogs(prev => ({ ...prev, [processName]: [] }));
     } catch (error) {
       console.error('Error clearing worker logs:', error);
@@ -2141,7 +2141,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
 
   const handleAddProcess = async () => {
     try {
-      await window.devbox?.supervisor.addProcess(projectId, newProcess);
+      await window.mylocaldev?.supervisor.addProcess(projectId, newProcess);
       setShowAddForm(false);
       const processName = newProcess.name;
       setNewProcess(getDefaultProcess());
@@ -2157,7 +2157,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
   };
 
   const handleStartProcess = async (name) => {
-    await window.devbox?.supervisor.startProcess(projectId, name);
+    await window.mylocaldev?.supervisor.startProcess(projectId, name);
     await onRefresh();
     // Auto-expand logs when starting a process
     setTimeout(() => {
@@ -2167,7 +2167,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
   };
 
   const handleStopProcess = async (name) => {
-    await window.devbox?.supervisor.stopProcess(projectId, name);
+    await window.mylocaldev?.supervisor.stopProcess(projectId, name);
     onRefresh();
   };
 
@@ -2180,7 +2180,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
       type: 'warning'
     });
     if (confirmed) {
-      await window.devbox?.supervisor.removeProcess(projectId, name);
+      await window.mylocaldev?.supervisor.removeProcess(projectId, name);
       onRefresh();
     }
   };
@@ -2218,7 +2218,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
                 onClick={async () => {
                   setSchedulerRunningNow(true);
                   try {
-                    await window.devbox?.scheduler?.runNow(projectId);
+                    await window.mylocaldev?.scheduler?.runNow(projectId);
                     setTimeout(loadSchedulerStatus, 1500);
                   } finally {
                     setSchedulerRunningNow(false);
@@ -2244,7 +2244,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
               {schedulerStatus?.exists ? (
                 <button
                   onClick={async () => {
-                    await window.devbox?.scheduler?.unregister(projectId);
+                    await window.mylocaldev?.scheduler?.unregister(projectId);
                     loadSchedulerStatus();
                   }}
                   className="btn-ghost btn-sm text-red-600 dark:text-red-400"
@@ -2255,7 +2255,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
               ) : (
                 <button
                   onClick={async () => {
-                    await window.devbox?.scheduler?.register(projectId);
+                    await window.mylocaldev?.scheduler?.register(projectId);
                     loadSchedulerStatus();
                   }}
                   className="btn-primary btn-sm"
@@ -2310,7 +2310,7 @@ function WorkersTab({ processes, projectId, onRefresh, isRunning, projectType, p
               {showSchedulerLogs && (
                 <button
                   onClick={async () => {
-                    await window.devbox?.scheduler?.clearLogs(projectId);
+                    await window.mylocaldev?.scheduler?.clearLogs(projectId);
                     loadSchedulerStatus();
                   }}
                   className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -2562,12 +2562,29 @@ function EnvironmentTab({ project, onRefresh }) {
   const [hasChanges, setHasChanges] = useState(false);
   const [originalEnv, setOriginalEnv] = useState({});
 
+  // Keys where MyLocalDev's stored value differs from the project's .env. Those are
+  // injected into PHP-CGI/terminal processes and therefore win over the .env file.
+  const overrideKeys = useMemo(() => {
+    const keys = [];
+    Object.entries(project.environment || {}).forEach(([key, rawValue]) => {
+      if (rawValue === undefined || rawValue === null || String(rawValue).length === 0) {
+        return;
+      }
+      const fileValue = originalEnv[key];
+      if (fileValue !== undefined && String(fileValue) === String(rawValue)) {
+        return;
+      }
+      keys.push(key);
+    });
+    return keys;
+  }, [project.environment, originalEnv]);
+
   // Load environment from .env file on mount
   useEffect(() => {
     const loadEnvFile = async () => {
       setIsLoading(true);
       try {
-        const envFromFile = await window.devbox?.projects.readEnv(project.id);
+        const envFromFile = await window.mylocaldev?.projects.readEnv(project.id);
         if (envFromFile && Object.keys(envFromFile).length > 0) {
           setEnvironment(envFromFile);
           setOriginalEnv(envFromFile);
@@ -2618,7 +2635,7 @@ function EnvironmentTab({ project, onRefresh }) {
     setSaveMessage(null);
     try {
       // Update project with new environment
-      await window.devbox?.projects.update(project.id, { environment });
+      await window.mylocaldev?.projects.update(project.id, { environment });
 
       // For Laravel projects, run optimize to apply changes
       if (project.type === 'laravel') {
@@ -2627,9 +2644,9 @@ function EnvironmentTab({ project, onRefresh }) {
 
         try {
           // Clear and rebuild all caches
-          await window.devbox?.php.runArtisan(project.id, 'config:clear');
-          await window.devbox?.php.runArtisan(project.id, 'cache:clear');
-          await window.devbox?.php.runArtisan(project.id, 'config:cache');
+          await window.mylocaldev?.php.runArtisan(project.id, 'config:clear');
+          await window.mylocaldev?.php.runArtisan(project.id, 'cache:clear');
+          await window.mylocaldev?.php.runArtisan(project.id, 'config:cache');
           setSaveMessage({ type: 'success', text: 'Environment saved and Laravel caches refreshed!' });
         } catch (optimizeError) {
           // Cache optimization failed - non-critical
@@ -2709,12 +2726,38 @@ function EnvironmentTab({ project, onRefresh }) {
         </div>
       )}
 
+      {/* Value precedence notice */}
+      {overrideKeys.length > 0 && (
+        <div className="flex items-start gap-3 p-3 rounded-lg mb-4 bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-200">
+          <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+          <div className="text-sm">
+            <p className="font-medium">
+              {overrideKeys.length} value{overrideKeys.length === 1 ? '' : 's'} override your <code>.env</code>
+            </p>
+            <p className="mt-1">
+              MyLocalDev injects these into PHP-CGI, terminals and workers, so they win over
+              the file: <span className="font-mono">{overrideKeys.join(', ')}</span>. Keep the
+              values identical on both sides, or clear them here, to let <code>.env</code> take over.
+              Empty values are never injected.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Existing Variables */}
       <div className="space-y-3 mb-6">
         {Object.entries(environment).map(([key, value]) => (
           <div key={key} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <span className="font-mono text-sm font-medium text-gray-700 dark:text-gray-300 min-w-[180px]">
+            <span className="font-mono text-sm font-medium text-gray-700 dark:text-gray-300 min-w-[180px] flex items-center gap-2">
               {key}
+              {overrideKeys.includes(key) && (
+                <span
+                  className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wide bg-amber-100 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800"
+                  title="Injected by MyLocalDev and takes precedence over .env"
+                >
+                  override
+                </span>
+              )}
             </span>
             <input
               type="text"
@@ -2810,7 +2853,7 @@ function DomainManager({ domains, onChange, localAccessPorts, webServerPorts, ss
         <div key={index} className="flex items-center gap-2 group">
           <Globe className="w-4 h-4 text-gray-400 shrink-0" />
           <button
-            onClick={() => window.devbox?.system?.openExternal(buildUrl(domain))}
+            onClick={() => window.mylocaldev?.system?.openExternal(buildUrl(domain))}
             className="text-sm text-primary-600 dark:text-primary-400 hover:underline flex-1 font-mono break-all text-left"
             title={buildUrl(domain)}
           >

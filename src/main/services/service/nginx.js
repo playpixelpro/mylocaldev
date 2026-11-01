@@ -174,7 +174,7 @@ module.exports = {
           const { killProcessesByPath, isProcessRunning } = require('../../utils/SpawnUtils');
           if (isProcessRunning('nginx.exe')) {
             const nginxResourcesPath = path.join(this.resourcePath, 'nginx');
-            this.managers.log?.systemInfo('Killing stale DevBox nginx processes before start');
+            this.managers.log?.systemInfo('Killing stale MyLocalDev nginx processes before start');
             await killProcessesByPath('nginx.exe', nginxResourcesPath);
             await new Promise(resolve => setTimeout(resolve, 500));
           }

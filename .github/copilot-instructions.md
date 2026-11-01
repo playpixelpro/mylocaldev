@@ -1,7 +1,7 @@
-# DevBox Pro - AI Coding Agent Instructions
+# MyLocalDev - AI Coding Agent Instructions
 
 ## Project Overview
-DevBox Pro is an Electron desktop app for local PHP and Node.js development with bundled runtimes and services. It supports multi-version PHP, Node.js, MySQL, MariaDB, Redis, PostgreSQL, MongoDB, Nginx, Apache, Mailpit, phpMyAdmin, MinIO, Memcached, and related tooling without Docker.
+MyLocalDev is an Electron desktop app for local PHP and Node.js development with bundled runtimes and services. It supports multi-version PHP, Node.js, MySQL, MariaDB, Redis, PostgreSQL, MongoDB, Nginx, Apache, Mailpit, phpMyAdmin, MinIO, Memcached, and related tooling without Docker.
 
 **Tech Stack:** Electron 40 + React 19 + Vite 7 + TailwindCSS 4
 
@@ -10,7 +10,7 @@ DevBox Pro is an Electron desktop app for local PHP and Node.js development with
 ### Process Separation (Critical)
 - **Main Process** (`src/main/`): Node.js backend - service managers, IPC handlers, system operations
 - **Renderer Process** (`src/renderer/`): React frontend - UI components, user interaction
-- **Communication**: All cross-process calls go through IPC via `preload.js` → `window.devbox.*` API
+- **Communication**: All cross-process calls go through IPC via `preload.js` → `window.mylocaldev.*` API
 - **Shared Config** (`src/shared/serviceConfig.js`): Single source of truth for service versions and ports
 
 ### Service Architecture (Critical)
@@ -32,7 +32,7 @@ Managers receive references to each other via `managers` object for cross-commun
 - `ServiceManager` - Starts/stops web servers and bundled services, owns runtime config generation
 - `DatabaseManager` - Multi-engine database operations, import/export, credentials, metadata
 - `BinaryDownloadManager` - Download, extract, import, update, and discover binary assets
-- `CliManager` - External `dvp` command integration and PATH/project mapping
+- `CliManager` - External `mylocaldev` command integration and PATH/project mapping
 - `GitManager` - Git executable discovery, clone/auth, SSH key workflows, progress reporting
 - `CompatibilityManager` - Bundled/remote compatibility rules and config normalization
 - `SupervisorManager` - Background worker/process management for PHP, Node.js, Python, and queues
@@ -44,10 +44,10 @@ ipcMain.handle('projects:create', async (event, config) => {
   return project.createProject(config, mainWindow);
 });
 ```
-Exposed to renderer via `preload.js` as `window.devbox.projects.create(config)`.
+Exposed to renderer via `preload.js` as `window.mylocaldev.projects.create(config)`.
 
 ### State Management
-- **Backend**: `ConfigStore` (electron-store) persists config to `~/.devbox-pro/`
+- **Backend**: `ConfigStore` (electron-store) persists config to `~/.mylocaldev/`
 - **Frontend**: `AppContext.jsx` with useReducer for global React state
 
 ## Key Conventions
@@ -121,14 +121,14 @@ Renderer dev server runs at `http://localhost:3000`.
 | Binary URLs | `config/binaries.json` |
 | Compatibility rules | `config/compatibility.json` |
 | Service mixins | `src/main/services/<domain>/` |
-| App config | `~/.devbox-pro/` (runtime) |
+| App config | `~/.mylocaldev/` (runtime) |
 
 ## Common Patterns
 
 ### Adding a New IPC Handler
 1. Add handler in `src/main/ipc/handlers.js`
 2. Expose in `src/main/preload.js` under appropriate namespace
-3. Call from renderer as `window.devbox.namespace.method()`
+3. Call from renderer as `window.mylocaldev.namespace.method()`
 
 ### Adding a New Service Version
 1. Update `SERVICE_VERSIONS` in `src/shared/serviceConfig.js`

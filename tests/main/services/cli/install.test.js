@@ -16,12 +16,12 @@ function setPlatform(value) {
 function makeContext(overrides = {}) {
   return {
     ...cliInstall,
-    resourcesPath: 'C:/DevBox/resources',
-    getAlias: vi.fn(() => 'dvp'),
-    getCliPath: vi.fn(() => 'C:/DevBox/cli'),
-    syncProjectsFile: vi.fn(async () => 'C:/DevBox/cli/projects.json'),
+    resourcesPath: 'C:/MyLocalDev/resources',
+    getAlias: vi.fn(() => 'mylocaldev'),
+    getCliPath: vi.fn(() => 'C:/MyLocalDev/cli'),
+    syncProjectsFile: vi.fn(async () => 'C:/MyLocalDev/cli/projects.json'),
     getInstallInstructions: vi.fn((cliPath) => ({ automatic: cliPath })),
-    getProjectsFilePath: vi.fn(() => 'C:/DevBox/cli/projects.json'),
+    getProjectsFilePath: vi.fn(() => 'C:/MyLocalDev/cli/projects.json'),
     installWindowsCli: cliInstall.installWindowsCli,
     installUnixCli: cliInstall.installUnixCli,
     ...overrides,
@@ -40,19 +40,19 @@ describe('cli/install', () => {
 
   it('installs the CLI wrapper by syncing projects and dispatching to the platform-specific installer', async () => {
     const ctx = makeContext({
-      installWindowsCli: vi.fn(async () => 'C:/DevBox/cli/dvp.cmd'),
+      installWindowsCli: vi.fn(async () => 'C:/MyLocalDev/cli/mylocaldev.cmd'),
     });
     vi.spyOn(fs, 'ensureDir').mockResolvedValue(undefined);
 
     const result = await ctx.installCli();
 
-    expect(fs.ensureDir).toHaveBeenCalledWith('C:/DevBox/cli');
+    expect(fs.ensureDir).toHaveBeenCalledWith('C:/MyLocalDev/cli');
     expect(ctx.syncProjectsFile).toHaveBeenCalled();
-    expect(ctx.installWindowsCli).toHaveBeenCalledWith('dvp', 'C:/DevBox/cli');
+    expect(ctx.installWindowsCli).toHaveBeenCalledWith('mylocaldev', 'C:/MyLocalDev/cli');
     expect(result).toEqual({
-      alias: 'dvp',
-      path: 'C:/DevBox/cli',
-      instructions: { automatic: 'C:/DevBox/cli' },
+      alias: 'mylocaldev',
+      path: 'C:/MyLocalDev/cli',
+      instructions: { automatic: 'C:/MyLocalDev/cli' },
     });
   });
 
@@ -60,19 +60,19 @@ describe('cli/install', () => {
     const ctx = makeContext();
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
 
-    const result = await ctx.installWindowsCli('dvp', 'C:/DevBox/cli');
+    const result = await ctx.installWindowsCli('mylocaldev', 'C:/MyLocalDev/cli');
 
-    expect(result).toBe(path.join('C:/DevBox/cli', 'dvp.cmd'));
+    expect(result).toBe(path.join('C:/MyLocalDev/cli', 'mylocaldev.cmd'));
     expect(writeFileSpy).toHaveBeenNthCalledWith(
       1,
-      path.join('C:/DevBox/cli', 'find-project.ps1'),
+      path.join('C:/MyLocalDev/cli', 'find-project.ps1'),
       expect.stringContaining('Write-Output "FOUND|$php|$node|$mt|$mv|$py"'),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenNthCalledWith(
       2,
-      path.join('C:/DevBox/cli', 'dvp.cmd'),
-      expect.stringContaining('Usage: dvp ^<command^> [arguments]'),
+      path.join('C:/MyLocalDev/cli', 'mylocaldev.cmd'),
+      expect.stringContaining('Usage: mylocaldev ^<command^> [arguments]'),
       'utf8'
     );
   });
@@ -80,25 +80,25 @@ describe('cli/install', () => {
   it('writes the Unix wrapper script and marks it executable', async () => {
     setPlatform('linux');
     const ctx = makeContext({
-      resourcesPath: '/opt/devbox/resources',
-      getProjectsFilePath: vi.fn(() => '/opt/devbox/cli/projects.json'),
+      resourcesPath: '/opt/MyLocalDev/resources',
+      getProjectsFilePath: vi.fn(() => '/opt/MyLocalDev/cli/projects.json'),
     });
     const writeFileSpy = vi.spyOn(fs, 'writeFile').mockResolvedValue(undefined);
     const chmodSpy = vi.spyOn(fs, 'chmod').mockResolvedValue(undefined);
 
-    const result = await ctx.installUnixCli('dvp', '/opt/devbox/cli');
+    const result = await ctx.installUnixCli('mylocaldev', '/opt/MyLocalDev/cli');
 
-    expect(result).toBe(path.join('/opt/devbox/cli', 'dvp'));
+    expect(result).toBe(path.join('/opt/MyLocalDev/cli', 'mylocaldev'));
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('/opt/devbox/cli', 'dvp'),
-      expect.stringContaining('DEVBOX_RESOURCES="/opt/devbox/resources"'),
+      path.join('/opt/MyLocalDev/cli', 'mylocaldev'),
+      expect.stringContaining('MYLOCALDEV_RESOURCES="/opt/MyLocalDev/resources"'),
       'utf8'
     );
     expect(writeFileSpy).toHaveBeenCalledWith(
-      path.join('/opt/devbox/cli', 'dvp'),
-      expect.stringContaining('Usage: dvp <command> [arguments]'),
+      path.join('/opt/MyLocalDev/cli', 'mylocaldev'),
+      expect.stringContaining('Usage: mylocaldev <command> [arguments]'),
       'utf8'
     );
-    expect(chmodSpy).toHaveBeenCalledWith(path.join('/opt/devbox/cli', 'dvp'), '755');
+    expect(chmodSpy).toHaveBeenCalledWith(path.join('/opt/MyLocalDev/cli', 'mylocaldev'), '755');
   });
 });

@@ -95,15 +95,31 @@ describe('project/environment', () => {
       getProject: vi.fn(() => ({ id: 'proj-1', path: '/project' })),
     });
     vi.spyOn(fs, 'pathExists').mockResolvedValue(true);
-    vi.spyOn(fs, 'readFile').mockResolvedValue('APP_NAME=DevBox\nPRIVATE_KEY="line1\nline2"\nMAIL_FROM=devbox@test\n');
+    vi.spyOn(fs, 'readFile').mockResolvedValue('APP_NAME=MyLocalDev\nPRIVATE_KEY="line1\nline2"\nMAIL_FROM=MyLocalDev@test\n');
 
     const result = await ctx.readEnvFile('proj-1');
 
     expect(result).toEqual({
-      APP_NAME: 'DevBox',
+      APP_NAME: 'MyLocalDev',
       PRIVATE_KEY: 'line1\nline2',
-      MAIL_FROM: 'devbox@test',
+      MAIL_FROM: 'MyLocalDev@test',
     });
+  });
+
+  it('injects only genuine overrides into child processes', async () => {
+    const ctx = makeContext({
+      getProject: vi.fn(() => ({
+        id: 'proj-1',
+        path: '/project',
+        environment: { APP_ENV: 'local', DB_DATABASE: 'hulamko', DB_PASSWORD: '' },
+      })),
+    });
+    vi.spyOn(fs, 'pathExists').mockResolvedValue(true);
+    vi.spyOn(fs, 'readFile').mockResolvedValue('APP_ENV=development\nDB_DATABASE=hulamko\nDB_PASSWORD=secret\n');
+
+    const overrides = await ctx.getEnvOverrides(ctx.getProject('proj-1'));
+
+    expect(overrides).toEqual({ APP_ENV: 'local' });
   });
 
   it('builds laravel defaults from active database settings', () => {

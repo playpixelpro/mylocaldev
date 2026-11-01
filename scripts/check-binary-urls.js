@@ -114,7 +114,7 @@ function requestUrl(url, redirectCount = 0) {
     const req = client.request(parsedUrl, {
       method: 'GET',
       headers: {
-        'User-Agent': 'DevBoxPro-BinaryUrlCheck/1.0',
+        'User-Agent': 'MyLocalDev-BinaryUrlCheck/1.0',
         Range: 'bytes=0-0',
         Accept: '*/*',
       },
@@ -158,7 +158,7 @@ function escapePowerShellString(value) {
 function requestUrlWithPowerShell(url) {
   const script = `
 $uri = '${escapePowerShellString(url)}'
-$headers = @{ 'User-Agent' = 'DevBoxPro-BinaryUrlCheck/1.0' }
+$headers = @{ 'User-Agent' = 'MyLocalDev-BinaryUrlCheck/1.0' }
 
 try {
   $response = Invoke-WebRequest -Uri $uri -Method Head -MaximumRedirection 5 -Headers $headers -ErrorAction Stop

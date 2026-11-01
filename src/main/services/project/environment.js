@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
+const { parseEnvContent, buildEnvOverrides } = require('../../../shared/projectEnv');
 
 module.exports = {
   async initialize() {
@@ -139,73 +140,60 @@ module.exports = {
     await fs.writeFile(envPath, envContent);
   },
 
+  /**
+   * Read and parse a `.env` file from an absolute path.
+   * Returns an empty object when the file is missing or unreadable.
+   *
+   * @param {string} envPath
+   * @returns {Promise<Record<string, string>>}
+   */
+  async readEnvFileFromPath(envPath) {
+    if (!envPath) {
+      return {};
+    }
+
+    try {
+      if (!await fs.pathExists(envPath)) {
+        return {};
+      }
+
+      const envContent = await fs.readFile(envPath, 'utf-8');
+      return parseEnvContent(envContent);
+    } catch (error) {
+      this.managers?.log?.systemWarn('Could not read .env file', { path: envPath, error: error.message });
+      return {};
+    }
+  },
+
   async readEnvFile(projectId) {
     const project = this.getProject(projectId);
     if (!project || !project.path) {
       throw new Error('Project not found');
     }
 
-    const envPath = path.join(project.path, '.env');
+    return this.readEnvFileFromPath(path.join(project.path, '.env'));
+  },
 
-    if (!await fs.pathExists(envPath)) {
+  /**
+   * Environment variables that should actually be injected into a project's child
+   * processes (PHP-CGI, terminal sessions, supervisor workers).
+   *
+   * Empty values are dropped and values already present in the project's `.env` are
+   * skipped, so only genuine MyLocalDev overrides reach the process environment.
+   *
+   * @param {object} project
+   * @returns {Promise<Record<string, string>>}
+   */
+  async getEnvOverrides(project) {
+    if (!project) {
       return {};
     }
 
-    const envContent = await fs.readFile(envPath, 'utf-8');
-    const environment = {};
-    const lines = envContent.split('\n');
-    let currentKey = null;
-    let currentValue = '';
-    let inMultilineQuote = null;
+    const fileEnvironment = project.path
+      ? await this.readEnvFileFromPath(path.join(project.path, '.env'))
+      : {};
 
-    for (const line of lines) {
-      if (inMultilineQuote) {
-        currentValue += '\n' + line;
-        const trimmedLine = line.trimEnd();
-        if (trimmedLine.endsWith(inMultilineQuote) && !trimmedLine.endsWith('\\' + inMultilineQuote)) {
-          currentValue = currentValue.slice(0, -1);
-          environment[currentKey] = currentValue;
-          currentKey = null;
-          currentValue = '';
-          inMultilineQuote = null;
-        }
-        continue;
-      }
-
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) {
-        continue;
-      }
-
-      const equalsIndex = trimmed.indexOf('=');
-      if (equalsIndex > 0) {
-        const key = trimmed.substring(0, equalsIndex).trim();
-        const value = trimmed.substring(equalsIndex + 1).trim();
-        const startsWithDoubleQuote = value.startsWith('"');
-        const startsWithSingleQuote = value.startsWith("'");
-
-        if (startsWithDoubleQuote || startsWithSingleQuote) {
-          const quote = startsWithDoubleQuote ? '"' : "'";
-          const valueWithoutStartQuote = value.slice(1);
-
-          if (valueWithoutStartQuote.endsWith(quote) && !valueWithoutStartQuote.endsWith('\\' + quote)) {
-            environment[key] = valueWithoutStartQuote.slice(0, -1);
-          } else {
-            currentKey = key;
-            currentValue = valueWithoutStartQuote;
-            inMultilineQuote = quote;
-          }
-        } else {
-          environment[key] = value;
-        }
-      }
-    }
-
-    if (currentKey && inMultilineQuote) {
-      environment[currentKey] = currentValue;
-    }
-
-    return environment;
+    return buildEnvOverrides(project.environment, fileEnvironment);
   },
 
   getDefaultEnvironment(projectType, projectName, port, projectConfig = {}) {

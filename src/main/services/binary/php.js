@@ -267,7 +267,7 @@ module.exports = {
     }
 
     const iniContent = `[PHP]
-; DevBox Pro PHP ${version} Configuration
+; MyLocalDev PHP ${version} Configuration
 engine = On
 short_open_tag = Off
 precision = 14
@@ -290,7 +290,7 @@ log_errors_max_len = 1024
 ignore_repeated_errors = Off
 ignore_repeated_source = Off
 report_memleaks = On
-variables_order = "GPCS"
+variables_order = "EGPCS"
 request_order = "GP"
 register_argc_argv = Off
 auto_globals_jit = On
@@ -324,7 +324,7 @@ pdo_mysql.default_socket=
 [mail function]
 SMTP = localhost
 smtp_port = 1025
-sendmail_from = devbox@localhost
+sendmail_from = MyLocalDev@localhost
 
 [Session]
 session.save_handler = files
@@ -408,7 +408,7 @@ ${extensionLines.join('\n')}
       'vcruntime140_1.dll',
     ];
 
-    const vcRedistBaseUrl = 'https://raw.githubusercontent.com/JeffGepiga/DevBoxPro/main/vcredist';
+    const vcRedistBaseUrl = 'https://raw.githubusercontent.com/playpixelpro/mylocaldev/main/vcredist';
     const system32Path = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32');
     const stillMissing = [];
     const sourceDirs = [

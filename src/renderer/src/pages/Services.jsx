@@ -40,7 +40,7 @@ function Services() {
   useEffect(() => {
     const loadConfig = async () => {
       try {
-        const config = await window.devbox?.binaries.getServiceConfig();
+        const config = await window.mylocaldev?.binaries.getServiceConfig();
         if (config) {
           setServiceConfig(config);
         }
@@ -84,7 +84,7 @@ function Services() {
   useEffect(() => {
     const loadBinariesStatus = async () => {
       try {
-        const status = await window.devbox?.binaries.getStatus();
+        const status = await window.mylocaldev?.binaries.getStatus();
         setBinariesStatus(status || {});
       } catch (err) {
         // Error loading binaries status
@@ -100,7 +100,7 @@ function Services() {
   useEffect(() => {
     const loadRunningVersions = async () => {
       try {
-        const running = await window.devbox?.services.getRunningVersions();
+        const running = await window.mylocaldev?.services.getRunningVersions();
         setRunningVersions(running || {});
       } catch (err) {
         // Failed to get running versions
@@ -116,8 +116,8 @@ function Services() {
     const loadTunnelStatuses = async () => {
       try {
         const [currentTunnelStatuses, currentZrokStatus] = await Promise.all([
-          window.devbox?.tunnel?.getAllStatuses?.(),
-          window.devbox?.tunnel?.zrokStatus?.(),
+          window.mylocaldev?.tunnel?.getAllStatuses?.(),
+          window.mylocaldev?.tunnel?.zrokStatus?.(),
         ]);
 
         setTunnelStatuses(currentTunnelStatuses || {});
@@ -132,7 +132,7 @@ function Services() {
 
     loadTunnelStatuses();
     const intervalId = setInterval(loadTunnelStatuses, 5000);
-    const unsubscribe = window.devbox?.tunnel?.onStatusChanged?.((payload) => {
+    const unsubscribe = window.mylocaldev?.tunnel?.onStatusChanged?.((payload) => {
       if (!payload?.projectId) {
         return;
       }
@@ -185,7 +185,7 @@ function Services() {
   }, [projects]);
 
   const handleStopTunnel = useCallback(async (projectId) => {
-    await window.devbox?.tunnel?.stop?.(projectId);
+    await window.mylocaldev?.tunnel?.stop?.(projectId);
   }, []);
 
   // Determine required services based on running projects
@@ -445,7 +445,7 @@ function Services() {
       .map(c => c.type === 'version' ? `${c.serviceName}-${c.version}` : c.serviceName);
     setLoadingServices(new Set(allKeys));
     try {
-      await window.devbox?.services.startAll();
+      await window.mylocaldev?.services.startAll();
       await refreshServices();
     } finally {
       setLoadingServices(new Set());
@@ -460,15 +460,15 @@ function Services() {
     setLoadingServices(new Set(runningKeys));
     try {
       if (runningProjects.length > 0) {
-        await window.devbox?.projects.stopAll();
+        await window.mylocaldev?.projects.stopAll();
 
         const standaloneRunningCards = serviceCards.filter((card) => card.isRunning && !requiredServices.has(card.serviceName));
         for (const card of standaloneRunningCards) {
           const version = card.type === 'version' ? card.version : null;
-          await window.devbox?.services.stop(card.serviceName, version);
+          await window.mylocaldev?.services.stop(card.serviceName, version);
         }
       } else {
-        await window.devbox?.services.stopAll();
+        await window.mylocaldev?.services.stopAll();
       }
 
       await refreshServices();
@@ -771,7 +771,7 @@ function VersionServiceCard({
 
         {isRunning && info.webUrl && (
           <button
-            onClick={() => window.devbox?.system.openExternal(info.webUrl)}
+            onClick={() => window.mylocaldev?.system.openExternal(info.webUrl)}
             className="btn-ghost btn-sm"
           >
             <ExternalLink className="w-4 h-4" />
@@ -875,7 +875,7 @@ function SimpleServiceCard({
 
         {isRunning && info.webUrl && (
           <button
-            onClick={() => window.devbox?.system.openExternal(info.webUrl)}
+            onClick={() => window.mylocaldev?.system.openExternal(info.webUrl)}
             className="btn-ghost btn-sm"
           >
             <ExternalLink className="w-4 h-4" />
@@ -966,7 +966,7 @@ function ActiveTunnelsCard({ tunnels, projectNamesById, onStopTunnel }) {
 
                 {tunnel.publicUrl && (
                   <button
-                    onClick={() => window.devbox?.system.openExternal(tunnel.publicUrl)}
+                    onClick={() => window.mylocaldev?.system.openExternal(tunnel.publicUrl)}
                     className="mt-3 text-left w-full rounded-md bg-gray-50 dark:bg-gray-800 px-3 py-2 font-mono text-xs text-blue-700 dark:text-blue-300 hover:underline"
                   >
                     {tunnel.publicUrl}

@@ -103,7 +103,7 @@ describe('cli/projects', () => {
     });
 
     await expect(ctx.executeCommand('C:/Unknown/project', 'composer', ['install'])).rejects.toThrow(
-      'No DevBox Pro project found for path: C:/Unknown/project'
+      'No MyLocalDev project found for path: C:/Unknown/project'
     );
   });
 });

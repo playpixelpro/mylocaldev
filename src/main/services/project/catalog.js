@@ -64,23 +64,23 @@ module.exports = {
         supervisor: project.supervisor || { processes: [] },
         phpExtensions,
         exportedAt: new Date().toISOString(),
-        devboxVersion: app.getVersion(),
+        mylocaldevVersion: app.getVersion(),
       };
 
-      const devboxJsonPath = path.join(project.path, 'devbox.json');
-      await fs.writeJson(devboxJsonPath, exportData, { spaces: 2 });
+      const mylocaldevJsonPath = path.join(project.path, 'mylocaldev.json');
+      await fs.writeJson(mylocaldevJsonPath, exportData, { spaces: 2 });
 
-      this.managers.log?.project(id, 'Successfully exported project configuration to devbox.json');
+      this.managers.log?.project(id, 'Successfully exported project configuration to mylocaldev.json');
       if (mainWindow) {
         const { dialog } = require('electron');
         dialog.showMessageBox(mainWindow, {
           type: 'info',
           title: 'Export Successful',
-          message: `Project configuration exported successfully to:\n${devboxJsonPath}`,
+          message: `Project configuration exported successfully to:\n${mylocaldevJsonPath}`,
           buttons: ['OK'],
         });
       }
-      return { success: true, path: devboxJsonPath };
+      return { success: true, path: mylocaldevJsonPath };
     } catch (error) {
       this.managers.log?.project(id, `Failed to export configuration: ${error.message}`, 'error');
       throw new Error(`Failed to export configuration: ${error.message}`);
@@ -118,17 +118,17 @@ module.exports = {
     let name = path.basename(folderPath);
     let configOverrides = {};
 
-    const devboxJsonPath = path.join(folderPath, 'devbox.json');
-    if (await fs.pathExists(devboxJsonPath)) {
+    const mylocaldevJsonPath = path.join(folderPath, 'mylocaldev.json');
+    if (await fs.pathExists(mylocaldevJsonPath)) {
       try {
-        const parsedNode = await fs.readJson(devboxJsonPath);
+        const parsedNode = await fs.readJson(mylocaldevJsonPath);
         if (parsedNode) {
           configOverrides = parsedNode;
           if (configOverrides.type) type = configOverrides.type;
           if (configOverrides.name) name = configOverrides.name;
         }
       } catch (error) {
-        this.managers.log?.systemWarn('Could not parse devbox.json during project detection', { error: error.message });
+        this.managers.log?.systemWarn('Could not parse mylocaldev.json during project detection', { error: error.message });
       }
     }
 

@@ -41,7 +41,7 @@
       "result": {
         "level": "warning",
         "message": "Running both MySQL and MariaDB simultaneously may cause port conflicts. Each will use a different port automatically.",
-        "suggestion": "DevBox Pro assigns different ports to each database version automatically."
+        "suggestion": "MyLocalDev assigns different ports to each database version automatically."
       }
     },
     {
@@ -277,7 +277,7 @@
       "result": {
         "level": "info",
         "message": "PHP 8+ recommends using PHP-FPM over mod_php for better performance and security.",
-        "suggestion": "DevBox Pro uses PHP-FPM by default for optimal Apache + PHP performance."
+        "suggestion": "MyLocalDev uses PHP-FPM by default for optimal Apache + PHP performance."
       }
     },
     {
@@ -443,7 +443,7 @@
         },
         "result": {
           "level": "info",
-          "message": "phpMyAdmin does not support PostgreSQL. Use the Databases page in DevBox Pro or connect via psql.",
+          "message": "phpMyAdmin does not support PostgreSQL. Use the Databases page in MyLocalDev or connect via psql.",
           "suggestion": "Use psql CLI or a GUI tool like TablePlus or DBeaver for PostgreSQL management."
         }
       }

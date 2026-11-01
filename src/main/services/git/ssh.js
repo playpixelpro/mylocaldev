@@ -6,7 +6,7 @@ module.exports = {
   async generateSshKey() {
     const { commandExists } = require('../../utils/SpawnUtils');
 
-    const keyPath = path.join(this.sshKeyPath, 'devboxpro_rsa');
+    const keyPath = path.join(this.sshKeyPath, 'mylocaldev_rsa');
     const publicKeyPath = `${keyPath}.pub`;
 
     if (await fs.pathExists(keyPath)) {
@@ -62,7 +62,7 @@ module.exports = {
       };
     }
 
-    const args = ['-t', 'ed25519', '-f', keyPath, '-N', '', '-C', 'devboxpro-generated-key', '-q'];
+    const args = ['-t', 'ed25519', '-f', keyPath, '-N', '', '-C', 'MyLocalDev-generated-key', '-q'];
 
     try {
       return new Promise((resolve) => {
@@ -121,7 +121,7 @@ module.exports = {
   },
 
   async getSshPublicKey() {
-    const publicKeyPath = path.join(this.sshKeyPath, 'devboxpro_rsa.pub');
+    const publicKeyPath = path.join(this.sshKeyPath, 'mylocaldev_rsa.pub');
 
     if (await fs.pathExists(publicKeyPath)) {
       try {
@@ -136,7 +136,7 @@ module.exports = {
   },
 
   async regenerateSshKey() {
-    const keyPath = path.join(this.sshKeyPath, 'devboxpro_rsa');
+    const keyPath = path.join(this.sshKeyPath, 'mylocaldev_rsa');
     const publicKeyPath = `${keyPath}.pub`;
 
     try {

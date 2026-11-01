@@ -25,8 +25,8 @@ describe('appConfig exports', () => {
     });
 
     describe('APP_NAME', () => {
-        it('is "DevBox Pro"', () => {
-            expect(APP_NAME).toBe('DevBox Pro');
+        it('is "MyLocalDev"', () => {
+            expect(APP_NAME).toBe('MyLocalDev');
         });
     });
 

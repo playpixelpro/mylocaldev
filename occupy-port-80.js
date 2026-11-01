@@ -30,7 +30,7 @@ server.on('error', (err) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Port ${PORT} is now occupied. DevBox Pro will fail to bind to it.`);
+  console.log(`✅ Port ${PORT} is now occupied. MyLocalDev will fail to bind to it.`);
   console.log(`   Press Ctrl+C to release the port.`);
 });
 

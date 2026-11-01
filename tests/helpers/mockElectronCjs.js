@@ -15,12 +15,12 @@ const path = require('path');
 const mockApp = {
     getPath: (name) => {
         const paths = {
-            userData: path.join(os.tmpdir(), 'devboxpro-test-userdata'),
+            userData: path.join(os.tmpdir(), 'MyLocalDev-test-userdata'),
             home: os.homedir(),
-            appData: path.join(os.tmpdir(), 'devboxpro-test-appdata'),
+            appData: path.join(os.tmpdir(), 'MyLocalDev-test-appdata'),
             temp: os.tmpdir(),
         };
-        return paths[name] || path.join(os.tmpdir(), `devboxpro-test-${name}`);
+        return paths[name] || path.join(os.tmpdir(), `MyLocalDev-test-${name}`);
     },
     getVersion: () => '1.0.0-test',
     isPackaged: false,

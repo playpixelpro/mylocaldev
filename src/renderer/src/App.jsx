@@ -162,7 +162,7 @@ function App() {
     // Load saved theme setting first
     const loadTheme = async () => {
       try {
-        const settings = await window.devbox?.settings.getAll();
+        const settings = await window.mylocaldev?.settings.getAll();
         const s = settings?.settings || {};
         const savedTheme = s.theme || 'system';
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -191,7 +191,7 @@ function App() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = async (e) => {
       try {
-        const settings = await window.devbox?.settings.getAll();
+        const settings = await window.mylocaldev?.settings.getAll();
         if (settings?.settings?.theme === 'system') {
           setDarkMode(e.matches);
         }

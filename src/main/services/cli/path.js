@@ -153,8 +153,8 @@ if ($found) { 'FOUND' } else { 'NOTFOUND' }
     const rcFile = shell.includes('zsh') ? '.zshrc' : '.bashrc';
     const rcPath = path.join(homeDir, rcFile);
 
-    const exportLine = `export PATH="${cliPath}:$PATH"  # DevBox Pro CLI`;
-    const marker = '# DevBox Pro CLI';
+    const exportLine = `export PATH="${cliPath}:$PATH"  # MyLocalDev CLI`;
+    const marker = '# MyLocalDev CLI';
 
     try {
       let content = '';
@@ -167,7 +167,7 @@ if ($found) { 'FOUND' } else { 'NOTFOUND' }
           success: true,
           message: 'Already in PATH',
           rcFile: rcPath,
-          note: 'DevBox Pro CLI is already configured in your shell.',
+          note: 'MyLocalDev CLI is already configured in your shell.',
         };
       }
 
@@ -189,8 +189,8 @@ if ($found) { 'FOUND' } else { 'NOTFOUND' }
   },
 
   async tryAddToSystemPath(normalizedCliPath) {
-    const tempScriptFile = path.join(os.tmpdir(), 'devbox_add_path.ps1');
-    const tempResultFile = path.join(os.tmpdir(), 'devbox_path_result.txt');
+    const tempScriptFile = path.join(os.tmpdir(), 'mylocaldev_add_path.ps1');
+    const tempResultFile = path.join(os.tmpdir(), 'mylocaldev_path_result.txt');
     const psScript = `
 $targetPath = '${normalizedCliPath.replace(/'/g, "''")}'
 $resultFile = '${tempResultFile.replace(/\\/g, '\\\\')}'
@@ -325,7 +325,7 @@ Write-Output 'Added to User PATH'
     const shell = process.env.SHELL || '/bin/bash';
     const rcFile = shell.includes('zsh') ? '.zshrc' : '.bashrc';
     const rcPath = path.join(homeDir, rcFile);
-    const marker = '# DevBox Pro CLI';
+    const marker = '# MyLocalDev CLI';
 
     try {
       if (!await fs.pathExists(rcPath)) {
@@ -367,8 +367,8 @@ Write-Output 'Added to User PATH'
   },
 
   async tryRemoveFromSystemPath(normalizedCliPath) {
-    const tempScriptFile = path.join(os.tmpdir(), 'devbox_remove_path.ps1');
-    const tempResultFile = path.join(os.tmpdir(), 'devbox_path_remove_result.txt');
+    const tempScriptFile = path.join(os.tmpdir(), 'mylocaldev_remove_path.ps1');
+    const tempResultFile = path.join(os.tmpdir(), 'mylocaldev_path_remove_result.txt');
     const psScript = `
 $targetPath = '${normalizedCliPath.replace(/'/g, "''")}'
 $resultFile = '${tempResultFile.replace(/\\/g, '\\\\')}'

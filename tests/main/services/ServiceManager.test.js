@@ -430,21 +430,21 @@ describe('ServiceManager', () => {
         });
 
         it('quotes file paths in generated nginx config', async () => {
-            configStore.getDataPath = vi.fn(() => 'C:/DevBox Pro/data');
-            mgr.getNginxPath = vi.fn(() => 'C:/DevBox Pro/resources-user/nginx/1.28/win');
+            configStore.getDataPath = vi.fn(() => 'C:/MyLocalDev/data');
+            mgr.getNginxPath = vi.fn(() => 'C:/MyLocalDev/resources-user/nginx/1.28/win');
             const writeFileSpy = vi.spyOn(require('fs-extra'), 'writeFile');
 
-            await mgr.createNginxConfig('C:/DevBox Pro/data/nginx/1.28/nginx.conf', 'C:/DevBox Pro/data/nginx/1.28/logs', 80, 443, '1.28');
+            await mgr.createNginxConfig('C:/MyLocalDev/data/nginx/1.28/nginx.conf', 'C:/MyLocalDev/data/nginx/1.28/logs', 80, 443, '1.28');
 
             expect(writeFileSpy).toHaveBeenCalled();
             const [, config] = writeFileSpy.mock.calls.at(-1);
-            expect(config).toContain('include       "C:/DevBox Pro/resources-user/nginx/1.28/win/conf/mime.types";');
-            expect(config).toContain('include "C:/DevBox Pro/data/nginx/1.28/sites/*.conf";');
-            expect(config).toContain('root "C:/DevBox Pro/data/www";');
+            expect(config).toContain('include       "C:/MyLocalDev/resources-user/nginx/1.28/win/conf/mime.types";');
+            expect(config).toContain('include "C:/MyLocalDev/data/nginx/1.28/sites/*.conf";');
+            expect(config).toContain('root "C:/MyLocalDev/data/www";');
         });
 
         it('quotes file paths in generated MySQL config', async () => {
-            mgr.getMySQLPath = vi.fn(() => 'C:/DevBox Pro/resources-user/mysql/8.4/win');
+            mgr.getMySQLPath = vi.fn(() => 'C:/MyLocalDev/resources-user/mysql/8.4/win');
             configStore.get.mockImplementation((key, def) => {
                 if (key === 'settings') return { serverTimezone: 'UTC' };
                 return def;
@@ -452,24 +452,24 @@ describe('ServiceManager', () => {
             fs.writeFile.mockResolvedValue();
 
             await mgr.createMySQLConfig(
-                'C:/DevBox Pro/data/mysql/8.4/my.cnf',
-                'C:/DevBox Pro/data/mysql/8.4/data',
+                'C:/MyLocalDev/data/mysql/8.4/my.cnf',
+                'C:/MyLocalDev/data/mysql/8.4/data',
                 3306,
                 '8.4',
-                'C:/DevBox Pro/data/mysql/8.4/credentials_init.sql'
+                'C:/MyLocalDev/data/mysql/8.4/credentials_init.sql'
             );
 
             expect(fs.writeFile).toHaveBeenCalled();
             const [, config] = fs.writeFile.mock.calls.at(-1);
-            expect(config).toContain('basedir="C:/DevBox Pro/resources-user/mysql/8.4/win"');
-            expect(config).toContain('datadir="C:/DevBox Pro/data/mysql/8.4/data"');
-            expect(config).toContain('init-file="C:/DevBox Pro/data/mysql/8.4/credentials_init.sql"');
-            expect(config).toContain('pid-file="C:/DevBox Pro/data/mysql/8.4/data/mysql.pid"');
-            expect(config).toContain('log-error="C:/DevBox Pro/data/mysql/8.4/data/error.log"');
+            expect(config).toContain('basedir="C:/MyLocalDev/resources-user/mysql/8.4/win"');
+            expect(config).toContain('datadir="C:/MyLocalDev/data/mysql/8.4/data"');
+            expect(config).toContain('init-file="C:/MyLocalDev/data/mysql/8.4/credentials_init.sql"');
+            expect(config).toContain('pid-file="C:/MyLocalDev/data/mysql/8.4/data/mysql.pid"');
+            expect(config).toContain('log-error="C:/MyLocalDev/data/mysql/8.4/data/error.log"');
         });
 
         it('escapes user and password literals in generated MySQL credentials init file', async () => {
-            mgr.getDataPath = vi.fn(() => 'C:/DevBox Pro/data');
+            mgr.getDataPath = vi.fn(() => 'C:/MyLocalDev/data');
             configStore.get.mockImplementation((key, def) => {
                 if (key === 'settings') return { dbUser: "adm'in", dbPassword: "pa'ss\\word" };
                 return def;
@@ -485,7 +485,7 @@ describe('ServiceManager', () => {
         });
 
         it('uses MySQL 5.7-compatible tuning options in generated config', async () => {
-            mgr.getMySQLPath = vi.fn(() => 'C:/DevBox Pro/resources-user/mysql/5.7/win');
+            mgr.getMySQLPath = vi.fn(() => 'C:/MyLocalDev/resources-user/mysql/5.7/win');
             configStore.get.mockImplementation((key, def) => {
                 if (key === 'settings') return { serverTimezone: 'UTC' };
                 return def;
@@ -493,8 +493,8 @@ describe('ServiceManager', () => {
             fs.writeFile.mockResolvedValue();
 
             await mgr.createMySQLConfig(
-                'C:/DevBox Pro/data/mysql/5.7/my.cnf',
-                'C:/DevBox Pro/data/mysql/5.7/data',
+                'C:/MyLocalDev/data/mysql/5.7/my.cnf',
+                'C:/MyLocalDev/data/mysql/5.7/data',
                 3308,
                 '5.7'
             );
@@ -510,8 +510,8 @@ describe('ServiceManager', () => {
 
             await expect(
                 mgr.initializeMySQLData(
-                    'C:/DevBox Pro/resources-user/mysql/8.4/win',
-                    'C:/DevBox Pro/data/mysql/8.4/data',
+                    'C:/MyLocalDev/resources-user/mysql/8.4/win',
+                    'C:/MyLocalDev/data/mysql/8.4/data',
                     '8.4'
                 )
             ).rejects.toThrow('missing share/messages_to_error_log.txt');
@@ -527,8 +527,8 @@ describe('ServiceManager', () => {
 
             await expect(
                 mgr.initializeMySQLData(
-                    'C:/DevBox Pro/resources-user/mysql/5.7/win',
-                    'C:/DevBox Pro/data/mysql/5.7/data',
+                    'C:/MyLocalDev/resources-user/mysql/5.7/win',
+                    'C:/MyLocalDev/data/mysql/5.7/data',
                     '5.7'
                 )
             ).rejects.toThrow('MySQL initialization failed to launch');
@@ -539,7 +539,7 @@ describe('ServiceManager', () => {
 
         it('adopts legacy MySQL data from the old userData path when current data is empty', async () => {
             const legacyDataDir = mgr.getLegacyMySQLDataDir('8.4');
-            const currentDataDir = 'C:/DevBox Pro/data/mysql/8.4/data';
+            const currentDataDir = 'C:/MyLocalDev/data/mysql/8.4/data';
             const currentMysqlDir = path.join(currentDataDir, 'mysql');
             const legacyMysqlDir = path.join(legacyDataDir, 'mysql');
             const fsExtra = require('fs-extra');
@@ -574,7 +574,7 @@ describe('ServiceManager', () => {
                 '2026-03-19T07:45:56.898594Z 1 [ERROR] [MY-012930] [InnoDB] Plugin initialization aborted with error Generic error.',
             ].join('\n'));
 
-            await expect(mgr.hasRecoverableMySQLRedoCorruption('C:/DevBox Pro/data/mysql/8.4/data')).resolves.toBe(true);
+            await expect(mgr.hasRecoverableMySQLRedoCorruption('C:/MyLocalDev/data/mysql/8.4/data')).resolves.toBe(true);
         });
 
         it('detects recoverable MySQL data dictionary failures from the error log', async () => {
@@ -586,7 +586,7 @@ describe('ServiceManager', () => {
                 '2026-06-05T06:25:40.606486Z 0 [ERROR] [MY-010020] [Server] Data Dictionary initialization failed.',
             ].join('\n'));
 
-            await expect(mgr.hasRecoverableMySQLDataDictionaryFailure('C:/DevBox Pro/data/mysql/8.4/data')).resolves.toBe(true);
+            await expect(mgr.hasRecoverableMySQLDataDictionaryFailure('C:/MyLocalDev/data/mysql/8.4/data')).resolves.toBe(true);
         });
 
         it('archives corrupt MySQL redo logs before retrying startup', async () => {
@@ -595,19 +595,19 @@ describe('ServiceManager', () => {
             vi.spyOn(fsExtra, 'pathExists').mockResolvedValue(true);
             vi.spyOn(fsExtra, 'move').mockResolvedValue();
 
-            const recovered = await mgr.recoverCorruptMySQLRedoLogs('8.4', 'C:/DevBox Pro/data/mysql/8.4/data');
+            const recovered = await mgr.recoverCorruptMySQLRedoLogs('8.4', 'C:/MyLocalDev/data/mysql/8.4/data');
 
             expect(recovered).toBe(true);
             const [sourcePath, backupPath, moveOptions] = fsExtra.move.mock.calls.at(-1);
-            expect(sourcePath.replace(/\\/g, '/')).toBe('C:/DevBox Pro/data/mysql/8.4/data/#innodb_redo');
-            expect(backupPath.replace(/\\/g, '/')).toContain('C:/DevBox Pro/data/mysql/8.4/data/#innodb_redo.corrupt-');
+            expect(sourcePath.replace(/\\/g, '/')).toBe('C:/MyLocalDev/data/mysql/8.4/data/#innodb_redo');
+            expect(backupPath.replace(/\\/g, '/')).toContain('C:/MyLocalDev/data/mysql/8.4/data/#innodb_redo.corrupt-');
             expect(moveOptions).toEqual({ overwrite: false });
             const [, warningDetails] = managers.log.systemWarn.mock.calls.at(-1);
             expect(managers.log.systemWarn).toHaveBeenCalledWith(
                 'Recovered corrupt MySQL 8.4 redo logs',
                 expect.any(Object)
             );
-            expect(warningDetails.redoDir.replace(/\\/g, '/')).toBe('C:/DevBox Pro/data/mysql/8.4/data/#innodb_redo');
+            expect(warningDetails.redoDir.replace(/\\/g, '/')).toBe('C:/MyLocalDev/data/mysql/8.4/data/#innodb_redo');
         });
 
         it('reinitializes MySQL data dictionary when only system schemas are present', async () => {
@@ -625,18 +625,18 @@ describe('ServiceManager', () => {
 
             const recovered = await mgr.recoverCorruptMySQLDataDictionary(
                 '8.4',
-                'C:/DevBox Pro/data/mysql/8.4/data',
-                'C:/DevBox Pro/resources-user/mysql/8.4/win'
+                'C:/MyLocalDev/data/mysql/8.4/data',
+                'C:/MyLocalDev/resources-user/mysql/8.4/win'
             );
 
             expect(recovered).toBe(true);
             const [sourcePath, backupPath, moveOptions] = fsExtra.move.mock.calls.at(-1);
-            expect(sourcePath.replace(/\\/g, '/')).toBe('C:/DevBox Pro/data/mysql/8.4/data');
-            expect(backupPath.replace(/\\/g, '/')).toContain('C:/DevBox Pro/data/mysql/8.4/data.dd-corrupt-');
+            expect(sourcePath.replace(/\\/g, '/')).toBe('C:/MyLocalDev/data/mysql/8.4/data');
+            expect(backupPath.replace(/\\/g, '/')).toContain('C:/MyLocalDev/data/mysql/8.4/data.dd-corrupt-');
             expect(moveOptions).toEqual({ overwrite: false });
             expect(mgr.initializeMySQLData).toHaveBeenCalledWith(
-                'C:/DevBox Pro/resources-user/mysql/8.4/win',
-                'C:/DevBox Pro/data/mysql/8.4/data',
+                'C:/MyLocalDev/resources-user/mysql/8.4/win',
+                'C:/MyLocalDev/data/mysql/8.4/data',
                 '8.4'
             );
         });
@@ -653,8 +653,8 @@ describe('ServiceManager', () => {
 
             const recovered = await mgr.recoverCorruptMySQLDataDictionary(
                 '8.4',
-                'C:/DevBox Pro/data/mysql/8.4/data',
-                'C:/DevBox Pro/resources-user/mysql/8.4/win'
+                'C:/MyLocalDev/data/mysql/8.4/data',
+                'C:/MyLocalDev/resources-user/mysql/8.4/win'
             );
 
             expect(recovered).toBe(false);
@@ -671,12 +671,12 @@ describe('ServiceManager', () => {
             vi.spyOn(require('child_process'), 'spawn').mockImplementationOnce(() => proc);
 
             mgr.startMySQL.mockRestore();
-            mgr.getMySQLPath = vi.fn(() => 'C:/DevBox Pro/resources-user/mysql/8.4/win');
-            mgr.getDataPath = vi.fn(() => 'C:/DevBox Pro/data');
-            mgr.getLegacyMySQLDataDir = vi.fn(() => 'C:/DevBox Pro/legacy/mysql/8.4/data');
+            mgr.getMySQLPath = vi.fn(() => 'C:/MyLocalDev/resources-user/mysql/8.4/win');
+            mgr.getDataPath = vi.fn(() => 'C:/MyLocalDev/data');
+            mgr.getLegacyMySQLDataDir = vi.fn(() => 'C:/MyLocalDev/legacy/mysql/8.4/data');
             mgr.ensureWindowsRuntimeDlls = vi.fn().mockResolvedValue(undefined);
             mgr.maybeAdoptLegacyMySQLData = vi.fn().mockResolvedValue(false);
-            mgr.createCredentialsInitFile = vi.fn().mockResolvedValue('C:/DevBox Pro/data/mysql/8.4/credentials_init.sql');
+            mgr.createCredentialsInitFile = vi.fn().mockResolvedValue('C:/MyLocalDev/data/mysql/8.4/credentials_init.sql');
             mgr.createMySQLConfig = vi.fn().mockResolvedValue(undefined);
             mgr.waitForService = vi.fn(() => new Promise(() => {}));
             mgr.getMySQLErrorLogTail = vi.fn().mockResolvedValue('2026-03-20T14:53:59.272391Z 0 [System] [MY-015016] [Server] MySQL Server - end.');

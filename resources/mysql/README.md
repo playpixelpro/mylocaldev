@@ -36,7 +36,7 @@ Download from MySQL website or extract from Homebrew installation.
 
 ## Configuration
 
-Default configuration is handled by DevBox Pro's DatabaseManager.
+Default configuration is handled by MyLocalDev's DatabaseManager.
 Custom my.cnf is generated at runtime with:
 - datadir pointing to user's data directory
 - port configured by user settings

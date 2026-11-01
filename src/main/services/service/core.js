@@ -492,7 +492,7 @@ module.exports = {
       }
     }
 
-    // For Apache on Windows, kill any remaining DevBox httpd processes.
+    // For Apache on Windows, kill any remaining MyLocalDev httpd processes.
     // IMPORTANT: Use path-filtered kill to avoid killing external Apache
     // installations (XAMPP, WAMP, etc.) that may be running on port 80.
     if (serviceName === 'apache' && require('os').platform() === 'win32') {

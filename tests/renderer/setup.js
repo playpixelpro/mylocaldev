@@ -1,13 +1,13 @@
 /**
  * Renderer-specific test setup.
  *
- * Sets up jest-dom matchers and window.devbox mock for renderer tests.
+ * Sets up jest-dom matchers and window.mylocaldev mock for renderer tests.
  * This is separate from the main setup.js because the renderer project
  * uses different resolve aliases that can conflict with the main setup.
  */
 import '@testing-library/jest-dom';
 
-// Mock window.devbox API for renderer tests
+// Mock window.mylocaldev API for renderer tests
 if (typeof window !== 'undefined') {
     // Suppress specific harmless React/Router warnings from cluttering the test output
     const originalConsoleError = console.error;
@@ -44,7 +44,7 @@ if (typeof window !== 'undefined') {
         };
     }
 
-    window.devbox = {
+    window.mylocaldev = {
         projects: {
             getAll: async () => [],
             getById: async () => null,

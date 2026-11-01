@@ -500,7 +500,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
     return ssl.trustCertificate(domain);
   });
 
-  // Trust the Root CA certificate (for browser to trust all DevBox certificates)
+  // Trust the Root CA certificate (for browser to trust all MyLocalDev certificates)
   ipcMain.handle('ssl:trustRootCA', async () => {
     return ssl.promptTrustRootCA();
   });
@@ -781,7 +781,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
       // This prevents errors from trying to read config files during graceful shutdown
       if (process.platform === 'win32') {
         const { killProcessByName, killProcessesByPath } = require('../utils/SpawnUtils');
-        // Kill DevBox-specific processes globally
+        // Kill MyLocalDev-specific processes globally
         const processNames = ['php-cgi.exe', 'nginx.exe', 'httpd.exe', 'mysqld.exe', 'mariadbd.exe', 'redis-server.exe', 'mailpit.exe'];
         for (const procName of processNames) {
           try {
@@ -950,6 +950,9 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
     const projectData = project.getProject(projectId);
 
     const shell = process.platform === 'win32' ? 'powershell.exe' : 'bash';
+    const projectEnvOverrides = typeof project.getEnvOverrides === 'function'
+      ? await project.getEnvOverrides(projectData)
+      : {};
     const term = pty.spawn(shell, [], {
       name: 'xterm-color',
       cols: 80,
@@ -957,7 +960,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
       cwd: projectData?.path || process.cwd(),
       env: {
         ...process.env,
-        ...(projectData?.environment || {}),
+        ...projectEnvOverrides,
       },
     });
 

@@ -72,7 +72,7 @@ vi.mock('@/components/ImportProjectModal', () => ({
     ),
 }));
 
-const mockDevbox = {
+const mockMyLocalDev = {
     projects: {
         start: vi.fn().mockResolvedValue({}),
         stop: vi.fn().mockResolvedValue({}),
@@ -91,7 +91,7 @@ const mockDevbox = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
     localStorage.clear();
 });

@@ -37,6 +37,11 @@ class PhpManager {
 
     // Store discovered versions
     this.configStore.set('phpVersions', this.phpVersions);
+
+    // Make sure PHP exposes OS environment variables through $_ENV for every
+    // installed version. Without the "E" flag apps that read $_ENV ignore the
+    // per-project values MyLocalDev injects into PHP-CGI.
+    await this.ensureEnvVariablesVisible();
   }
 
   async discoverPhpVersion(phpBasePath, platform, version) {
@@ -294,7 +299,7 @@ class PhpManager {
       // Create basic php.ini
       const basicIni = `
 [PHP]
-; Basic PHP Configuration for DevBox Pro
+; Basic PHP Configuration for MyLocalDev
 engine = On
 short_open_tag = Off
 precision = 14
@@ -356,6 +361,10 @@ opcache.revalidate_freq = 0
       await fs.writeFile(iniPath, basicIni);
       await fs.ensureDir(path.join(phpPath, 'sessions'));
     }
+
+    // The bundled templates ship with variables_order = "GPCS"; add the "E" flag so
+    // per-project environment values reach $_ENV in newly installed PHP versions too.
+    await this.ensureVariablesOrderIncludesEnv(phpPath).catch(() => {});
   }
 
   /**
@@ -704,6 +713,74 @@ opcache.revalidate_freq = 0
   }
 
   /**
+   * Ensure every installed php.ini includes the "E" flag in `variables_order`.
+   *
+   * PHP's default is `GPCS`, which leaves `$_ENV` empty when the process inherits
+   * variables from its parent. MyLocalDev injects per-project values into PHP-CGI,
+   * so without the flag those values are invisible to apps that read `$_ENV`.
+   *
+   * @returns {Promise<string[]>} PHP versions whose php.ini was updated
+   */
+  async ensureEnvVariablesVisible() {
+    const updatedVersions = [];
+
+    for (const version of this.getSortedPhpVersions()) {
+      const versionInfo = this.phpVersions[version];
+      if (!versionInfo || !versionInfo.available) {
+        continue;
+      }
+
+      try {
+        if (await this.ensureVariablesOrderIncludesEnv(versionInfo.path)) {
+          updatedVersions.push(version);
+        }
+      } catch (error) {
+        this.managers?.log?.systemWarn(`Could not update variables_order in php.ini for PHP ${version}`, {
+          error: error.message,
+        });
+      }
+    }
+
+    if (updatedVersions.length > 0) {
+      this.managers?.log?.systemInfo(
+        `Enabled environment variables in $_ENV for PHP ${updatedVersions.join(', ')}`
+      );
+    }
+
+    return updatedVersions;
+  }
+
+  /**
+   * Add the "E" flag to `variables_order` in a single php.ini when missing.
+   *
+   * @param {string} phpPath - Directory containing php.ini
+   * @returns {Promise<boolean>} True when the file was modified
+   */
+  async ensureVariablesOrderIncludesEnv(phpPath) {
+    const iniPath = path.join(phpPath, 'php.ini');
+
+    if (!(await fs.pathExists(iniPath))) {
+      return false;
+    }
+
+    let iniContent = await fs.readFile(iniPath, 'utf-8');
+    const directive = iniContent.match(/^[ \t]*variables_order[ \t]*=[ \t]*"?([A-Za-z]*)"?[ \t]*$/m);
+
+    if (directive) {
+      const current = (directive[1] || '').toUpperCase();
+      if (current.includes('E')) {
+        return false;
+      }
+      iniContent = iniContent.replace(directive[0], `variables_order = "E${current || 'GPCS'}"`);
+    } else {
+      iniContent = iniContent.trimEnd() + '\nvariables_order = "EGPCS"\n';
+    }
+
+    await fs.writeFile(iniPath, iniContent);
+    return true;
+  }
+
+  /**
    * Restore the local-development php.ini from backup.
    *
    * @param {string} version - PHP version string
@@ -720,6 +797,8 @@ opcache.revalidate_freq = 0
 
     if (await fs.pathExists(backupPath)) {
       await fs.copy(backupPath, iniPath, { overwrite: true });
+      // Backups created before the E-flag change would restore variables_order = "GPCS".
+      await this.ensureVariablesOrderIncludesEnv(versionInfo.path).catch(() => {});
       this.managers?.log?.systemInfo(`Restored local php.ini for PHP ${version}`);
       return { success: true };
     }

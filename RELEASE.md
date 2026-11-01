@@ -1,10 +1,18 @@
-# 🚀 DevBox Pro v1.0.8
+# 🚀 MyLocalDev v1.0.0
 
-**Stable Release | Production Mode, Windows Task Scheduler integration, hardened web security, and resilient background workers**
+**First release of MyLocalDev — a rebranded, MIT-licensed fork of DevBox Pro, including Production Mode, Windows Task Scheduler integration, hardened web security, and resilient background workers.**
 
 ---
 
-## 🆕 What's New in v1.0.8
+## 🆕 What's New in v1.0.0
+
+### 🎨 Rebrand and fork maintenance
+- **New identity**: MyLocalDev name, icon set, installer artwork, window/tray titles, CLI messages and generated web-server configs.
+- **Separate application identity**: `appId` `com.playpixelpro.mylocaldev`, executable `MyLocalDev`, so it installs alongside any previous installation.
+- **Clean start**: MyLocalDev uses its own `~/.mylocaldev` data directory and `%APPDATA%\mylocaldev` profile, with nothing imported from a previous installation.
+- **Project environment fixes**: importing a project reads its `.env`; only genuine overrides are injected into PHP-CGI/terminals/workers; the Environment tab flags those overrides.
+- **Dependencies**: Electron 45, electron-builder 26, and a refreshed lockfile (`npm audit --omit=dev` → 0 vulnerabilities).
+- **Attribution**: original DevBox Pro copyright and MIT license preserved in `LICENSE` and `NOTICE`.
 
 ### 🚀 Production Mode Support
 - **Dual Environment Profiles**: Switch between **Local Mode** (interactive debugging, detailed errors, single queue worker) and **Production Mode** (optimized performance, hardened security, multi-worker) globally or per project.
@@ -155,8 +163,8 @@ mysqldump -u root mydb > backup.sql  # Dump with the active DB version
 
 | File | Description |
 |------|-------------|
-| **DevBox-Pro-Setup-1.0.8.exe** | Installer version (recommended) |
-| **DevBox-Pro-1.0.8.exe** | Portable version – no installation required |
+| **MyLocalDev-Setup-1.0.0.exe** | Installer version (recommended) |
+| **MyLocalDev-1.0.0.exe** | Portable version – no installation required |
 
 ### System Requirements (Windows)
 - **OS**: Windows 10/11 (64-bit)
@@ -173,7 +181,7 @@ mysqldump -u root mydb > backup.sql  # Dump with the active DB version
 ## 🚀 Getting Started
 
 1. **Download** the installer or portable version
-2. **Run** DevBox Pro
+2. **Run** MyLocalDev
 3. Open **Binary Manager** and download the components you need
 4. Click **"+ New Project"** to create your first project
 5. Start coding!
@@ -189,8 +197,8 @@ mysqldump -u root mydb > backup.sql  # Dump with the active DB version
 
 ## 📣 Report Issues & Feedback
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/JeffGepiga/DevBoxPro/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/JeffGepiga/DevBoxPro/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/playpixelpro/mylocaldev/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/playpixelpro/mylocaldev/discussions)
 - 📧 **Email**: jeffreygepiga27@gmail.com
 
 ---

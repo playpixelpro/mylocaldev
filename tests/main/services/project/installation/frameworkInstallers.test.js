@@ -258,7 +258,7 @@ describe('project/installation/framework installers', () => {
     const fs = require('fs-extra');
     const https = require('https');
     const AdmZip = require('adm-zip');
-    const projectPath = nativeFs.mkdtempSync(path.join(os.tmpdir(), 'devbox-wp-'));
+    const projectPath = nativeFs.mkdtempSync(path.join(os.tmpdir(), 'MyLocalDev-wp-'));
     const wpConfigTemplate = [
       "define( 'DB_NAME', 'database_name_here' );",
       "define( 'DB_USER', 'username_here' );",
@@ -339,7 +339,7 @@ describe('project/installation/framework installers', () => {
     const fs = require('fs-extra');
     const https = require('https');
     const AdmZip = require('adm-zip');
-    const projectPath = nativeFs.mkdtempSync(path.join(os.tmpdir(), 'devbox-wp-maria-'));
+    const projectPath = nativeFs.mkdtempSync(path.join(os.tmpdir(), 'MyLocalDev-wp-maria-'));
     const wpConfigTemplate = [
       "define( 'DB_NAME', 'database_name_here' );",
       "define( 'DB_USER', 'username_here' );",

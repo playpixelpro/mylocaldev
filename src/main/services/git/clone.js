@@ -68,7 +68,7 @@ module.exports = {
 
     const env = { ...process.env };
     if (authType === 'ssh') {
-      const sshKeyFile = path.join(this.sshKeyPath, 'devboxpro_rsa');
+      const sshKeyFile = path.join(this.sshKeyPath, 'mylocaldev_rsa');
       if (await fs.pathExists(sshKeyFile)) {
         env.GIT_SSH_COMMAND = `ssh -i "${sshKeyFile}" -o StrictHostKeyChecking=no`;
       }
@@ -177,7 +177,7 @@ module.exports = {
 
     const env = { ...process.env };
     if (authType === 'ssh') {
-      const sshKeyFile = path.join(this.sshKeyPath, 'devboxpro_rsa');
+      const sshKeyFile = path.join(this.sshKeyPath, 'mylocaldev_rsa');
       if (await fs.pathExists(sshKeyFile)) {
         env.GIT_SSH_COMMAND = `ssh -i "${sshKeyFile}" -o StrictHostKeyChecking=no`;
       }

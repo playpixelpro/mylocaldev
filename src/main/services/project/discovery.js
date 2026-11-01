@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const { v4: uuidv4 } = require('uuid');
+const { isProductionMode } = require('../../../shared/deploymentMode');
 
 module.exports = {
   async scanUnregisteredProjects() {
@@ -113,6 +114,32 @@ module.exports = {
     const webServer = config.webServer || settings.webServer || 'nginx';
     const webServerVersion = config.webServerVersion || this.getDefaultWebServerVersion(webServer);
 
+    // Honour an existing .env file instead of inventing values: the project is already
+    // configured, and stored values win over .env at runtime.
+    const envFileValues = typeof this.readEnvFileFromPath === 'function'
+      ? await this.readEnvFileFromPath(path.join(config.path, '.env'))
+      : {};
+
+    const environment = {
+      ...this.getDefaultEnvironment(projectType, config.name, port, {
+        services: {
+          mysql: projectServices.mysql || config.database === 'mysql',
+          mysqlVersion: projectServices.mysqlVersion || '8.4',
+          mariadb: projectServices.mariadb || config.database === 'mariadb',
+          mariadbVersion: projectServices.mariadbVersion || '11.4',
+        },
+        database: config.database,
+        deploymentMode: config.deploymentMode,
+      }),
+      ...envFileValues,
+    };
+
+    // Production mode is an explicit choice, so it still wins over the imported .env.
+    if (isProductionMode({ deploymentMode: config.deploymentMode }, settings)) {
+      environment.APP_ENV = 'production';
+      environment.APP_DEBUG = 'false';
+    }
+
     const project = {
       id,
       name: config.name,
@@ -147,16 +174,7 @@ module.exports = {
         memcachedVersion: projectServices.memcachedVersion || '1.6',
         minio: projectServices.minio || false,
       },
-      environment: this.getDefaultEnvironment(projectType, config.name, port, {
-        services: {
-          mysql: projectServices.mysql || config.database === 'mysql',
-          mysqlVersion: projectServices.mysqlVersion || '8.4',
-          mariadb: projectServices.mariadb || config.database === 'mariadb',
-          mariadbVersion: projectServices.mariadbVersion || '11.4',
-        },
-        database: config.database,
-        deploymentMode: config.deploymentMode,
-      }),
+      environment,
       deploymentMode: config.deploymentMode || 'global',
       supervisor: {
         workers: 1,
@@ -173,7 +191,9 @@ module.exports = {
     this.assertProjectDomainsAvailable(project);
 
     if (project.services.mysql || project.services.mariadb) {
-      const dbName = this.sanitizeDatabaseName(config.name);
+      // An imported .env owns the database name when it declares one.
+      const envDatabaseName = project.environment.DB_DATABASE;
+      const dbName = envDatabaseName || this.sanitizeDatabaseName(config.name);
       project.environment.DB_DATABASE = dbName;
 
       try {

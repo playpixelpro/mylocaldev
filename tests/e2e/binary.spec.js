@@ -1,9 +1,9 @@
 import { test, expect } from './fixtures';
 
-test.describe('DevBoxPro Binary Manager Workflow', () => {
+test.describe('MyLocalDev Binary Manager Workflow', () => {
     test('Lists services in Binary Manager and allows starting from Services', async ({ page }) => {
         // Wait for Dashboard
-        await expect(page.locator('text=DevBox Pro')).toBeVisible();
+        await expect(page.locator('text=MyLocalDev')).toBeVisible();
 
         // Go to Binaries
         await page.click('a:has-text("Binaries")');

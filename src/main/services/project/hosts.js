@@ -141,7 +141,7 @@ module.exports = {
 
       const sudo = require('sudo-prompt');
       const options = {
-        name: 'DevBox Pro',
+        name: 'MyLocalDev',
         icns: undefined,
       };
 
@@ -149,8 +149,8 @@ module.exports = {
       const tempDir = app.getPath('temp');
 
       if (process.platform === 'win32') {
-        const tempEntriesPath = path.join(tempDir, 'devbox-hosts-entries.txt');
-        const scriptPath = path.join(tempDir, 'devbox-hosts-update.bat');
+        const tempEntriesPath = path.join(tempDir, 'MyLocalDev-hosts-entries.txt');
+        const scriptPath = path.join(tempDir, 'MyLocalDev-hosts-update.bat');
 
         await fs.writeFile(tempEntriesPath, '\r\n' + entries.join('\r\n') + '\r\n', 'utf8');
 
@@ -172,7 +172,7 @@ module.exports = {
         });
       }
 
-      const tempEntriesPath = path.join(tempDir, 'devbox-hosts-entries.txt');
+      const tempEntriesPath = path.join(tempDir, 'MyLocalDev-hosts-entries.txt');
       await fs.writeFile(tempEntriesPath, '\n' + entries.join('\n') + '\n', 'utf8');
       const command = `cat "${tempEntriesPath}" >> "${hostsPath}"`;
 
@@ -214,7 +214,7 @@ module.exports = {
       if (newContent !== hostsContent) {
         const sudo = require('sudo-prompt');
         const options = {
-          name: 'DevBox Pro',
+          name: 'MyLocalDev',
           icns: undefined,
         };
 

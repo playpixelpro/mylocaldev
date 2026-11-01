@@ -2,7 +2,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 // Expose protected methods that allow the renderer process to use
 // ipcRenderer without exposing the entire object
-contextBridge.exposeInMainWorld('devbox', {
+contextBridge.exposeInMainWorld('mylocaldev', {
   // Project operations
   projects: {
     getAll: () => ipcRenderer.invoke('projects:getAll'),

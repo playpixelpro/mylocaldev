@@ -25,11 +25,11 @@ Download from: https://www.phpmyadmin.net/downloads/
 
 1. Download the "all languages" package
 2. Extract to this directory
-3. DevBox Pro will generate config.inc.php at runtime
+3. MyLocalDev will generate config.inc.php at runtime
 
 ## Configuration
 
-DevBox Pro automatically configures phpMyAdmin with:
+MyLocalDev automatically configures phpMyAdmin with:
 - Connection to local MySQL server
 - Appropriate authentication settings
 - Theme configuration

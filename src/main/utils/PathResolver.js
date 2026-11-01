@@ -64,7 +64,7 @@ function pathHasMeaningfulEntries(targetPath) {
 function hasExistingStandardInstallState(app) {
   const userDataPath = typeof app?.getPath === 'function' ? app.getPath('userData') : null;
   const candidatePaths = [
-    path.join(os.homedir(), '.devbox-pro'),
+    path.join(os.homedir(), '.mylocaldev'),
     userDataPath ? path.join(userDataPath, 'data') : null,
     userDataPath ? path.join(userDataPath, 'resources') : null,
   ].filter(Boolean);
@@ -115,7 +115,7 @@ function getDataPath(app) {
     return path.join(portableRoot, 'data');
   }
 
-  return path.join(os.homedir(), '.devbox-pro');
+  return path.join(os.homedir(), '.mylocaldev');
 }
 
 function getResourcesPath(app) {

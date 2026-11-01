@@ -136,6 +136,40 @@ describe('project/discovery', () => {
     ]));
   });
 
+  it('honours an existing .env when importing an already configured project', async () => {
+    const ctx = makeContext({
+      configStore: {
+        get: vi.fn((key) => {
+          if (key === 'settings') return { defaultTld: 'test', webServer: 'nginx', portRangeStart: 8000 };
+          if (key === 'projects') return [];
+          return undefined;
+        }),
+        set: vi.fn(),
+      },
+      getDefaultEnvironment: vi.fn(() => ({ APP_NAME: 'Imported App', APP_ENV: 'local', DB_PASSWORD: '' })),
+      readEnvFileFromPath: vi.fn(async () => ({
+        APP_NAME: 'Imported App',
+        APP_ENV: 'development',
+        APP_KEY: 'base64:existingkey',
+        DB_DATABASE: 'existing_db',
+      })),
+    });
+
+    const result = await ctx.registerExistingProject({
+      name: 'Imported App',
+      path: '/projects/imported-app',
+      services: { mysql: true },
+      ssl: false,
+    });
+
+    expect(result.environment).toMatchObject({
+      APP_ENV: 'development',
+      APP_KEY: 'base64:existingkey',
+      DB_DATABASE: 'existing_db',
+    });
+    expect(ctx.managers.database.createDatabase).toHaveBeenCalledWith('existing_db', '8.4');
+  });
+
   it('disables SSL for imported projects after certificate retry failure', async () => {
     vi.useFakeTimers();
 

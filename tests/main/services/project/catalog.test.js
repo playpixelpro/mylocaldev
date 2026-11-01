@@ -67,9 +67,9 @@ describe('project/catalog', () => {
 
     const result = await ctx.exportProjectConfig('proj-1');
 
-    expect(result).toEqual({ success: true, path: path.join('/project', 'devbox.json') });
+    expect(result).toEqual({ success: true, path: path.join('/project', 'mylocaldev.json') });
     expect(fs.writeJson).toHaveBeenCalledWith(
-      path.join('/project', 'devbox.json'),
+      path.join('/project', 'mylocaldev.json'),
       expect.objectContaining({
         name: 'Exported App',
         phpExtensions: ['redis'],
@@ -86,9 +86,9 @@ describe('project/catalog', () => {
     await expect(ctx.detectProjectType('/symfony-app')).resolves.toBe('symfony');
   });
 
-  it('merges devbox.json overrides during path detection', async () => {
+  it('merges mylocaldev.json overrides during path detection', async () => {
     const ctx = makeContext();
-    vi.spyOn(fs, 'pathExists').mockImplementation(async (targetPath) => targetPath.endsWith('devbox.json'));
+    vi.spyOn(fs, 'pathExists').mockImplementation(async (targetPath) => targetPath.endsWith('mylocaldev.json'));
     vi.spyOn(fs, 'readJson').mockResolvedValue({ name: 'Configured Name', type: 'nodejs', webServer: 'apache' });
     ctx.detectProjectType = vi.fn().mockResolvedValue('custom');
 

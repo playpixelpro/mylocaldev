@@ -96,11 +96,11 @@ module.exports = {
     const productionHeaders = isProd ? PRODUCTION_NGINX_HEADERS.map(h => `    ${h}`).join('\n') : '';
 
     let config = `
-# DevBox Pro - ${project.name}
+# MyLocalDev - ${project.name}
 # Domain: ${project.domain}
 # Generated: ${new Date().toISOString()}
     # NOTE: Auto-generated file. Manual edits are not recommended.
-    # This file is regenerated when DevBox starts, stops, or reloads the project/service.
+    # This file is regenerated when MyLocalDev starts, stops, or reloads the project/service.
 # Ports: HTTP=${finalHttpPort}, HTTPS=${httpsPort}${networkAccess ? '\n# Network Access: ENABLED - accessible from local network' : ''}${canUsePort80 ? '\n# Port 80 (first-come-first-served)' : ''}
 
 # HTTP Server
@@ -136,27 +136,27 @@ ${isProd ? `
 
     location ~ \\.php$ {
         try_files $uri /index.php?$query_string;
-        set $devbox_request_scheme $scheme;
-        set $devbox_https $https;
-        set $devbox_server_port $server_port;
-        set $devbox_forwarded_proto $scheme;
+        set $mylocaldev_request_scheme $scheme;
+        set $mylocaldev_https $https;
+        set $mylocaldev_server_port $server_port;
+        set $mylocaldev_forwarded_proto $scheme;
       if ($http_x_forwarded_port != "") {
-        set $devbox_server_port $http_x_forwarded_port;
+        set $mylocaldev_server_port $http_x_forwarded_port;
       }
         if ($http_x_forwarded_proto = "https") {
-            set $devbox_request_scheme https;
-            set $devbox_https on;
-            set $devbox_forwarded_proto https;
+            set $mylocaldev_request_scheme https;
+            set $mylocaldev_https on;
+            set $mylocaldev_forwarded_proto https;
         }
         fastcgi_pass 127.0.0.1:${phpFpmPort};
         fastcgi_index index.php;
       include "${fastcgiParamsPath}";
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        fastcgi_param HTTPS $devbox_https;
-        fastcgi_param REQUEST_SCHEME $devbox_request_scheme;
-        fastcgi_param SERVER_PORT $devbox_server_port;
-        fastcgi_param HTTP_X_FORWARDED_PROTO $devbox_forwarded_proto;
-        fastcgi_param HTTP_X_FORWARDED_PORT $devbox_server_port;
+        fastcgi_param HTTPS $mylocaldev_https;
+        fastcgi_param REQUEST_SCHEME $mylocaldev_request_scheme;
+        fastcgi_param SERVER_PORT $mylocaldev_server_port;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $mylocaldev_forwarded_proto;
+        fastcgi_param HTTP_X_FORWARDED_PORT $mylocaldev_server_port;
         fastcgi_hide_header X-Powered-By;
         fastcgi_read_timeout ${isProd ? '60' : '300'};
     }
@@ -219,27 +219,27 @@ server {
 
     location ~ \\.php$ {
         try_files $uri /index.php?$query_string;
-        set $devbox_request_scheme $scheme;
-        set $devbox_https $https;
-        set $devbox_server_port $server_port;
-        set $devbox_forwarded_proto $scheme;
+        set $mylocaldev_request_scheme $scheme;
+        set $mylocaldev_https $https;
+        set $mylocaldev_server_port $server_port;
+        set $mylocaldev_forwarded_proto $scheme;
       if ($http_x_forwarded_port != "") {
-        set $devbox_server_port $http_x_forwarded_port;
+        set $mylocaldev_server_port $http_x_forwarded_port;
       }
         if ($http_x_forwarded_proto = "https") {
-            set $devbox_request_scheme https;
-            set $devbox_https on;
-            set $devbox_forwarded_proto https;
+            set $mylocaldev_request_scheme https;
+            set $mylocaldev_https on;
+            set $mylocaldev_forwarded_proto https;
         }
         fastcgi_pass 127.0.0.1:${phpFpmPort};
         fastcgi_index index.php;
       include "${fastcgiParamsPath}";
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-        fastcgi_param HTTPS $devbox_https;
-        fastcgi_param REQUEST_SCHEME $devbox_request_scheme;
-        fastcgi_param SERVER_PORT $devbox_server_port;
-        fastcgi_param HTTP_X_FORWARDED_PROTO $devbox_forwarded_proto;
-        fastcgi_param HTTP_X_FORWARDED_PORT $devbox_server_port;
+        fastcgi_param HTTPS $mylocaldev_https;
+        fastcgi_param REQUEST_SCHEME $mylocaldev_request_scheme;
+        fastcgi_param SERVER_PORT $mylocaldev_server_port;
+        fastcgi_param HTTP_X_FORWARDED_PROTO $mylocaldev_forwarded_proto;
+        fastcgi_param HTTP_X_FORWARDED_PORT $mylocaldev_server_port;
         fastcgi_hide_header X-Powered-By;
         fastcgi_read_timeout 300;
     }
@@ -275,11 +275,11 @@ server {
     const certsExist = await this.ensureProjectSslCertificates(project, sslDir);
 
     let config = `
-# DevBox Pro Proxy - ${project.name}
+# MyLocalDev Proxy - ${project.name}
 # Domain: ${project.domain}
 # Generated: ${new Date().toISOString()}
   # NOTE: Auto-generated file. Manual edits are not recommended.
-  # This file is regenerated when DevBox starts, stops, or reloads the project/service.
+  # This file is regenerated when MyLocalDev starts, stops, or reloads the project/service.
 # Front Door: nginx -> ${this.getEffectiveWebServer(project)}:${backendHttpPort}
 
 server {

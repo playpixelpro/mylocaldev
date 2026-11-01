@@ -11,7 +11,7 @@ class ConfigStore {
       const defaultData = this.getDefaults();
       this.resolvedDataPath = defaultData.dataPath;
       this.store = new Store({
-        name: 'devbox-pro-config',
+        name: 'mylocaldev-config',
         defaults: defaultData,
         cwd: defaultData.dataPath
       });
@@ -89,7 +89,7 @@ class ConfigStore {
   getResolvedStandardProjectsPath() {
     if (this.isTestEnvironment()) {
       const baseDir = process.env.TEST_USER_DATA_DIR || os.tmpdir();
-      return path.join(baseDir, '.devbox-pro-test', 'Projects');
+      return path.join(baseDir, '.mylocaldev-test', 'Projects');
     }
 
     return this.getPlatformDefaultProjectsPath();
@@ -156,7 +156,7 @@ class ConfigStore {
       defaultProjectsPath = path.join(portableRoot, 'Projects');
     } else if (isTestEnv) {
       const baseDir = process.env.TEST_USER_DATA_DIR || os.tmpdir();
-      dataPath = path.join(baseDir, '.devbox-pro-test');
+      dataPath = path.join(baseDir, '.mylocaldev-test');
       defaultProjectsPath = path.join(dataPath, 'Projects');
     } else {
       dataPath = getDataPath(app);

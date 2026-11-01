@@ -224,7 +224,7 @@ const XTerminal = forwardRef(({
           if (isRunningCommand.current && runningProcessId.current) {
             // Send input to running process (include the typed text + newline)
             const inputText = commandBuffer.current + '\n';
-            const result = await window.devbox?.terminal?.sendInput?.(runningProcessId.current, inputText);
+            const result = await window.mylocaldev?.terminal?.sendInput?.(runningProcessId.current, inputText);
             commandBuffer.current = '';
           } else {
             const command = commandBuffer.current.trim();
@@ -261,7 +261,7 @@ const XTerminal = forwardRef(({
 
           // Cancel running command
           if (isRunningCommand.current && runningProcessId.current) {
-            window.devbox?.terminal?.cancelCommand?.(runningProcessId.current);
+            window.mylocaldev?.terminal?.cancelCommand?.(runningProcessId.current);
           }
 
           isRunningCommand.current = false;
@@ -321,12 +321,12 @@ const XTerminal = forwardRef(({
   }, []);
 
   const writePrompt = (terminal, path) => {
-    const shortPath = path ? path.split(/[\\/]/).pop() : 'devbox';
+    const shortPath = path ? path.split(/[\\/]/).pop() : 'MyLocalDev';
     terminal.write(`\x1b[1;32m${shortPath}\x1b[0m \x1b[1;34m>\x1b[0m `);
   };
 
   const clearCurrentLine = (terminal, path) => {
-    const shortPath = path ? path.split(/[\\/]/).pop() : 'devbox';
+    const shortPath = path ? path.split(/[\\/]/).pop() : 'MyLocalDev';
     const promptLength = shortPath.length + 3 + commandBuffer.current.length; // path + " > " + command
     terminal.write('\r\x1b[K'); // Move to start and clear line
     terminal.write(`\x1b[1;32m${shortPath}\x1b[0m \x1b[1;34m>\x1b[0m `);
@@ -389,10 +389,10 @@ const XTerminal = forwardRef(({
       }
 
       // Listen for output events
-      outputListenerRef.current = window.devbox?.terminal?.onOutput?.(outputHandler);
+      outputListenerRef.current = window.mylocaldev?.terminal?.onOutput?.(outputHandler);
 
       try {
-        const result = await window.devbox?.terminal?.runCommand?.(
+        const result = await window.mylocaldev?.terminal?.runCommand?.(
           processId,
           finalCommand,
           {

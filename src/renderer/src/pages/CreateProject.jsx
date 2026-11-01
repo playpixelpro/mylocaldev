@@ -210,7 +210,7 @@ function CreateProject() {
   useEffect(() => {
     const loadDefaultPath = async () => {
       try {
-        const allSettings = await window.devbox?.settings?.getAll?.();
+        const allSettings = await window.mylocaldev?.settings?.getAll?.();
         const defaultPath = allSettings?.settings?.defaultProjectsPath;
         if (defaultPath) {
           setDefaultProjectsPath(defaultPath);
@@ -226,7 +226,7 @@ function CreateProject() {
   useEffect(() => {
     const loadServiceConfig = async () => {
       try {
-        const config = await window.devbox?.binaries.getServiceConfig();
+        const config = await window.mylocaldev?.binaries.getServiceConfig();
         if (config) {
           setServiceConfig(config);
         }
@@ -308,8 +308,8 @@ function CreateProject() {
     };
 
     // Subscribe to terminal output immediately
-    const cleanupOutput = window.devbox?.terminal?.onOutput?.(handleOutput);
-    const cleanupComplete = window.devbox?.terminal?.onInstallComplete?.(handleInstallComplete);
+    const cleanupOutput = window.mylocaldev?.terminal?.onOutput?.(handleOutput);
+    const cleanupComplete = window.mylocaldev?.terminal?.onInstallComplete?.(handleInstallComplete);
 
     return () => {
       if (cleanupOutput && typeof cleanupOutput === 'function') {
@@ -325,7 +325,7 @@ function CreateProject() {
   useEffect(() => {
     const checkBinaries = async () => {
       try {
-        const status = await window.devbox?.binaries.getStatus();
+        const status = await window.mylocaldev?.binaries.getStatus();
         if (status) {
           // PHP versions
           const phpVersions = Object.entries(status.php || {})
@@ -436,7 +436,7 @@ function CreateProject() {
   useEffect(() => {
     const checkGit = async () => {
       try {
-        const result = await window.devbox?.git?.isAvailable();
+        const result = await window.mylocaldev?.git?.isAvailable();
         setGitStatus({
           available: result?.available || false,
           source: result?.source || null,
@@ -446,7 +446,7 @@ function CreateProject() {
 
         // Also check for existing SSH key
         if (result?.available) {
-          const sshResult = await window.devbox?.git?.getSshPublicKey();
+          const sshResult = await window.mylocaldev?.git?.getSshPublicKey();
           if (sshResult?.exists) {
             setSshKeyInfo({ exists: true, publicKey: sshResult.publicKey });
           }
@@ -473,7 +473,7 @@ function CreateProject() {
           webServer: formData.webServer,
           webServerVersion: formData.webServerVersion,
         };
-        const result = await window.devbox?.projects.checkCompatibility(config);
+        const result = await window.mylocaldev?.projects.checkCompatibility(config);
         if (result?.warnings) {
           setCompatibilityWarnings(result.warnings);
         } else {
@@ -500,7 +500,7 @@ function CreateProject() {
   };
 
   const handleSelectPath = async () => {
-    const path = await window.devbox?.system.selectDirectory();
+    const path = await window.mylocaldev?.system.selectDirectory();
     if (path) {
       setPathManuallySet(true); // Mark path as manually set
       updateFormData({ path });
@@ -883,7 +883,7 @@ function CreateProject() {
           }}
           onImport={async (config) => {
             try {
-              const result = await window.devbox?.projects?.registerExisting(config);
+              const result = await window.mylocaldev?.projects?.registerExisting(config);
               if (result?.id) {
                 await refreshProjects?.();
                 navigate('/projects');
@@ -911,7 +911,7 @@ function StepProjectType({ formData, updateFormData, onImportProject }) {
   const handleImportFolder = async () => {
     try {
       // Open folder picker dialog
-      const folderPath = await window.devbox?.system.selectDirectory();
+      const folderPath = await window.mylocaldev?.system.selectDirectory();
       if (!folderPath) return; // User cancelled
 
       const existingProject = projects.find((project) => project.path === folderPath);
@@ -925,7 +925,7 @@ function StepProjectType({ formData, updateFormData, onImportProject }) {
       }
 
       // Detect project type from folder contents
-      const projectInfo = await window.devbox?.projects.detectType(folderPath);
+      const projectInfo = await window.mylocaldev?.projects.detectType(folderPath);
 
       onImportProject({
         path: folderPath,
@@ -1105,7 +1105,7 @@ function StepDetails({
     setAuthTestResult(null);
 
     try {
-      const result = await window.devbox?.git?.testAuth(formData.repositoryUrl, {
+      const result = await window.mylocaldev?.git?.testAuth(formData.repositoryUrl, {
         authType: formData.authType,
         accessToken: formData.accessToken,
       });
@@ -1123,7 +1123,7 @@ function StepDetails({
     setSshKeyError(null);
 
     try {
-      const result = await window.devbox?.git?.generateSshKey();
+      const result = await window.mylocaldev?.git?.generateSshKey();
       if (result?.success) {
         setSshKeyInfo({ exists: true, publicKey: result.publicKey });
       } else {
@@ -1163,7 +1163,7 @@ function StepDetails({
     setSshKeyError(null);
 
     try {
-      const result = await window.devbox?.git?.regenerateSshKey();
+      const result = await window.mylocaldev?.git?.regenerateSshKey();
       if (result?.success) {
         setSshKeyInfo({ exists: true, publicKey: result.publicKey });
       } else {

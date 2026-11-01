@@ -5,7 +5,7 @@ import os from 'os';
 import crypto from 'crypto';
 import { promises as fsp } from 'fs';
 
-const realConfigPath = path.join(os.homedir(), '.devbox-pro', 'devbox-pro-config.json');
+const realConfigPath = path.join(os.homedir(), '.mylocaldev', 'mylocaldev-config.json');
 
 // Setup highly-isolated test environments for each Playwright test worker
 export const test = base.extend({
@@ -37,7 +37,7 @@ export const test = base.extend({
         const mainEntry = path.join(__dirname, '..', '..', 'src', 'main', 'main.js');
 
         // Create a temporary, random user data directory for true isolation
-        const tempUserDataDir = path.join(os.tmpdir(), `devbox-e2e-${crypto.randomUUID()}`);
+        const tempUserDataDir = path.join(os.tmpdir(), `MyLocalDev-e2e-${crypto.randomUUID()}`);
 
         const envArgs = {
             ...process.env,
@@ -52,7 +52,7 @@ export const test = base.extend({
         // reads the sentinel from there — 100% reliable, no argv parsing required.
         await fsp.mkdir(tempUserDataDir, { recursive: true });
         await fsp.writeFile(
-            path.join(tempUserDataDir, 'devboxpro-e2e.json'),
+            path.join(tempUserDataDir, 'MyLocalDev-e2e.json'),
             JSON.stringify({ dataDir: tempUserDataDir }),
             'utf8'
         );
@@ -88,9 +88,9 @@ export const test = base.extend({
         // Mock binaries status so the UI thinks we have PHP and NGINX installed 
         // without downloading 100MB of binaries every test run
         await window.addInitScript(() => {
-            if (window.devbox && window.devbox.binaries) {
-                const originalGetStatus = window.devbox.binaries.getStatus;
-                window.devbox.binaries.getStatus = async () => {
+            if (window.mylocaldev && window.mylocaldev.binaries) {
+                const originalGetStatus = window.mylocaldev.binaries.getStatus;
+                window.mylocaldev.binaries.getStatus = async () => {
                     const realStatus = await originalGetStatus();
                     return {
                         ...realStatus,

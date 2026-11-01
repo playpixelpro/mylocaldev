@@ -51,7 +51,7 @@ const SECOND_PROJECT = {
 let mockProjects = [MOCK_PROJECT];
 let tunnelStatusChangedListener = null;
 
-const mockDevbox = {
+const mockMyLocalDev = {
     projects: {
         start: vi.fn().mockResolvedValue({}),
         stop: vi.fn().mockResolvedValue({}),
@@ -109,7 +109,7 @@ const mockDevbox = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
     Object.assign(MOCK_PROJECT, {
         id: 'proj-1',
@@ -154,17 +154,17 @@ beforeEach(() => {
     });
     mockProjects = [MOCK_PROJECT];
     tunnelStatusChangedListener = null;
-    mockDevbox.binaries.getStatus.mockResolvedValue({
+    mockMyLocalDev.binaries.getStatus.mockResolvedValue({
         php: { '8.3': { installed: true } },
         mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
         cloudflared: { installed: true },
         zrok: { installed: true },
     });
-    mockDevbox.binaries.getServiceConfig.mockResolvedValue({
+    mockMyLocalDev.binaries.getServiceConfig.mockResolvedValue({
         defaultPorts: { mysql: 3306 },
         portOffsets: { mysql: { '8.4': 0, '8.0': 1 } },
     });
-    mockDevbox.tunnel.onStatusChanged.mockImplementation((callback) => {
+    mockMyLocalDev.tunnel.onStatusChanged.mockImplementation((callback) => {
         tunnelStatusChangedListener = callback;
         return vi.fn();
     });
@@ -235,15 +235,15 @@ describe('ProjectDetail', () => {
 
         it('keeps the local domain portless while LAN URLs use backend ports', async () => {
             MOCK_PROJECT.networkAccess = true;
-            mockDevbox.system.getLocalIpAddresses.mockResolvedValue(['192.168.1.20']);
-            mockDevbox.services.getProjectLocalAccessPorts.mockResolvedValue({ httpPort: 80, sslPort: 443 });
-            mockDevbox.services.getProjectNetworkPort.mockResolvedValue({ httpPort: 8084, sslPort: 8446 });
+            mockMyLocalDev.system.getLocalIpAddresses.mockResolvedValue(['192.168.1.20']);
+            mockMyLocalDev.services.getProjectLocalAccessPorts.mockResolvedValue({ httpPort: 80, sslPort: 443 });
+            mockMyLocalDev.services.getProjectNetworkPort.mockResolvedValue({ httpPort: 8084, sslPort: 8446 });
 
             renderProjectDetail();
 
             await waitFor(() => expect(screen.getByRole('button', { name: /^myapp\.test$/i })).toBeInTheDocument());
-            expect(mockDevbox.services.getProjectLocalAccessPorts).toHaveBeenCalledWith('proj-1');
-            expect(mockDevbox.services.getProjectNetworkPort).toHaveBeenCalledWith('proj-1');
+            expect(mockMyLocalDev.services.getProjectLocalAccessPorts).toHaveBeenCalledWith('proj-1');
+            expect(mockMyLocalDev.services.getProjectNetworkPort).toHaveBeenCalledWith('proj-1');
             MOCK_PROJECT.networkAccess = false;
         });
 
@@ -271,7 +271,7 @@ describe('ProjectDetail', () => {
     describe('phpMyAdmin launch', () => {
         it('shows a loading state while phpMyAdmin is starting', async () => {
             let resolvePhpMyAdminUrl;
-            mockDevbox.database.getPhpMyAdminUrl.mockImplementation(() => new Promise((resolve) => {
+            mockMyLocalDev.database.getPhpMyAdminUrl.mockImplementation(() => new Promise((resolve) => {
                 resolvePhpMyAdminUrl = resolve;
             }));
 
@@ -281,12 +281,12 @@ describe('ProjectDetail', () => {
             fireEvent.click(openButton);
 
             expect(screen.getByRole('button', { name: /Starting phpMyAdmin/i })).toBeDisabled();
-            expect(mockDevbox.database.getPhpMyAdminUrl).toHaveBeenCalledWith('mysql', '8.4');
+            expect(mockMyLocalDev.database.getPhpMyAdminUrl).toHaveBeenCalledWith('mysql', '8.4');
 
             resolvePhpMyAdminUrl('http://localhost:8080/index.php?server=1');
 
             await waitFor(() => {
-                expect(mockDevbox.system.openExternal).toHaveBeenCalledWith('http://localhost:8080/index.php?server=1');
+                expect(mockMyLocalDev.system.openExternal).toHaveBeenCalledWith('http://localhost:8080/index.php?server=1');
             });
         });
     });
@@ -302,7 +302,7 @@ describe('ProjectDetail', () => {
             fireEvent.click(startButton);
 
             await waitFor(() => {
-                expect(mockDevbox.tunnel.start).toHaveBeenCalledWith('proj-1', 'cloudflared');
+                expect(mockMyLocalDev.tunnel.start).toHaveBeenCalledWith('proj-1', 'cloudflared');
             });
 
             expect(await screen.findByText('https://myapp.trycloudflare.com')).toBeInTheDocument();
@@ -325,7 +325,7 @@ describe('ProjectDetail', () => {
                 },
             ];
 
-            mockDevbox.tunnel.start.mockResolvedValueOnce({
+            mockMyLocalDev.tunnel.start.mockResolvedValueOnce({
                 projectId: 'proj-1',
                 provider: 'cloudflared',
                 status: 'running',
@@ -338,7 +338,7 @@ describe('ProjectDetail', () => {
             fireEvent.click(startButton);
 
             await waitFor(() => {
-                expect(mockDevbox.tunnel.start).toHaveBeenCalledWith('proj-2', 'cloudflared');
+                expect(mockMyLocalDev.tunnel.start).toHaveBeenCalledWith('proj-2', 'cloudflared');
             });
 
             expect(screen.queryByText('https://first-project.trycloudflare.com')).not.toBeInTheDocument();
@@ -360,7 +360,7 @@ describe('ProjectDetail', () => {
             MOCK_PROJECT.tunnelProvider = 'cloudflared';
 
             let resolveTunnelStart;
-            mockDevbox.tunnel.start.mockImplementationOnce(() => new Promise((resolve) => {
+            mockMyLocalDev.tunnel.start.mockImplementationOnce(() => new Promise((resolve) => {
                 resolveTunnelStart = resolve;
             }));
 
@@ -401,7 +401,7 @@ describe('ProjectDetail', () => {
                 },
             ];
 
-            mockDevbox.tunnel.start.mockResolvedValueOnce({
+            mockMyLocalDev.tunnel.start.mockResolvedValueOnce({
                 projectId: 'proj-1',
                 provider: 'cloudflared',
                 status: 'running',
@@ -417,14 +417,14 @@ describe('ProjectDetail', () => {
             fireEvent.click(autoStartToggle);
 
             await waitFor(() => {
-                expect(mockDevbox.projects.update).toHaveBeenCalledWith(
+                expect(mockMyLocalDev.projects.update).toHaveBeenCalledWith(
                     'proj-2',
                     { tunnelAutoStart: true },
                     { deferRestart: true }
                 );
             });
             await waitFor(() => {
-                expect(mockDevbox.tunnel.start).toHaveBeenCalledWith('proj-2', 'cloudflared');
+                expect(mockMyLocalDev.tunnel.start).toHaveBeenCalledWith('proj-2', 'cloudflared');
             });
 
             expect(screen.queryByText('https://first-project.trycloudflare.com')).not.toBeInTheDocument();
@@ -448,7 +448,7 @@ describe('ProjectDetail', () => {
                 deploymentMode: 'production',
             };
             mockProjects = [prodProject];
-            mockDevbox.projects.getAll.mockResolvedValue([prodProject]);
+            mockMyLocalDev.projects.getAll.mockResolvedValue([prodProject]);
 
             renderProjectDetail('proj-prod');
 

@@ -96,7 +96,7 @@ module.exports = {
       const transport = parsedUrl.protocol === 'https:' ? https : http;
       const request = transport.get(parsedUrl, {
         headers: {
-          'User-Agent': 'DevBoxPro-TunnelWarmup',
+          'User-Agent': 'MyLocalDev-TunnelWarmup',
           Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         },
       }, (response) => {
@@ -269,7 +269,7 @@ module.exports = {
         res.writeHead(502, { 'Content-Type': 'text/plain' });
       }
       if (res && !res.writableEnded) {
-        res.end('DevBox Pro tunnel proxy error');
+        res.end('MyLocalDev tunnel proxy error');
       }
     });
 

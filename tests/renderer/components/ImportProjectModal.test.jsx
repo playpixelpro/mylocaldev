@@ -20,14 +20,14 @@ vi.mock('@/context/AppContext', () => ({
     }),
 }));
 
-const mockDevbox = {
+const mockMyLocalDev = {
     binaries: {
         getStatus: vi.fn(),
     },
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
 });
 
@@ -64,7 +64,7 @@ describe('ImportProjectModal', () => {
 
     describe('Loading State', () => {
         it('shows loading spinner while fetching binaries', () => {
-            mockDevbox.binaries.getStatus.mockReturnValue(new Promise(() => { })); // never resolves
+            mockMyLocalDev.binaries.getStatus.mockReturnValue(new Promise(() => { })); // never resolves
             renderModal();
             expect(screen.getByText(/Loading binaries/i)).toBeInTheDocument();
         });
@@ -76,7 +76,7 @@ describe('ImportProjectModal', () => {
 
     describe('Rendering after loading', () => {
         beforeEach(() => {
-            mockDevbox.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
         });
 
         it('renders Import Project header', async () => {
@@ -118,7 +118,7 @@ describe('ImportProjectModal', () => {
         });
 
         it('shows No PHP installed when no PHP is available', async () => {
-            mockDevbox.binaries.getStatus.mockResolvedValue({
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue({
                 ...STATUS_WITH_PHP,
                 php: {},
             });
@@ -133,7 +133,7 @@ describe('ImportProjectModal', () => {
 
     describe('Optional Services', () => {
         beforeEach(() => {
-            mockDevbox.binaries.getStatus.mockResolvedValue({
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue({
                 ...STATUS_WITH_PHP,
                 mysql: { '8.4': { installed: true } },
                 mariadb: { '11.4': { installed: true } },
@@ -180,7 +180,7 @@ describe('ImportProjectModal', () => {
 
     describe('Missing Binary Warning', () => {
         it('shows warning for missing PHP version when isConfigImport', async () => {
-            mockDevbox.binaries.getStatus.mockResolvedValue({
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue({
                 php: { '8.1': { installed: true } }, // 8.3 not installed
                 nginx: { '1.28': { installed: true } },
                 apache: {},
@@ -208,7 +208,7 @@ describe('ImportProjectModal', () => {
 
     describe('Form Submit', () => {
         it('calls onImport when form is submitted', async () => {
-            mockDevbox.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
             const onImport = vi.fn().mockResolvedValue(true);
             renderModal({}, onImport);
 
@@ -219,7 +219,7 @@ describe('ImportProjectModal', () => {
         });
 
         it('calls onClose when Cancel clicked', async () => {
-            mockDevbox.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
             const onClose = vi.fn();
             renderModal({}, vi.fn(), onClose);
 
@@ -229,7 +229,7 @@ describe('ImportProjectModal', () => {
         });
 
         it('Import button disabled when project has no name', async () => {
-            mockDevbox.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
+            mockMyLocalDev.binaries.getStatus.mockResolvedValue(STATUS_WITH_PHP);
             renderModal({ name: '' });
 
             await waitFor(() => {

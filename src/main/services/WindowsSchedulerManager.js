@@ -18,11 +18,11 @@ class WindowsSchedulerManager {
   }
 
   getTaskName(projectId) {
-    return `DevBoxPro_Schedule_${this.sanitizeId(projectId)}`;
+    return `MyLocalDev-Schedule-${this.sanitizeId(projectId)}`;
   }
 
   async getSchedulerDir() {
-    const dataPath = this.configStore?.getDataPath ? this.configStore.getDataPath() : path.join(process.cwd(), '.devbox');
+    const dataPath = this.configStore?.getDataPath ? this.configStore.getDataPath() : path.join(process.cwd(), '.mylocaldev');
     const dir = path.join(dataPath, 'scheduler');
     await fs.ensureDir(dir);
     return dir;

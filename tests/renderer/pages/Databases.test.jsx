@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 afterEach(cleanup);
 
-const mockDevbox = {
+const mockMyLocalDev = {
     binaries: {
         getStatus: vi.fn().mockResolvedValue({
             mysql: { '8.4': { installed: true } },
@@ -57,23 +57,23 @@ const mockAppContext = {
 };
 
 beforeEach(() => {
-    Object.defineProperty(window, 'devbox', { value: mockDevbox, writable: true, configurable: true });
+    Object.defineProperty(window, 'mylocaldev', { value: mockMyLocalDev, writable: true, configurable: true });
     vi.clearAllMocks();
-    mockDevbox.database.listDatabases.mockResolvedValue([]);
-    mockDevbox.database.getDatabases.mockResolvedValue([]);
-    mockDevbox.database.getDatabaseInfo.mockResolvedValue({ type: 'mysql', version: '8.4', host: '127.0.0.1', port: 3306 });
-    mockDevbox.database.setActiveDatabaseType.mockResolvedValue({ success: true });
-    mockDevbox.binaries.getStatus.mockResolvedValue({
+    mockMyLocalDev.database.listDatabases.mockResolvedValue([]);
+    mockMyLocalDev.database.getDatabases.mockResolvedValue([]);
+    mockMyLocalDev.database.getDatabaseInfo.mockResolvedValue({ type: 'mysql', version: '8.4', host: '127.0.0.1', port: 3306 });
+    mockMyLocalDev.database.setActiveDatabaseType.mockResolvedValue({ success: true });
+    mockMyLocalDev.binaries.getStatus.mockResolvedValue({
         mysql: { '8.4': { installed: true } },
         mariadb: {},
         postgresql: {},
         mongodb: {},
     });
-    mockDevbox.binaries.getServiceConfig.mockResolvedValue({
+    mockMyLocalDev.binaries.getServiceConfig.mockResolvedValue({
         defaultPorts: { mysql: 3306, mariadb: 3310, postgresql: 5432, mongodb: 27017 },
         portOffsets: { mysql: { '8.4': 0, '8.0': 1 } },
     });
-    mockDevbox.services.getStatus.mockResolvedValue({
+    mockMyLocalDev.services.getStatus.mockResolvedValue({
         mysql: { runningVersions: { '8.4': { pid: 1234 } } },
         mariadb: { runningVersions: {} },
         postgresql: { runningVersions: {} },
@@ -108,7 +108,7 @@ describe('Databases', () => {
     });
 
     it('auto-loads databases for the initially selected running engine', async () => {
-        mockDevbox.database.getDatabases.mockResolvedValue([
+        mockMyLocalDev.database.getDatabases.mockResolvedValue([
             { name: 'app_db', isSystem: false },
             { name: 'mysql', isSystem: true },
         ]);
@@ -120,7 +120,7 @@ describe('Databases', () => {
         );
 
         await waitFor(() => {
-            expect(mockDevbox.database.getDatabases).toHaveBeenCalled();
+            expect(mockMyLocalDev.database.getDatabases).toHaveBeenCalled();
             expect(screen.getByText('app_db')).toBeInTheDocument();
             expect(screen.getByText(/System Databases \(1\)/i)).toBeInTheDocument();
         });
@@ -139,7 +139,7 @@ describe('Databases', () => {
 
     it('shows a loading state while phpMyAdmin is starting', async () => {
         let resolvePhpMyAdminUrl;
-        mockDevbox.database.getPhpMyAdminUrl.mockImplementation(() => new Promise((resolve) => {
+        mockMyLocalDev.database.getPhpMyAdminUrl.mockImplementation(() => new Promise((resolve) => {
             resolvePhpMyAdminUrl = resolve;
         }));
 
@@ -153,12 +153,12 @@ describe('Databases', () => {
         fireEvent.click(phpMyAdminButton);
 
         expect(screen.getByRole('button', { name: /Starting phpMyAdmin/i })).toBeDisabled();
-        expect(mockDevbox.database.getPhpMyAdminUrl).toHaveBeenCalledWith('mysql', '8.4');
+        expect(mockMyLocalDev.database.getPhpMyAdminUrl).toHaveBeenCalledWith('mysql', '8.4');
 
         resolvePhpMyAdminUrl('http://localhost:8080/index.php?server=1');
 
         await waitFor(() => {
-            expect(mockDevbox.system.openExternal).toHaveBeenCalledWith('http://localhost:8080/index.php?server=1');
+            expect(mockMyLocalDev.system.openExternal).toHaveBeenCalledWith('http://localhost:8080/index.php?server=1');
         });
     });
 
@@ -171,19 +171,19 @@ describe('Databases', () => {
                 mysqlVersion: '8.0',
             },
         }];
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: { runningVersions: {} },
             mariadb: { runningVersions: {} },
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.getDatabaseInfo.mockResolvedValue({
+        mockMyLocalDev.database.getDatabaseInfo.mockResolvedValue({
             type: 'mysql',
             version: '8.0',
             host: '127.0.0.1',
@@ -206,13 +206,13 @@ describe('Databases', () => {
     });
 
     it('shows engine card ports from shared service config', async () => {
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: {
                 runningVersions: {
                     '8.4': { pid: 1234, port: 3307 },
@@ -241,19 +241,19 @@ describe('Databases', () => {
     });
 
     it('uses the selected engine version port in connection info even if dbInfo is stale', async () => {
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: { runningVersions: { '8.4': { pid: 1234 } } },
             mariadb: { runningVersions: {} },
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.getDatabaseInfo.mockResolvedValue({
+        mockMyLocalDev.database.getDatabaseInfo.mockResolvedValue({
             type: 'mysql',
             version: '8.0',
             host: '127.0.0.1',
@@ -287,19 +287,19 @@ describe('Databases', () => {
                 mysqlVersion: '8.0',
             },
         }];
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: { runningVersions: {} },
             mariadb: { runningVersions: {} },
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.getDatabaseInfo.mockResolvedValue({
+        mockMyLocalDev.database.getDatabaseInfo.mockResolvedValue({
             type: 'mysql',
             version: '8.0',
             host: '127.0.0.1',
@@ -318,19 +318,19 @@ describe('Databases', () => {
             expect(screen.getByText(/Currently Used/i)).toBeInTheDocument();
         });
         expect(screen.queryByRole('button', { name: /Stop/i })).not.toBeInTheDocument();
-        expect(mockDevbox.services.stop).not.toHaveBeenCalled();
+        expect(mockMyLocalDev.services.stop).not.toHaveBeenCalled();
     });
 
     it('loads the selected running version on the first click', async () => {
         let activeVersion = '8.4';
 
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: {
                 runningVersions: {
                     '8.4': { pid: 1234 },
@@ -341,11 +341,11 @@ describe('Databases', () => {
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
+        mockMyLocalDev.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
             activeVersion = version;
             return { success: true };
         });
-        mockDevbox.database.getDatabaseInfo.mockImplementation(async () => ({
+        mockMyLocalDev.database.getDatabaseInfo.mockImplementation(async () => ({
             type: 'mysql',
             version: activeVersion,
             host: '127.0.0.1',
@@ -353,7 +353,7 @@ describe('Databases', () => {
             user: 'root',
             password: '',
         }));
-        mockDevbox.database.getDatabases.mockImplementation(async () => (
+        mockMyLocalDev.database.getDatabases.mockImplementation(async () => (
             activeVersion === '8.0'
                 ? [{ name: 'beta_db', isSystem: false }]
                 : [{ name: 'alpha_db', isSystem: false }]
@@ -372,7 +372,7 @@ describe('Databases', () => {
         fireEvent.click(screen.getByText('MySQL 8.0'));
 
         await waitFor(() => {
-            expect(mockDevbox.database.setActiveDatabaseType).toHaveBeenCalledWith('mysql', '8.0');
+            expect(mockMyLocalDev.database.setActiveDatabaseType).toHaveBeenCalledWith('mysql', '8.0');
             expect(screen.getByText('beta_db')).toBeInTheDocument();
         });
     });
@@ -381,13 +381,13 @@ describe('Databases', () => {
         let activeVersion = '8.4';
         let resolveSecondLoad;
 
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: {
                 runningVersions: {
                     '8.4': { pid: 1234 },
@@ -398,11 +398,11 @@ describe('Databases', () => {
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
+        mockMyLocalDev.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
             activeVersion = version;
             return { success: true };
         });
-        mockDevbox.database.getDatabaseInfo.mockImplementation(async () => ({
+        mockMyLocalDev.database.getDatabaseInfo.mockImplementation(async () => ({
             type: 'mysql',
             version: activeVersion,
             host: '127.0.0.1',
@@ -410,7 +410,7 @@ describe('Databases', () => {
             user: 'root',
             password: '',
         }));
-        mockDevbox.database.getDatabases.mockImplementation(async () => {
+        mockMyLocalDev.database.getDatabases.mockImplementation(async () => {
             if (activeVersion === '8.0') {
                 return new Promise((resolve) => {
                     resolveSecondLoad = resolve;
@@ -449,13 +449,13 @@ describe('Databases', () => {
         let resolveFirstSwitch;
         let firstSwitchStarted = false;
 
-        mockDevbox.binaries.getStatus.mockResolvedValue({
+        mockMyLocalDev.binaries.getStatus.mockResolvedValue({
             mysql: { '8.4': { installed: true }, '8.0': { installed: true } },
             mariadb: {},
             postgresql: {},
             mongodb: {},
         });
-        mockDevbox.services.getStatus.mockResolvedValue({
+        mockMyLocalDev.services.getStatus.mockResolvedValue({
             mysql: {
                 runningVersions: {
                     '8.4': { pid: 1234 },
@@ -466,11 +466,11 @@ describe('Databases', () => {
             postgresql: { runningVersions: {} },
             mongodb: { runningVersions: {} },
         });
-        mockDevbox.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
+        mockMyLocalDev.database.setActiveDatabaseType.mockImplementation(async (_, version) => {
             activeVersion = version;
             return { success: true };
         });
-        mockDevbox.database.getDatabaseInfo.mockImplementation(async () => ({
+        mockMyLocalDev.database.getDatabaseInfo.mockImplementation(async () => ({
             type: 'mysql',
             version: activeVersion,
             host: '127.0.0.1',
@@ -478,7 +478,7 @@ describe('Databases', () => {
             user: 'root',
             password: '',
         }));
-        mockDevbox.database.getDatabases.mockImplementation(async () => {
+        mockMyLocalDev.database.getDatabases.mockImplementation(async () => {
             if (activeVersion === '8.0' && !firstSwitchStarted) {
                 firstSwitchStarted = true;
                 return new Promise((resolve) => {
@@ -526,7 +526,7 @@ describe('Databases', () => {
     it('refreshes the selected database list from the manual refresh button', async () => {
         let loadCount = 0;
 
-        mockDevbox.database.getDatabases.mockImplementation(async () => {
+        mockMyLocalDev.database.getDatabases.mockImplementation(async () => {
             loadCount += 1;
             return loadCount === 1
                 ? [{ name: 'alpha_db', isSystem: false }]

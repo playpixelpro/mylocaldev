@@ -31,7 +31,7 @@ async function cleanupStaleManagedWebServerProcesses(resourcePath, logger) {
   }
 
   if (cleanedServices.length > 0) {
-    logger?.systemInfo?.('Cleaned stale DevBox web server processes on startup', {
+    logger?.systemInfo?.('Cleaned stale MyLocalDev web server processes on startup', {
       services: cleanedServices,
     });
 

@@ -43,9 +43,9 @@ function Sidebar({ darkMode, setDarkMode }) {
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
-          <img src={logoImg} alt="DevBox Pro" className="w-8 h-8" />
+          <img src={logoImg} alt="MyLocalDev" className="w-8 h-8" />
           <span className="text-lg font-bold text-gray-900 dark:text-white">
-            DevBox Pro
+            MyLocalDev
           </span>
         </div>
       </div>

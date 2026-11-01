@@ -32,7 +32,7 @@ function PhpIniEditor({ version, isOpen, onClose }) {
     setLoading(true);
     setError(null);
     try {
-      const ini = await window.devbox?.binaries.getPhpIni(version);
+      const ini = await window.mylocaldev?.binaries.getPhpIni(version);
       if (ini) {
         setContent(ini);
         setOriginalContent(ini);
@@ -139,7 +139,7 @@ function PhpIniEditor({ version, isOpen, onClose }) {
     } else {
       // Doesn't exist, we must add it.
       // Easiest is to append to the end of the file
-      lines.push(`\n; DevBox Pro automatically added extension`);
+      lines.push(`\n; MyLocalDev automatically added extension`);
       lines.push(`${ext.type}=${ext.name}`);
     }
     
@@ -150,11 +150,11 @@ function PhpIniEditor({ version, isOpen, onClose }) {
     setSaving(true);
     setError(null);
     try {
-      await window.devbox?.binaries.savePhpIni(version, content);
+      await window.mylocaldev?.binaries.savePhpIni(version, content);
       setOriginalContent(content);
 
       // Auto-restart running projects using this PHP version
-      const allProjects = await window.devbox?.projects.getAll();
+      const allProjects = await window.mylocaldev?.projects.getAll();
       if (allProjects) {
         const projectsToRestart = allProjects.filter(p =>
           p.isRunning && p.phpVersion === version
@@ -162,7 +162,7 @@ function PhpIniEditor({ version, isOpen, onClose }) {
 
         // Restart projects sequentially
         for (const project of projectsToRestart) {
-          await window.devbox?.projects.restart(project.id);
+          await window.mylocaldev?.projects.restart(project.id);
         }
       }
 
@@ -191,7 +191,7 @@ function PhpIniEditor({ version, isOpen, onClose }) {
     setLoading(true);
     setError(null);
     try {
-      await window.devbox?.binaries.resetPhpIni(version);
+      await window.mylocaldev?.binaries.resetPhpIni(version);
       await loadPhpIni();
     } catch (err) {
       setError(err.message);

@@ -1,58 +1,50 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Electron-40.0.0-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron">
+  <img src="logo.png" alt="MyLocalDev logo" width="128">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Electron-45.2.1-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron">
   <img src="https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
   <img src="https://img.shields.io/badge/Vite-7.0.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
   <img src="https://img.shields.io/badge/TailwindCSS-4.0.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
 </p>
 
-# 🚀 DevBox Pro
+# 🚀 MyLocalDev
 
 **Run legacy and modern PHP and Node.js apps side by side with isolated runtimes, bundled services, and zero Docker setup.**
 
-Maintaining an old PHP 7.4 project while building a new Laravel 11 app on PHP 8.5? Running a Next.js frontend alongside a PHP backend? DevBox Pro is built for exactly that workflow. It lets you run multiple PHP, Node.js, database, and web server versions at the same time, with per-project configuration, automatic local domains, compatibility warnings, and bundled tooling.
+Maintaining an old PHP 7.4 project while building a new Laravel 11 app on PHP 8.5? Running a Next.js frontend alongside a PHP backend? MyLocalDev is built for exactly that workflow. It lets you run multiple PHP, Node.js, database, and web server versions at the same time, with per-project configuration, automatic local domains, compatibility warnings, and bundled tooling.
 
-DevBox Pro is an Electron desktop app with a React renderer and a Node.js main process. It manages PHP, Node.js, MySQL, MariaDB, Redis, Nginx, Apache, PostgreSQL, MongoDB, MinIO, Memcached, Mailpit, phpMyAdmin, Composer, Git, and more from one local interface.
+MyLocalDev is an Electron desktop app with a React renderer and a Node.js main process. It manages PHP, Node.js, MySQL, MariaDB, Redis, Nginx, Apache, PostgreSQL, MongoDB, MinIO, Memcached, Mailpit, phpMyAdmin, Composer, Git, and more from one local interface.
 
-> **Version 1.0.8:** Introduces first-class **Production Mode** support with OPcache optimization, hardened web server security headers, resilient queue workers, safe in-place binary upgrades, and native **Windows Task Scheduler** integration for reliable production server deployment on Windows clients.
+> **Version 1.0.0:** The first MyLocalDev release. A rebrand of the MIT-licensed DevBox Pro codebase (see [Credits](#-credits)), reset to a clean 1.0.0 version line and shipped with project-environment and dependency fixes.
 >
-> DevBox Pro provides two operation profiles: **Local Mode** for active debugging, hot reload, and development agility; and **Production Mode** for high performance, hardened security, and unattended background service and scheduler reliability.
+> MyLocalDev provides two operation profiles: **Local Mode** for active debugging, hot reload, and development agility; and **Production Mode** for high performance, hardened security, and unattended background service and scheduler reliability.
 
 ---
 
-## 🆕 What's New in v1.0.8
+## 🆕 What's New in v1.0.0
 
-### 🚀 Production Mode Support
-- **Dual Environment Profiles**: Switch between **Local Mode** (interactive debugging, detailed errors, single queue worker) and **Production Mode** (optimized performance, hardened security, multi-worker) globally or per project.
-- **Hierarchical Precedence**: Easily set a global deployment mode in Settings while allowing per-project overrides or inheriting global defaults.
-- **Production Environment Variables**: Injects `APP_ENV=production` and `NODE_ENV=production` across projects, web servers, and background supervisor workers.
+### 🎨 Rebrand
+- **New name and identity**: MyLocalDev, with a new application icon, installer artwork, window/tray titles, CLI messages, generated web-server configs and local certificate organization names.
+- **Separate application identity**: installs side by side with any previous installation (`appId` `com.playpixelpro.mylocaldev`, executable `MyLocalDev`).
+- **Clean start**: MyLocalDev uses its own `~/.mylocaldev` data directory and `%APPDATA%\mylocaldev` profile. Nothing is imported from a previous installation, so no old projects, settings or databases are picked up.
 
-### ⚡ Performance & Caching Optimizations
-- **PHP OPcache & JIT**: Automatically enables OPcache (`opcache.enable=1`, `opcache.jit=1255`) and suppresses sensitive error output (`display_errors=Off`) in production.
-- **High-Performance FastCGI**: Automatically provisions up to 8 `PHP_FCGI_CHILDREN` in production for concurrent request handling.
-- **Optimized Database Settings**: MySQL production configuration applies `skip-name-resolve` and expands `innodb_buffer_pool_size` to 512MB.
-- **Secured Redis**: Configures mandatory password protection, a 256MB LRU memory cap (`allkeys-lru`), and disables high-risk admin commands like `FLUSHALL`.
+### 🔧 Project environment fixes
+- **Import reads the project's `.env`**: importing an existing project now keeps its `DB_DATABASE`, `APP_KEY`, `APP_ENV` and other values instead of inventing defaults from the folder name.
+- **No more silent overrides**: only genuine overrides are injected into PHP-CGI, terminals and supervisor workers — empty values and values identical to `.env` are skipped.
+- **Overrides are visible**: the Environment tab now flags every value that takes precedence over `.env`.
+- **`$_ENV` works for injected values**: bundled PHP now runs with `variables_order = "EGPCS"`, including on already-installed PHP versions.
 
-### 🛡️ Hardened Web Server Security
-- **Strict Transport Security (HSTS)**: Automatically attaches `Strict-Transport-Security` headers in HTTPS production mode.
-- **Defensive Headers**: Injects `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, and `X-XSS-Protection`.
-- **Information Leak Prevention**: Sets `server_tokens off` on Nginx and `ServerTokens Prod` / `ServerSignature Off` on Apache, and disables directory indexing (`Options -Indexes`).
+### 🔒 Dependencies
+- Electron 45, electron-builder 26, and a refreshed lockfile. `npm audit --omit=dev` reports 0 vulnerabilities.
 
-### 👷 Resilient Supervisor Queue Workers
-- **Production Queue Flags**: Pre-configures production workers with `--tries=3`, `--timeout=90`, `--memory=128`, and `--max-jobs=1000`.
-- **Code 0 Clean Exit Restarts**: Handles Laravel's clean job/time retirement (exit code 0) smoothly without treating it as a process death.
-- **Crash-Loop & Exponential Backoff**: Prevents CPU spikes and thrashing when misconfigured jobs fail repeatedly.
-- **Independent Multi-Instance Supervision**: Full lifecycle isolation for workers configured with `numprocs > 1`.
+---
 
-### ⏰ Native Windows Task Scheduler Integration
-- **Windows Task Scheduler Service**: Integrates directly with Windows `schtasks.exe` to trigger `php artisan schedule:run` every minute on Windows client servers.
-- **Silent Background Execution**: Runs via an optimized VBScript launcher through `wscript.exe`, eliminating disruptive black CMD popups every 60 seconds.
-- **Management & Status Controls**: Dedicated scheduler dashboard card in Project Details to view status, inspect execution logs, clear logs, and manually trigger "Run Now".
+## ✨ Previously released features
 
-### 🔄 Safe In-Place Binary Updates
-- **One-Click In-Place Upgrades**: Safely upgrade installed packages (PHP, Node.js, Python, MySQL, MariaDB) in-place without manual file deletion or path reconfiguration.
-- **Automated Configuration Preservation**: Preserves customized `php.ini` directives (e.g., `memory_limit`, `upload_max_filesize`), custom PHP extensions in `ext/`, CA certificates (`cacert.pem`), and global Node.js npm packages.
-- **Zero File-Lock / EPERM Failures**: Automatically detects and stops running background services (including phpMyAdmin and database daemons) and active project workers that hold file locks on Windows DLLs (like `libcrypto-3-x64.dll`).
-- **Resilient Retry & Auto-Restart**: Features a 5-attempt retry loop with exponential backoff and Windows CIM process termination, then automatically brings all temporarily stopped services and projects back online immediately after binary replacement.
+All features from the upstream 1.0.x line — multi-PHP support, embedded services, production mode, tunnels, and supervisor — are included.
 
 ---
 
@@ -162,7 +154,7 @@ DevBox Pro is an Electron desktop app with a React renderer and a Node.js main p
 > **⚠️ Production Mode Precautions & Intended Use:**
 > - **Deployment Scope:** Production Mode is designed for internal office/LAN servers, dedicated client Windows PCs, kiosk workstations, or staging environments. It is **not** a direct replacement for hardened, dedicated Linux cloud infrastructure (e.g., AWS, DigitalOcean) for mission-critical, public-facing web applications.
 > - **Code Caching:** To maximize performance, `opcache.validate_timestamps` is set to `0`. Modified script files will **not** take effect immediately; you must restart the project or reload the web server to flush cached bytecode.
-> - **Suppressed Error Output:** `display_errors` is turned `Off` to prevent sensitive credentials from leaking to visitors. Check the project **Logs** tab in DevBox Pro to diagnose runtime issues.
+> - **Suppressed Error Output:** `display_errors` is turned `Off` to prevent sensitive credentials from leaking to visitors. Check the project **Logs** tab in MyLocalDev to diagnose runtime issues.
 > - **Operating System Considerations:** For continuous unattended hosting on Windows, disable system sleep/hibernation, configure Windows Update active hours, and ensure adequate machine airflow and power supply backup (UPS).
 
 ### ⚙️ Project Configuration
@@ -178,8 +170,8 @@ DevBox Pro is an Electron desktop app with a React renderer and a Node.js main p
 ### Installation
 
 1. **Download** the latest release for your platform:
-  - Windows: `DevBox-Pro-Setup-1.0.8.exe`
-  - macOS: `DevBox-Pro-1.0.8.dmg`
+  - Windows: `MyLocalDev-Setup-1.0.0.exe`
+  - macOS: `MyLocalDev-1.0.0.dmg`
 
 2. **Install** the application
   - Windows installer builds silently install or repair the Microsoft Visual C++ Redistributable when `vcredist/VC_redist.x64.exe` is bundled with the release
@@ -207,13 +199,13 @@ DevBox Pro is an Electron desktop app with a React renderer and a Node.js main p
 
 > **Provider notes:** Cloudflare uses disposable random public URLs on `trycloudflare.com`. zrok requires a one-time app-wide enable step before any project can use it.
 
-> **Production note:** Tunnel sharing is intended for temporary previews, QA, and stakeholder review. Do not use DevBox Pro as a production hosting platform.
+> **Production note:** Tunnel sharing is intended for temporary previews, QA, and stakeholder review. Do not use MyLocalDev as a production hosting platform.
 
 ### Using Terminal Commands
 
-DevBox Pro lets you use `php`, `npm`, `node`, `composer`, `mysql`, and `mysqldump` directly from any terminal with automatic project version detection:
+MyLocalDev lets you use `php`, `npm`, `node`, `composer`, `mysql`, and `mysqldump` directly from any terminal with automatic project version detection:
 
-1. Go to **Settings > CLI Tool** in DevBox Pro
+1. Go to **Settings > CLI Tool** in MyLocalDev
 2. Enable **"Terminal commands"**
 3. Restart your terminal or VS Code
 
@@ -241,7 +233,7 @@ mysql -u root -p mydb < migration.sql
 mysqldump -u root mydb > backup.sql
 ```
 
-> **How it works:** When you run `php`, `mysql`, or `npm` from a project directory, DevBox Pro automatically uses that project's configured version. Outside a project, it uses your default version set in Settings.
+> **How it works:** When you run `php`, `mysql`, or `npm` from a project directory, MyLocalDev automatically uses that project's configured version. Outside a project, it uses your default version set in Settings.
 
 ---
 
@@ -257,8 +249,8 @@ mysqldump -u root mydb > backup.sql
 
 ```bash
 # Clone the repository
-git clone https://github.com/JeffGepiga/DevBoxPro.git
-cd DevBoxPro
+git clone https://github.com/playpixelpro/mylocaldev.git
+cd MyLocalDev
 
 # Install dependencies
 npm install
@@ -279,7 +271,7 @@ The renderer dev server runs at `http://localhost:3000`.
 
 ### Testing
 
-DevBox Pro includes unit, integration, and end-to-end coverage.
+MyLocalDev includes unit, integration, and end-to-end coverage.
 
 ```bash
 # Run all tests
@@ -300,7 +292,7 @@ The test suite covers the main-process managers, the renderer, and Playwright en
 ### Project Structure
 
 ```
-DevBoxPro/
+MyLocalDev/
 ├── src/
 │   ├── main/                    # Electron main process
 │   │   ├── services/
@@ -477,15 +469,25 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MyLocalDev is released under the MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Credits
+
+MyLocalDev is a rebranded fork of **DevBox Pro**, originally created by **Jeffrey Gepiga** and distributed under the MIT License:
+
+- Original project: <https://github.com/JeffGepiga/DevBoxPro>
+- Original copyright: `Copyright (c) 2025 Jeffrey Gepiga`
+
+The MIT license requires this attribution to be preserved. It is also recorded in [NOTICE](NOTICE).
 
 ---
 
 ## 💬 Support
 
-- 📧 Email: jeffreygepiga27@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/JeffGepiga/DevBoxPro/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/JeffGepiga/DevBoxPro/discussions)
+- 🐛 Issues: [GitHub Issues](https://github.com/playpixelpro/mylocaldev/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/playpixelpro/mylocaldev/discussions)
 
 ---
 

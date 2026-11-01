@@ -52,7 +52,7 @@ function Dashboard() {
   useEffect(() => {
     const loadConfig = async () => {
       try {
-        const config = await window.devbox?.binaries.getServiceConfig();
+        const config = await window.mylocaldev?.binaries.getServiceConfig();
         if (config) {
           setServiceConfig(config);
         }
@@ -80,7 +80,7 @@ function Dashboard() {
   useEffect(() => {
     const loadBinariesStatus = async () => {
       try {
-        const status = await window.devbox?.binaries.getStatus();
+        const status = await window.mylocaldev?.binaries.getStatus();
         setBinariesStatus(status || {});
       } catch (err) {
         // Error loading binaries status
@@ -96,7 +96,7 @@ function Dashboard() {
   useEffect(() => {
     const loadRunningVersions = async () => {
       try {
-        const running = await window.devbox?.services.getRunningVersions();
+        const running = await window.mylocaldev?.services.getRunningVersions();
         setRunningVersions(running || {});
       } catch (err) {
         // Failed to get running versions
@@ -380,7 +380,7 @@ function ProjectRow({ project, onStart, onStop }) {
         {project.isRunning ? (
           <>
             <button
-              onClick={() => window.devbox?.projects.openInBrowser(project.id)}
+              onClick={() => window.mylocaldev?.projects.openInBrowser(project.id)}
               className="btn-ghost btn-sm btn-icon"
               title="Open in browser"
             >

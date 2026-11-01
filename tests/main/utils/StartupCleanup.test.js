@@ -12,7 +12,7 @@ describe('cleanupStaleManagedWebServerProcesses()', () => {
     });
 
     it('kills only stale managed web servers that are currently running', async () => {
-        const resourcePath = 'C:\\Users\\Jeffrey\\.devbox-pro\\resources';
+        const resourcePath = 'C:\\Users\\Jeffrey\\.mylocaldev\\resources';
         const logger = {
             systemInfo: vi.fn(),
             systemWarn: vi.fn(),
@@ -26,7 +26,7 @@ describe('cleanupStaleManagedWebServerProcesses()', () => {
         expect(SpawnUtils.killProcessesByPath).toHaveBeenCalledTimes(1);
         expect(SpawnUtils.killProcessesByPath).toHaveBeenCalledWith('nginx.exe', path.join(resourcePath, 'nginx'));
         expect(logger.systemInfo).toHaveBeenCalledWith(
-            'Cleaned stale DevBox web server processes on startup',
+            'Cleaned stale MyLocalDev web server processes on startup',
             { services: ['nginx'] }
         );
         expect(logger.systemWarn).not.toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe('cleanupStaleManagedWebServerProcesses()', () => {
 
         SpawnUtils.isProcessRunning.mockReturnValue(false);
 
-        const cleaned = await cleanupStaleManagedWebServerProcesses('C:\\Users\\Jeffrey\\.devbox-pro\\resources', logger);
+        const cleaned = await cleanupStaleManagedWebServerProcesses('C:\\Users\\Jeffrey\\.mylocaldev\\resources', logger);
 
         expect(cleaned).toEqual([]);
         expect(SpawnUtils.killProcessesByPath).not.toHaveBeenCalled();

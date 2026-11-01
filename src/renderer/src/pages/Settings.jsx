@@ -68,13 +68,13 @@ function Settings() {
 
       // Save all settings
       for (const [key, value] of Object.entries(localSettings)) {
-        await window.devbox?.settings.set(`settings.${key}`, value);
+        await window.mylocaldev?.settings.set(`settings.${key}`, value);
       }
 
       // If credentials changed, sync to all database versions
       if (credentialsChanged) {
         try {
-          await window.devbox?.database.syncCredentialsToAllVersions(newUser, newPassword, oldPassword);
+          await window.mylocaldev?.database.syncCredentialsToAllVersions(newUser, newPassword, oldPassword);
         } catch (syncError) {
           // Sync error logged to system log on backend
         }
@@ -101,9 +101,9 @@ function Settings() {
       type: 'warning'
     });
     if (confirmed) {
-      await window.devbox?.settings.reset();
+      await window.mylocaldev?.settings.reset();
       await refreshSettings();
-      const newSettings = await window.devbox?.settings.getAll();
+      const newSettings = await window.mylocaldev?.settings.getAll();
       setLocalSettings(newSettings.settings || {});
     }
   };
@@ -111,7 +111,7 @@ function Settings() {
   const handleExportConfig = async () => {
     try {
       // In a real app, this would use a save dialog
-      await showAlert({ title: 'Export Config', message: 'Config exported to devbox-config.json', type: 'success' });
+      await showAlert({ title: 'Export Config', message: 'Config exported to mylocaldev-config.json', type: 'success' });
     } catch (error) {
       // Error exporting config
     }
@@ -141,7 +141,7 @@ function Settings() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Configure DevBox Pro preferences
+            Configure MyLocalDev preferences
           </p>
         </div>
         {/* Only show Save/Reset for tabs that need manual saving */}
@@ -232,7 +232,7 @@ function GeneralSettings({ settings, updateSetting }) {
 
   const handleSelectProjectsPath = async () => {
     try {
-      const result = await window.devbox?.system?.selectDirectory?.();
+      const result = await window.mylocaldev?.system?.selectDirectory?.();
       if (result) {
         updateSetting('defaultProjectsPath', result);
       }
@@ -256,7 +256,7 @@ function GeneralSettings({ settings, updateSetting }) {
                 value={settings.defaultProjectsPath || ''}
                 onChange={(e) => updateSetting('defaultProjectsPath', e.target.value)}
                 className="input flex-1"
-                placeholder="C:\\Users\\YourName\\Projects or C:\\DevBoxPro\\Projects"
+                placeholder="C:\\Users\\YourName\\Projects or C:\\MyLocalDev\\Projects"
               />
               <button onClick={handleSelectProjectsPath} className="btn-secondary">
                 <Folder className="w-4 h-4" />
@@ -264,7 +264,7 @@ function GeneralSettings({ settings, updateSetting }) {
               </button>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              New projects will be created in this directory by default. Portable installs default to the app's Projects folder, for example C:/DevBoxPro/Projects.
+              New projects will be created in this directory by default. Portable installs default to the app's Projects folder, for example C:/MyLocalDev/Projects.
             </p>
           </div>
 
@@ -300,7 +300,7 @@ function GeneralSettings({ settings, updateSetting }) {
                 Launch on system startup
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Automatically start DevBox Pro when you log in
+                Automatically start MyLocalDev when you log in
               </p>
             </div>
             <input
@@ -436,7 +436,7 @@ function GeneralSettings({ settings, updateSetting }) {
                       ]
                     : [{ name: 'All Files', extensions: ['*'] }];
                   
-                  const filePath = await window.devbox?.system?.selectFile(filters);
+                  const filePath = await window.mylocaldev?.system?.selectFile(filters);
                   if (filePath) {
                     updateSetting('customEditorCommand', filePath);
                   }
@@ -472,19 +472,19 @@ function CliSettings() {
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const status = await window.devbox?.cli?.getStatus();
+        const status = await window.mylocaldev?.cli?.getStatus();
         setCliStatus(status);
 
-        const shimsEnabled = await window.devbox?.cli?.getDirectShimsEnabled();
+        const shimsEnabled = await window.mylocaldev?.cli?.getDirectShimsEnabled();
         setDirectShimsEnabled(shimsEnabled || false);
 
-        const defPhp = await window.devbox?.cli?.getDefaultPhpVersion();
+        const defPhp = await window.mylocaldev?.cli?.getDefaultPhpVersion();
         setDefaultPhpVersion(defPhp);
 
-        const defNode = await window.devbox?.cli?.getDefaultNodeVersion();
+        const defNode = await window.mylocaldev?.cli?.getDefaultNodeVersion();
         setDefaultNodeVersion(defNode);
 
-        const binaries = await window.devbox?.binaries?.getInstalled();
+        const binaries = await window.mylocaldev?.binaries?.getInstalled();
         setInstalledBinaries(binaries);
       } catch (error) {
         console.error('Failed to load CLI settings:', error);
@@ -500,15 +500,15 @@ function CliSettings() {
     try {
       // First install CLI if not installed
       if (!cliStatus?.installed) {
-        await window.devbox?.cli?.install();
+        await window.mylocaldev?.cli?.install();
       }
 
-      await window.devbox?.cli?.setDirectShimsEnabled(enabled);
+      await window.mylocaldev?.cli?.setDirectShimsEnabled(enabled);
       setDirectShimsEnabled(enabled);
 
       if (enabled) {
         // Add to PATH automatically - always try to ensure System PATH priority
-        await window.devbox?.cli?.addToPath();
+        await window.mylocaldev?.cli?.addToPath();
 
         setMessage({
           type: 'success',
@@ -519,7 +519,7 @@ function CliSettings() {
       }
 
       // Refresh status
-      const status = await window.devbox?.cli?.getStatus();
+      const status = await window.mylocaldev?.cli?.getStatus();
       setCliStatus(status);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
@@ -530,12 +530,12 @@ function CliSettings() {
     setRemovingFromPath(true);
     setMessage(null);
     try {
-      await window.devbox?.cli?.removeFromPath();
+      await window.mylocaldev?.cli?.removeFromPath();
       // Also disable terminal commands when removing from PATH
-      await window.devbox?.cli?.setDirectShimsEnabled(false);
+      await window.mylocaldev?.cli?.setDirectShimsEnabled(false);
       setDirectShimsEnabled(false);
       setMessage({ type: 'success', text: 'Terminal commands disabled and removed from PATH. Restart your terminal for changes to take effect.' });
-      const status = await window.devbox?.cli?.getStatus();
+      const status = await window.mylocaldev?.cli?.getStatus();
       setCliStatus(status);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
@@ -546,7 +546,7 @@ function CliSettings() {
 
   const handleSetDefaultPhp = async (version) => {
     try {
-      await window.devbox?.cli?.setDefaultPhpVersion(version || null);
+      await window.mylocaldev?.cli?.setDefaultPhpVersion(version || null);
       setDefaultPhpVersion(version || null);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
@@ -555,7 +555,7 @@ function CliSettings() {
 
   const handleSetDefaultNode = async (version) => {
     try {
-      await window.devbox?.cli?.setDefaultNodeVersion(version || null);
+      await window.mylocaldev?.cli?.setDefaultNodeVersion(version || null);
       setDefaultNodeVersion(version || null);
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
@@ -594,7 +594,7 @@ function CliSettings() {
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
           Use <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">php</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">npm</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">node</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">composer</code>, and <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">mysql</code> commands
-          directly from any terminal. DevBox Pro automatically uses the correct version based on your project.
+          directly from any terminal. MyLocalDev automatically uses the correct version based on your project.
         </p>
 
 
@@ -689,7 +689,7 @@ function CliSettings() {
 
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-blue-700 dark:text-blue-300">
-              <strong>How it works:</strong> Inside a project folder, DevBox Pro uses that project's configured PHP/Node version.
+              <strong>How it works:</strong> Inside a project folder, MyLocalDev uses that project's configured PHP/Node version.
               Outside a project, it uses the default versions above.
             </p>
           </div>
@@ -736,7 +736,7 @@ function CliSettings() {
             Advanced
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Remove DevBox Pro from your system PATH if needed.
+            Remove MyLocalDev from your system PATH if needed.
           </p>
           <button
             onClick={handleRemoveFromPath}
@@ -918,7 +918,7 @@ function NetworkSettings({ settings, updateSetting }) {
               className="text-primary-600 hover:text-primary-700 dark:text-primary-400 text-sm"
               onClick={(e) => {
                 e.preventDefault();
-                window.devbox?.system?.openExternal('https://en.wikipedia.org/wiki/List_of_tz_database_time_zones');
+                window.mylocaldev?.system?.openExternal('https://en.wikipedia.org/wiki/List_of_tz_database_time_zones');
               }}
             >
               View all timezones
@@ -1265,7 +1265,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
   useEffect(() => {
     const loadConfigInfo = async () => {
       try {
-        const compatInfo = await window.devbox?.compatibility?.getConfigInfo();
+        const compatInfo = await window.mylocaldev?.compatibility?.getConfigInfo();
         setConfigInfo(prev => ({ ...prev, compatibility: compatInfo }));
       } catch (error) {
         // Error loading config info
@@ -1273,7 +1273,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     };
     const loadAppDataPath = async () => {
       try {
-        const dataPath = await window.devbox?.system?.getAppDataPath?.();
+        const dataPath = await window.mylocaldev?.system?.getAppDataPath?.();
         setAppDataPath(dataPath);
       } catch (error) {
         // Error loading app data path
@@ -1284,17 +1284,17 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
 
     // Load current app version
     const loadVersion = async () => {
-      const version = await window.devbox?.system?.getAppVersion?.();
+      const version = await window.mylocaldev?.system?.getAppVersion?.();
       setCurrentVersion(version);
     };
     loadVersion();
 
     // Subscribe to update events
-    const unsubProgress = window.devbox?.update?.onProgress?.((data) => {
+    const unsubProgress = window.mylocaldev?.update?.onProgress?.((data) => {
       setDownloadProgress(data);
     });
 
-    const unsubStatus = window.devbox?.update?.onStatus?.((data) => {
+    const unsubStatus = window.mylocaldev?.update?.onStatus?.((data) => {
       if (data.status === 'downloaded') {
         setDownloadingUpdate(false);
         setUpdateDownloaded(true);
@@ -1305,7 +1305,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
       }
     });
 
-    const unsubRollbackProgress = window.devbox?.update?.onRollbackProgress?.((data) => {
+    const unsubRollbackProgress = window.mylocaldev?.update?.onRollbackProgress?.((data) => {
       setRollbackProgress(data);
     });
 
@@ -1321,7 +1321,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setAppUpdateResult(null);
     setUpdateDownloaded(false);
     try {
-      const result = await window.devbox?.update?.checkForUpdates();
+      const result = await window.mylocaldev?.update?.checkForUpdates();
       setAppUpdateResult(result);
     } catch (error) {
       setAppUpdateResult({ success: false, error: error.message });
@@ -1334,7 +1334,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setDownloadingUpdate(true);
     setDownloadProgress(null);
     try {
-      await window.devbox?.update?.downloadUpdate();
+      await window.mylocaldev?.update?.downloadUpdate();
     } catch (error) {
       setDownloadingUpdate(false);
       setAppUpdateResult({ success: false, error: error.message });
@@ -1342,7 +1342,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
   };
 
   const handleInstallUpdate = () => {
-    window.devbox?.update?.quitAndInstall();
+    window.mylocaldev?.update?.quitAndInstall();
   };
 
   const handleLoadVersionHistory = async () => {
@@ -1353,7 +1353,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setShowVersionHistory(true);
     setLoadingVersionHistory(true);
     try {
-      const result = await window.devbox?.update?.getReleasesHistory();
+      const result = await window.mylocaldev?.update?.getReleasesHistory();
       setVersionHistory(result);
     } catch (error) {
       setVersionHistory({ success: false, error: error.message, releases: [] });
@@ -1388,7 +1388,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setRollbackDownloadUrl(asset.downloadUrl);
     setRollingBackTo(version);
     try {
-      const result = await window.devbox?.update?.downloadAndInstallVersion(version, asset.downloadUrl);
+      const result = await window.mylocaldev?.update?.downloadAndInstallVersion(version, asset.downloadUrl);
       if (!result?.success) {
         setRollbackError(result?.error || 'Failed to download version');
         setRollingBackTo(null);
@@ -1406,7 +1406,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setCheckingBinaryUpdates(true);
     setBinaryUpdateResult(null);
     try {
-      const result = await window.devbox?.binaries?.checkForUpdates();
+      const result = await window.mylocaldev?.binaries?.checkForUpdates();
       setBinaryUpdateResult(result);
     } catch (error) {
       setBinaryUpdateResult({ success: false, error: error.message });
@@ -1418,7 +1418,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
   const handleApplyBinaryUpdates = async () => {
     setApplyingBinaryUpdates(true);
     try {
-      await window.devbox?.binaries?.applyUpdates();
+      await window.mylocaldev?.binaries?.applyUpdates();
       setBinaryUpdateResult(prev => ({ ...prev, hasUpdates: false, applied: true }));
     } catch (error) {
       // Error applying binary updates
@@ -1431,7 +1431,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setCheckingCompatibilityUpdates(true);
     setCompatibilityUpdateResult(null);
     try {
-      const result = await window.devbox?.compatibility?.checkForUpdates();
+      const result = await window.mylocaldev?.compatibility?.checkForUpdates();
       setCompatibilityUpdateResult(result);
     } catch (error) {
       setCompatibilityUpdateResult({ success: false, error: error.message });
@@ -1443,11 +1443,11 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
   const handleApplyCompatibilityUpdates = async () => {
     setApplyingCompatibilityUpdates(true);
     try {
-      const result = await window.devbox?.compatibility?.applyUpdates();
+      const result = await window.mylocaldev?.compatibility?.applyUpdates();
       if (result?.success) {
         setCompatibilityUpdateResult(prev => ({ ...prev, hasUpdates: false, applied: true }));
         // Refresh config info
-        const compatInfo = await window.devbox?.compatibility?.getConfigInfo();
+        const compatInfo = await window.mylocaldev?.compatibility?.getConfigInfo();
         setConfigInfo(prev => ({ ...prev, compatibility: compatInfo }));
       }
     } catch (error) {
@@ -1466,7 +1466,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
     setClearResult(null);
 
     try {
-      const result = await window.devbox?.system?.clearAllData?.(clearProjectFiles);
+      const result = await window.mylocaldev?.system?.clearAllData?.(clearProjectFiles);
       setClearResult({ success: true, message: result?.message || 'All data cleared successfully!' });
 
       // Close modal after delay
@@ -1503,7 +1503,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
           Application Updates
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Check for new versions of DevBox Pro.
+          Check for new versions of MyLocalDev.
           {currentVersion && (
             <span className="ml-2 text-gray-400">(Current: v{currentVersion})</span>
           )}
@@ -1514,7 +1514,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
             <div>
               <div className="flex items-center gap-2">
                 <ArrowUpCircle className="w-5 h-5 text-primary-500" />
-                <h4 className="font-medium text-gray-900 dark:text-white">DevBox Pro</h4>
+                <h4 className="font-medium text-gray-900 dark:text-white">MyLocalDev</h4>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Updates are downloaded from GitHub Releases
@@ -1712,7 +1712,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
                               )}
                               {rollbackDownloadUrl && (
                                 <button
-                                  onClick={() => window.devbox?.system.openExternal(rollbackDownloadUrl)}
+                                  onClick={() => window.mylocaldev?.system.openExternal(rollbackDownloadUrl)}
                                   className="mt-1 text-xs text-primary-600 dark:text-primary-400 hover:underline flex items-center gap-1"
                                   title="Download installer manually"
                                 >
@@ -1756,7 +1756,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
                                     : (release.assets?.find(a => a.name.endsWith('.AppImage')) || release.assets?.find(a => a.name.endsWith('.deb')));
                                 return asset ? (
                                   <button
-                                    onClick={() => window.devbox?.system.openExternal(asset.downloadUrl)}
+                                    onClick={() => window.mylocaldev?.system.openExternal(asset.downloadUrl)}
                                     className="btn-icon text-gray-400 hover:text-gray-600"
                                     title={`Download v${release.version} manually (${asset.name})`}
                                   ><ExternalLink className="w-3.5 h-3.5" /></button>
@@ -1783,7 +1783,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
                                     : (release.assets?.find(a => a.name.endsWith('.AppImage')) || release.assets?.find(a => a.name.endsWith('.deb')));
                                 return asset ? (
                                   <button
-                                    onClick={() => window.devbox?.system.openExternal(asset.downloadUrl)}
+                                    onClick={() => window.mylocaldev?.system.openExternal(asset.downloadUrl)}
                                     className="btn-icon text-gray-400 hover:text-gray-600"
                                     title={`Download v${release.version} manually (${asset.name})`}
                                   ><ExternalLink className="w-3.5 h-3.5" /></button>
@@ -1820,7 +1820,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
           Remote Configuration Updates
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Check for updates to binary download URLs and compatibility rules from the DevBox Pro repository.
+          Check for updates to binary download URLs and compatibility rules from the MyLocalDev repository.
         </p>
 
         {/* Binary Updates */}
@@ -1830,7 +1830,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
               <div className="flex items-center gap-2">
                 <h4 className="font-medium text-gray-900 dark:text-white">Binary Downloads</h4>
                 <button
-                  onClick={() => window.devbox?.system.openExternal('https://github.com/JeffGepiga/DevBoxPro/blob/main/config/binaries.json')}
+                  onClick={() => window.mylocaldev?.system.openExternal('https://github.com/playpixelpro/mylocaldev/blob/main/config/binaries.json')}
                   className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
                   title="View source on GitHub"
                 >
@@ -1916,7 +1916,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
               <div className="flex items-center gap-2">
                 <h4 className="font-medium text-gray-900 dark:text-white">Compatibility Rules</h4>
                 <button
-                  onClick={() => window.devbox?.system.openExternal('https://github.com/JeffGepiga/DevBoxPro/blob/main/config/compatibility.json')}
+                  onClick={() => window.mylocaldev?.system.openExternal('https://github.com/playpixelpro/mylocaldev/blob/main/config/compatibility.json')}
                   className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
                   title="View source on GitHub"
                 >
@@ -2011,13 +2011,13 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
           Data Location
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-          DevBox Pro stores data in the following location:
+          MyLocalDev stores data in the following location:
         </p>
         <button
           onClick={() => {
             const pathToOpen = appDataPath || settings.dataPath;
             if (pathToOpen) {
-              window.devbox?.system?.openPath?.(pathToOpen)?.catch((err) => {
+              window.mylocaldev?.system?.openPath?.(pathToOpen)?.catch((err) => {
                 console.error('Failed to open path:', err);
               });
             }
@@ -2069,7 +2069,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
 
               <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                 <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                  This will reset DevBox Pro to a fresh install state:
+                  This will reset MyLocalDev to a fresh install state:
                 </p>
                 <ul className="text-sm text-gray-600 dark:text-gray-400 mt-2 list-disc list-inside space-y-1">
                   <li>All downloaded binaries (PHP, MySQL, Redis, Node.js, Nginx, Apache, Composer, etc.)</li>
@@ -2214,7 +2214,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
           About
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          DevBox Pro - Local Development Environment Manager
+          MyLocalDev - Local Development Environment Manager
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
           Made by <span className="font-semibold">Jeffrey Gepiga</span>
@@ -2222,7 +2222,7 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
           Found an issue?{' '}
           <button
-            onClick={() => window.devbox?.system.openExternal('https://github.com/JeffGepiga/DevBoxPro/issues')}
+            onClick={() => window.mylocaldev?.system.openExternal('https://github.com/playpixelpro/mylocaldev/issues')}
             className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 inline-flex items-center gap-1"
           >
             Report it on GitHub

@@ -64,13 +64,13 @@ function makeConfigStore() {
     let projects = [];
     const store = {
         get: vi.fn((key, def) => {
-            if (key === 'projects' || key === 'devbox.projects') return projects;
+            if (key === 'projects' || key === 'MyLocalDev.projects') return projects;
             if (key === 'resourcePath') return '/mock/resources';
             if (key === 'settings') return { webServer: 'nginx' };
             return def;
         }),
         set: vi.fn((key, val) => {
-            if (key === 'projects' || key === 'devbox.projects') {
+            if (key === 'projects' || key === 'MyLocalDev.projects') {
                 projects = Array.isArray(val) ? val : [];
             }
         }),
@@ -499,7 +499,7 @@ describe('ProjectManager', () => {
             configStore.set('projects', [project]);
 
             configStore.get.mockImplementation((key, def) => {
-                if (key === 'projects' || key === 'devbox.projects') return [project];
+                if (key === 'projects' || key === 'MyLocalDev.projects') return [project];
                 return def;
             });
 
@@ -581,7 +581,7 @@ describe('ProjectManager', () => {
 
             managers.ssl.certificateMatchesCurrentCA = vi.fn().mockResolvedValue(false);
 
-            await mgr.ensureProjectSslCertificates(project, 'C:/Users/Test User/.devbox-pro/ssl/stale-ssl.test');
+            await mgr.ensureProjectSslCertificates(project, 'C:/Users/Test User/.mylocaldev/ssl/stale-ssl.test');
 
             expect(managers.ssl.certificateMatchesCurrentCA).toHaveBeenCalledWith('stale-ssl.test');
             expect(managers.ssl.waitForReady).toHaveBeenCalled();
@@ -642,19 +642,19 @@ describe('ProjectManager', () => {
             };
 
             configStore.get.mockImplementation((key, def) => {
-                if (key === 'projects' || key === 'devbox.projects') return [project];
-                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources';
+                if (key === 'projects' || key === 'MyLocalDev.projects') return [project];
+                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources';
                 if (key === 'settings') return { webServer: 'nginx' };
                 return def;
             });
-            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.devbox-pro');
-            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources');
+            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.mylocaldev');
+            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources');
             managers.service.getServicePorts.mockReturnValue({ httpPort: 80, sslPort: 443 });
 
             await mgr.createNginxVhost(project, 9000, '1.28');
 
             const [, config] = fs.writeFile.mock.calls.at(-1);
-            expect(config).toContain('include "C:/Users/Test User/AppData/Roaming/devbox-pro/resources/nginx/1.28/win/conf/fastcgi_params";');
+            expect(config).toContain('include "C:/Users/Test User/AppData/Roaming/MyLocalDev/resources/nginx/1.28/win/conf/fastcgi_params";');
         });
 
         it('does not turn the first apache SSL vhost into a wildcard catch-all', async () => {
@@ -675,13 +675,13 @@ describe('ProjectManager', () => {
             };
 
             configStore.get.mockImplementation((key, def) => {
-                if (key === 'projects' || key === 'devbox.projects') return [project];
-                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources';
+                if (key === 'projects' || key === 'MyLocalDev.projects') return [project];
+                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources';
                 if (key === 'settings') return { webServer: 'apache' };
                 return def;
             });
-            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.devbox-pro');
-            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources');
+            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.mylocaldev');
+            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources');
             managers.service.getServicePorts.mockReturnValue({ httpPort: 80, sslPort: 443 });
             managers.service.standardPortOwner = 'apache';
 
@@ -731,13 +731,13 @@ describe('ProjectManager', () => {
             };
 
             configStore.get.mockImplementation((key, def) => {
-                if (key === 'projects' || key === 'devbox.projects') return [firstProject, secondProject];
-                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources';
+                if (key === 'projects' || key === 'MyLocalDev.projects') return [firstProject, secondProject];
+                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources';
                 if (key === 'settings') return { webServer: 'apache' };
                 return def;
             });
-            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.devbox-pro');
-            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources');
+            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.mylocaldev');
+            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources');
             managers.service.getServicePorts.mockReturnValue({ httpPort: 8084, sslPort: 8446 });
             managers.service.standardPortOwner = null;
 
@@ -794,13 +794,13 @@ describe('ProjectManager', () => {
             };
 
             configStore.get.mockImplementation((key, def) => {
-                if (key === 'projects' || key === 'devbox.projects') return [firstProject, secondProject];
-                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources';
+                if (key === 'projects' || key === 'MyLocalDev.projects') return [firstProject, secondProject];
+                if (key === 'resourcePath') return 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources';
                 if (key === 'settings') return { webServer: 'apache' };
                 return def;
             });
-            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.devbox-pro');
-            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/devbox-pro/resources');
+            configStore.getDataPath = vi.fn(() => 'C:/Users/Test User/.mylocaldev');
+            configStore.getResourcesPath = vi.fn(() => 'C:/Users/Test User/AppData/Roaming/MyLocalDev/resources');
             managers.service.getServicePorts.mockReturnValue({ httpPort: 80, sslPort: 443 });
             managers.service.standardPortOwner = 'apache';
             mgr.networkPort80Owner = secondProject.id;

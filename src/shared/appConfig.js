@@ -8,7 +8,7 @@
 // These globals are injected by Vite at build time from package.json
 // See vite.config.js for the define configuration
 export const APP_VERSION = __APP_VERSION__;
-export const APP_NAME = 'DevBox Pro';
+export const APP_NAME = 'MyLocalDev';
 
 export default {
     version: APP_VERSION,

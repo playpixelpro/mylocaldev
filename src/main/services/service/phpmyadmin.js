@@ -189,7 +189,7 @@ $cfg['Servers'][${serverIndex}]['AllowNoPassword'] = true;
 
     const configContent = `<?php
 /**
- * phpMyAdmin configuration for DevBox Pro
+ * phpMyAdmin configuration for MyLocalDev
  * AUTO-GENERATED - DO NOT EDIT MANUALLY
  */
 

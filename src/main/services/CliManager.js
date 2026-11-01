@@ -32,7 +32,7 @@ class CliManager {
   }
 
   getAlias() {
-    return this.configStore.get('settings.cliAlias', 'dvp');
+    return this.configStore.get('settings.cliAlias', 'mylocaldev');
   }
 
   setAlias(alias) {

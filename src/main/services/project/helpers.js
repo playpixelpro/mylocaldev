@@ -259,7 +259,7 @@ module.exports = {
       const matchesCurrentCA = await this.managers.ssl.certificateMatchesCurrentCA(project.domain);
       if (!matchesCurrentCA) {
         certsExist = false;
-        this.managers.log?.systemWarn(`Regenerating SSL certificate for ${project.domain} because it does not match the current DevBox Root CA`);
+        this.managers.log?.systemWarn(`Regenerating SSL certificate for ${project.domain} because it does not match the current MyLocalDev Root CA`);
       }
     }
 

@@ -826,7 +826,7 @@
         },
         "linux": {
           "url": "builtin",
-          "note": "Install MongoDB Database Tools on Linux from your distro package manager or MongoDB package repository. fastdl.mongodb.org blocks the generic automated download used by DevBox Pro here."
+          "note": "Install MongoDB Database Tools on Linux from your distro package manager or MongoDB package repository. fastdl.mongodb.org blocks the generic automated download used by MyLocalDev here."
         },
         "label": "Latest"
       }

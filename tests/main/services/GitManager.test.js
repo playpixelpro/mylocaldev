@@ -135,7 +135,7 @@ describe('GitManager', () => {
 
         it('returns public key when file exists', async () => {
             await fs.ensureDir(gm.sshKeyPath);
-            await fs.writeFile(path.join(gm.sshKeyPath, 'devboxpro_rsa.pub'), 'ssh-ed25519 AAAA testkey');
+            await fs.writeFile(path.join(gm.sshKeyPath, 'mylocaldev_rsa.pub'), 'ssh-ed25519 AAAA testkey');
             const result = await gm.getSshPublicKey();
             expect(result.exists).toBe(true);
             expect(result.publicKey).toContain('ssh-ed25519');

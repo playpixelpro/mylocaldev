@@ -74,7 +74,7 @@ module.exports = {
     const project = this.getProjectForPath(workingDir);
 
     if (!project) {
-      throw new Error(`No DevBox Pro project found for path: ${workingDir}`);
+      throw new Error(`No MyLocalDev project found for path: ${workingDir}`);
     }
 
     const env = this.buildProjectEnv(project);

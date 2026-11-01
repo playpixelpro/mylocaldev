@@ -46,8 +46,8 @@ describe('git spawn behavior', () => {
   });
 
   it('spawns ssh-keygen with an executable path and argument array', async () => {
-    const sshDir = 'C:\\tmp\\devbox-ssh';
-    const keyPath = path.join(sshDir, 'devboxpro_rsa');
+    const sshDir = 'C:\\tmp\\MyLocalDev-ssh';
+    const keyPath = path.join(sshDir, 'mylocaldev_rsa');
     const publicKeyPath = `${keyPath}.pub`;
     const proc = createMockProcess();
     const spawnSpy = vi.spyOn(childProcess, 'spawn').mockImplementation(() => {
@@ -79,7 +79,7 @@ describe('git spawn behavior', () => {
 
     expect(spawnSpy).toHaveBeenCalledWith(
       path.join(process.env.SYSTEMROOT || 'C:\\Windows', 'System32', 'OpenSSH', 'ssh-keygen.exe'),
-      ['-t', 'ed25519', '-f', keyPath, '-N', '', '-C', 'devboxpro-generated-key', '-q'],
+      ['-t', 'ed25519', '-f', keyPath, '-N', '', '-C', 'MyLocalDev-generated-key', '-q'],
       expect.objectContaining({
         windowsHide: true,
         stdio: ['ignore', 'pipe', 'pipe'],

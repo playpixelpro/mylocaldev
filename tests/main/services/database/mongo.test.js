@@ -37,7 +37,7 @@ describe('database/mongo', () => {
     process.env.PLAYWRIGHT_TEST = 'true';
     const context = makeContext();
 
-    await mongo._runMongoQuery.call(context, 'db.getSiblingDB("analytics").getCollection("_devbox_meta").updateOne({_id:"init"},{$set:{createdAt:new Date()}},{upsert:true})');
+    await mongo._runMongoQuery.call(context, 'db.getSiblingDB("analytics").getCollection("_mylocaldev_meta").updateOne({_id:"init"},{$set:{createdAt:new Date()}},{upsert:true})');
     const names = await mongo._runMongoQuery.call(context, 'db.adminCommand({listDatabases:1}).databases.forEach(d=>print(d.name))');
     await mongo._runMongoQuery.call(context, 'db.dropDatabase()', 'analytics');
     const namesAfterDrop = await mongo._runMongoQuery.call(context, 'db.adminCommand({listDatabases:1}).databases.forEach(d=>print(d.name))');

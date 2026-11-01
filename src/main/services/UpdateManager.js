@@ -226,15 +226,15 @@ class UpdateManager {
     async fetchReleasesHistory() {
         const https = require('https');
         const currentVersion = app.getVersion();
-        const owner = 'JeffGepiga';
-        const repo = 'DevBoxPro';
+        const owner = 'playpixelpro';
+        const repo = 'mylocaldev';
 
         return new Promise((resolve) => {
             const options = {
                 hostname: 'api.github.com',
                 path: `/repos/${owner}/${repo}/releases?per_page=15`,
                 headers: {
-                    'User-Agent': 'DevBoxPro-App',
+                    'User-Agent': 'MyLocalDev-App',
                     'Accept': 'application/vnd.github.v3+json',
                 },
             };
@@ -297,7 +297,7 @@ class UpdateManager {
         const os = require('os');
 
         const ext = path.extname(new URL(downloadUrl).pathname) || '.exe';
-        const fileName = `DevBoxPro-rollback-${version}${ext}`;
+        const fileName = `MyLocalDev-rollback-${version}${ext}`;
         const destPath = path.join(os.tmpdir(), fileName);
 
         return new Promise((resolve) => {
@@ -312,7 +312,7 @@ class UpdateManager {
                 const urlObj = new URL(url);
                 const mod = urlObj.protocol === 'https:' ? require('https') : require('http');
 
-                mod.get(url, { headers: { 'User-Agent': 'DevBoxPro-App' } }, (res) => {
+                mod.get(url, { headers: { 'User-Agent': 'MyLocalDev-App' } }, (res) => {
                     if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 307) {
                         downloadWithRedirects(res.headers.location, redirectCount + 1);
                         return;
