@@ -144,7 +144,16 @@ covers maintenance, Windows testing and runtime download costs.
 
 <p align="center">
   <a href="https://github.com/sponsors/playpixelpro">
-    <img src="https://img.shields.io/badge/Sponsor-❤%20Support%20MyLocalDev-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub">
+    <img src="https://img.shields.io/badge/GitHub_Sponsors-❤-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub">
+  </a>
+  <a href="https://patreon.com/playpixelpro">
+    <img src="https://img.shields.io/badge/Patreon-Support-FF424D?style=for-the-badge&logo=patreon&logoColor=white" alt="Support on Patreon">
+  </a>
+  <a href="https://ko-fi.com/playpixelpro">
+    <img src="https://img.shields.io/badge/Ko--fi-Buy_a_coffee-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi">
+  </a>
+  <a href="https://buymeacoffee.com/playpixelpro">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_my_work-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee">
   </a>
 </p>
 

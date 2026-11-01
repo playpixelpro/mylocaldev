@@ -160,6 +160,20 @@ code {
 
 .nav-cta:hover { filter: brightness(1.08); }
 
+.nav-sponsor { color: #fda4af !important; }
+
+.nav-sponsor::before {
+  content: '♥';
+  margin-right: 0.38rem;
+  font-size: 0.9em;
+  color: var(--red);
+}
+
+.nav-sponsor:hover {
+  color: #fecdd3 !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+}
+
 .nav-toggle {
   display: none;
   margin-left: auto;
@@ -724,9 +738,7 @@ pre .p { color: var(--red-bright); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 760px) {
-  :root { --nav-h: 64px; }
-
+@media (max-width: 940px) {
   .nav-toggle { display: block; }
 
   .nav-links {
@@ -747,6 +759,10 @@ pre .p { color: var(--red-bright); }
   .nav-links.open { display: flex; }
   .nav-links a { padding: 0.7rem 0.8rem; }
   .nav-cta { margin-left: 0; text-align: center; }
+}
+
+@media (max-width: 760px) {
+  :root { --nav-h: 64px; }
 
   .hero { padding-top: 2.5rem; }
   .cards, .cards.two, .cards.four { grid-template-columns: 1fr; }
