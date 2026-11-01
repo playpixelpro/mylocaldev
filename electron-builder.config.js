@@ -2,14 +2,19 @@
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
  */
-module.exports = {
+const fs = require('fs');
+const path = require('path');
+
+// Reuse the Electron binary downloaded by `npm install` when it is present, which
+// keeps local builds fast. On CI the folder may be missing, so electron-builder is
+// left to fetch the runtime itself.
+const localElectronDist = path.join(__dirname, 'node_modules', 'electron', 'dist');
+
+const config = {
   appId: 'com.playpixelpro.mylocaldev',
   productName: 'MyLocalDev',
   copyright: 'Copyright © 2026 PlayPixelPro',
   asar: true,
-  // Use the Electron binary already downloaded by `npm install` (node_modules/electron/dist)
-  // This avoids re-downloading 138MB from GitHub during every build.
-  electronDist: './node_modules/electron/dist',
   directories: {
     output: 'dist',
     buildResources: 'resources',
@@ -171,3 +176,9 @@ module.exports = {
     releaseType: 'release',
   },
 };
+
+if (fs.existsSync(localElectronDist)) {
+  config.electronDist = localElectronDist;
+}
+
+module.exports = config;
