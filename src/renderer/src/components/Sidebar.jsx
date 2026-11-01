@@ -14,7 +14,8 @@ import {
   Download,
 } from 'lucide-react';
 import clsx from 'clsx';
-import logoImg from '/logo.svg';
+import logoDefault from '/logo.svg';
+import logoLight from '/logo-light.svg';
 import { APP_VERSION } from '../../../shared/appConfig';
 
 const navigation = [
@@ -43,7 +44,12 @@ function Sidebar({ darkMode, setDarkMode }) {
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
-          <img src={logoImg} alt="MyLocalDev" className="w-8 h-8" />
+          <img
+            src={darkMode ? logoLight : logoDefault}
+            alt="MyLocalDev"
+            className="w-8 h-8"
+            draggable={false}
+          />
           <span className="text-lg font-bold text-gray-900 dark:text-white">
             MyLocalDev
           </span>

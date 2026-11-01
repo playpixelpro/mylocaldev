@@ -34,6 +34,15 @@ describe('Sidebar', () => {
             expect(screen.getByText('MyLocalDev')).toBeInTheDocument();
         });
 
+        it('switches the logo with the theme', () => {
+            const light = renderSidebar({ darkMode: false });
+            expect(screen.getByAltText('MyLocalDev').getAttribute('src')).toMatch(/logo\.svg$/);
+            light.unmount();
+
+            renderSidebar({ darkMode: true });
+            expect(screen.getByAltText('MyLocalDev').getAttribute('src')).toMatch(/logo-light\.svg$/);
+        });
+
         it('renders all navigation items', () => {
             renderSidebar();
             expect(screen.getByText('Dashboard')).toBeInTheDocument();
