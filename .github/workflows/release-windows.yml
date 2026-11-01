@@ -1,7 +1,7 @@
 name: Release Windows Build
 
-# Pushing a version tag (e.g. v1.0.1) builds the Windows installers and publishes
-# them to a GitHub release. Manual runs only build artifacts, never publish.
+# Pushing a version tag (e.g. v1.0.2) builds the Windows installers and creates a
+# GitHub release with them. Manual runs only build artifacts, never publish.
 on:
   push:
     tags:
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to build (e.g. 1.0.1). Leave empty to use package.json'
+        description: 'Version to build (e.g. 1.0.2). Leave empty to use package.json'
         required: false
         type: string
 
@@ -66,27 +66,34 @@ jobs:
       - name: Verify binary download URLs
         run: npm run test:binary-urls
 
-      - name: Build and publish release (tag push)
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx electron-builder --win --publish always
+      # Build locally; the release is created explicitly below so the asset list and
+      # release notes are deterministic (electron-builder's publisher can race across
+      # targets and create duplicate releases).
+      - name: Build Windows installers
+        run: npx electron-builder --win --publish never
 
-      - name: Build only (manual run)
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        run: npx electron-builder --win
-
-      - name: Apply release notes
+      - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          NOTES="release-notes/${{ steps.version.outputs.version }}.md"
-          if [ -f "$NOTES" ]; then
-            echo "Applying release notes from $NOTES"
-            gh release edit "${{ steps.version.outputs.tag }}" --notes-file "$NOTES"
+          TAG="${{ steps.version.outputs.tag }}"
+          VERSION="${{ steps.version.outputs.version }}"
+          NOTES="release-notes/$VERSION.md"
+          ASSETS=$(ls dist/*.exe dist/latest.yml dist/*.blockmap 2>/dev/null)
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists - uploading artifacts"
+            gh release upload "$TAG" $ASSETS --clobber
+            if [ -f "$NOTES" ]; then
+              gh release edit "$TAG" --title "MyLocalDev $VERSION" --notes-file "$NOTES"
+            fi
+          elif [ -f "$NOTES" ]; then
+            gh release create "$TAG" $ASSETS --verify-tag --latest \
+              --title "MyLocalDev $VERSION" --notes-file "$NOTES"
           else
-            echo "No release notes file for this version"
+            gh release create "$TAG" $ASSETS --verify-tag --latest \
+              --title "MyLocalDev $VERSION" --generate-notes
           fi
 
       - name: Upload build artifacts
