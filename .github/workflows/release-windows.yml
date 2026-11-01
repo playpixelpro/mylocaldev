@@ -76,6 +76,19 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: npx electron-builder --win
 
+      - name: Apply release notes
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NOTES="release-notes/${{ steps.version.outputs.version }}.md"
+          if [ -f "$NOTES" ]; then
+            echo "Applying release notes from $NOTES"
+            gh release edit "${{ steps.version.outputs.tag }}" --notes-file "$NOTES"
+          else
+            echo "No release notes file for this version"
+          fi
+
       - name: Upload build artifacts
         if: always()
         uses: actions/upload-artifact@v4
