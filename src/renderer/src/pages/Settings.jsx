@@ -2217,18 +2217,34 @@ function AdvancedSettings({ settings, updateSetting, onExport, onImport }) {
           MyLocalDev - Local Development Environment Manager
         </p>
         <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
-          Made by <span className="font-semibold">Jeffrey Gepiga</span>
+          Maintained by <span className="font-semibold">PlayPixelPro</span>
         </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
-          Found an issue?{' '}
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Based on DevBox Pro &copy; 2025 Jeffrey Gepiga, licensed under MIT.
+        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-sm">
+          <button
+            onClick={() => window.mylocaldev?.system.openExternal('https://playpixelpro.github.io/mylocaldev/')}
+            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 inline-flex items-center gap-1"
+          >
+            Documentation
+            <ExternalLink className="w-3 h-3" />
+          </button>
+          <button
+            onClick={() => window.mylocaldev?.system.openExternal('https://github.com/playpixelpro/mylocaldev')}
+            className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 inline-flex items-center gap-1"
+          >
+            Source code
+            <ExternalLink className="w-3 h-3" />
+          </button>
           <button
             onClick={() => window.mylocaldev?.system.openExternal('https://github.com/playpixelpro/mylocaldev/issues')}
             className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 inline-flex items-center gap-1"
           >
-            Report it on GitHub
+            Report an issue
             <ExternalLink className="w-3 h-3" />
           </button>
-        </p>
+        </div>
       </div>
     </div>
   );

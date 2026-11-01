@@ -22,6 +22,8 @@ MyLocalDev is an Electron desktop app with a React renderer and a Node.js main p
 >
 > MyLocalDev provides two operation profiles: **Local Mode** for active debugging, hot reload, and development agility; and **Production Mode** for high performance, hardened security, and unattended background service and scheduler reliability.
 
+🌐 **Website & documentation:** <https://playpixelpro.github.io/mylocaldev/>
+
 ---
 
 ## 🆕 What's New in v1.0.0
