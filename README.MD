@@ -1,498 +1,160 @@
 <p align="center">
-  <img src="logo.png" alt="MyLocalDev logo" width="128">
+  <img src="docs/images/social-preview.png" alt="MyLocalDev — versioned PHP, Node and database runtimes on one machine" width="900">
+</p>
+
+<h1 align="center">MyLocalDev</h1>
+
+<p align="center">
+  <strong>Every version your projects need — side by side, without Docker.</strong><br>
+  <sub>A Windows desktop app that owns your PHP, Node, database and web server runtimes so your projects don't have to share.</sub>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Electron-45.2.1-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron">
-  <img src="https://img.shields.io/badge/React-19.0.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
-  <img src="https://img.shields.io/badge/Vite-7.0.0-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/TailwindCSS-4.0.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="TailwindCSS">
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
+  <a href="https://github.com/playpixelpro/mylocaldev/releases/latest">
+    <img src="https://img.shields.io/github/v/release/playpixelpro/mylocaldev?style=for-the-badge&label=release&color=2563eb" alt="Latest release">
+  </a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0f172a?style=for-the-badge&logo=windows&logoColor=60a5fa" alt="Windows 10 and 11">
+  <img src="https://img.shields.io/badge/License-MIT-ef4444?style=for-the-badge" alt="MIT License">
+  <img src="https://img.shields.io/badge/Electron-45-47848F?style=for-the-badge&logo=electron&logoColor=white" alt="Electron">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
 </p>
 
-# 🚀 MyLocalDev
-
-**Run legacy and modern PHP and Node.js apps side by side with isolated runtimes, bundled services, and zero Docker setup.**
-
-Maintaining an old PHP 7.4 project while building a new Laravel 11 app on PHP 8.5? Running a Next.js frontend alongside a PHP backend? MyLocalDev is built for exactly that workflow. It lets you run multiple PHP, Node.js, database, and web server versions at the same time, with per-project configuration, automatic local domains, compatibility warnings, and bundled tooling.
-
-MyLocalDev is an Electron desktop app with a React renderer and a Node.js main process. It manages PHP, Node.js, MySQL, MariaDB, Redis, Nginx, Apache, PostgreSQL, MongoDB, MinIO, Memcached, Mailpit, phpMyAdmin, Composer, Git, and more from one local interface.
-
-> **Version 1.0.0:** The first MyLocalDev release. A rebrand of the MIT-licensed DevBox Pro codebase (see [Credits](#-credits)), reset to a clean 1.0.0 version line and shipped with project-environment and dependency fixes.
->
-> MyLocalDev provides two operation profiles: **Local Mode** for active debugging, hot reload, and development agility; and **Production Mode** for high performance, hardened security, and unattended background service and scheduler reliability.
-
-🌐 **Website & documentation:** <https://playpixelpro.github.io/mylocaldev/>
+<p align="center">
+  <a href="https://playpixelpro.github.io/mylocaldev/"><b>Website</b></a> ·
+  <a href="https://github.com/playpixelpro/mylocaldev/releases/latest">Download</a> ·
+  <a href="https://playpixelpro.github.io/mylocaldev/getting-started.html">Getting started</a> ·
+  <a href="https://github.com/playpixelpro/mylocaldev/issues">Issues</a> ·
+  <a href="#sponsor">Sponsor</a>
+</p>
 
 ---
 
-## 🆕 What's New in v1.0.0
+## Why MyLocalDev
 
-### 🎨 Rebrand
-- **New name and identity**: MyLocalDev, with a new application icon, installer artwork, window/tray titles, CLI messages, generated web-server configs and local certificate organization names.
-- **Separate application identity**: installs side by side with any previous installation (`appId` `com.playpixelpro.mylocaldev`, executable `MyLocalDev`).
-- **Clean start**: MyLocalDev uses its own `~/.mylocaldev` data directory and `%APPDATA%\mylocaldev` profile. Nothing is imported from a previous installation, so no old projects, settings or databases are picked up.
+- **Old and new projects at the same time.** Pin PHP 7.4 to the legacy client site and 8.5 to the rewrite; both keep running, neither notices the other.
+- **Real domains instead of `localhost:8000`.** Projects answer on `name.test` with certificates your browser trusts.
+- **No containers.** Runtimes live in a folder, not in an image. Xdebug, file watchers and breakpoints behave the way you expect.
+- **Honest state.** Every screen shows which runtime, port, database and certificate a project is actually using.
+- **Nothing forced on your machine.** PHP, Node and Composer are optional on the host — the app downloads and isolates what you install.
 
-### 🔧 Project environment fixes
-- **Import reads the project's `.env`**: importing an existing project now keeps its `DB_DATABASE`, `APP_KEY`, `APP_ENV` and other values instead of inventing defaults from the folder name.
-- **No more silent overrides**: only genuine overrides are injected into PHP-CGI, terminals and supervisor workers — empty values and values identical to `.env` are skipped.
-- **Overrides are visible**: the Environment tab now flags every value that takes precedence over `.env`.
-- **`$_ENV` works for injected values**: bundled PHP now runs with `variables_order = "EGPCS"`, including on already-installed PHP versions.
+## Screenshots
 
-### 🔒 Dependencies
-- Electron 45, electron-builder 26, and a refreshed lockfile. `npm audit --omit=dev` reports 0 vulnerabilities.
+| Dashboard | Project settings | Binary manager |
+|:-:|:-:|:-:|
+| ![Dashboard](docs/images/shots/dashboard.png) | ![Project overview](docs/images/shots/project-overview.png) | ![Binary manager](docs/images/shots/binaries-language.png) |
+| **Databases** | **Services** | **Project wizard** |
+| ![Databases](docs/images/shots/databases.png) | ![Services](docs/images/shots/services.png) | ![Create project](docs/images/shots/create-project.png) |
 
----
+## Features
 
-## ✨ Previously released features
+**Projects**
+- New project wizard for Laravel, Symfony, WordPress, plain PHP and Node.js frameworks
+- Import an existing folder without rewriting it — the project's `.env` is read, not replaced
+- Per-project PHP, Node, web server, database and deployment mode
+- Start, stop and restart from one screen, with live status
 
-All features from the upstream 1.0.x line — multi-PHP support, embedded services, production mode, tunnels, and supervisor — are included.
+**Domains & TLS**
+- Automatic `.test` domains, hosts-file entries and virtual hosts
+- Local certificate authority with one-click trust, wildcards for subdomains
+- Nginx or Apache per project, with automatic front-door proxying
 
----
+**Runtimes**
+- PHP 7.4 – 8.5, Node.js 16 – 24, Python 3.10 – 3.13
+- Nginx 1.24 – 1.28, Apache 2.4
+- MySQL 5.7 – 8.4, MariaDB 10.6 – 11.4, PostgreSQL 14 – 17, MongoDB 6.0 – 8.0, SQLite
+- Redis 6.2 – 7.4, Memcached 1.6, MinIO, Mailpit, phpMyAdmin, Composer, Git
+- Download, import a ZIP, or update in place while keeping custom ini directives and extensions
 
-## ✨ Features
+**Databases**
+- Versioned data directories and offset ports, so two MySQL builds can run together
+- SQL and gzipped import/export with visible progress
+- Databases created automatically per project, backed up next to the engine
 
-### 🐘 Multi-PHP Version Support
-- **PHP 7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5** - Run multiple versions side by side
-- Per-project PHP version selection with compatibility validation
-- Easy extension management per version with php.ini editor
-- Pre-configured for optimal performance
+**Environments & deployment**
+- Local and production modes per project: OPcache + JIT, hardened headers, extra FastCGI workers
+- Supervisor for queue workers with crash-loop protection and restart backoff
+- Windows Task Scheduler integration for `artisan schedule:run`
+- Environment editor that flags any value overriding `.env`
 
-### 🟢 Node.js Project Support
-- **Node.js 16, 18, 20, 22, 24** - Run pure Node.js applications
-- Per-project Node.js version selection
-- Automatic proxy through Nginx/Apache for `.test` domains
-- Run Express, Next.js, Nuxt, or any Node.js framework
+**Developer comfort**
+- Folder-aware CLI: `php`, `composer`, `npm`, `mysql` resolve to the project you are in
+- Built-in terminal, per-project and per-service logs
+- Cloudflare Tunnel and zrok sharing for temporary previews
+- Light and dark themes with a theme-aware logo
 
-### 🌐 Web Server Options
-- **Nginx 1.24, 1.26, 1.28** - High-performance, low memory footprint (recommended)
-- **Apache 2.4** - Full .htaccess support, mod_rewrite included
-- Front-door ownership and automatic proxying between Nginx and Apache
-- Automatic virtual host creation
-- HTTP & HTTPS support for every project
+## Supported runtimes
 
-### 📦 Embedded Services
-| Service | Versions | Description |
-|---------|----------|-------------|
-| **MySQL** | 5.7, 8.0, 8.4 | Powerful relational database |
-| **MariaDB** | 10.6, 10.11, 11.4 | MySQL-compatible, open source |
-| **Redis** | 6.2, 7.2, 7.4 | In-memory cache & session storage |
-| **PostgreSQL** | 14, 15, 16, 17 | Advanced relational database |
-| **MongoDB** | 6.0, 7.0, 8.0 | Document database |
-| **Memcached** | 1.6 | Distributed memory caching |
-| **MinIO** | Latest | S3-compatible object storage |
-| **Mailpit** | Latest | Email testing with SMTP server |
-| **phpMyAdmin** | Latest | Web-based database management |
-| **Node.js** | 16, 18, 20, 22, 24 (LTS) | JavaScript runtime for projects & tooling |
-| **Python** | 3.10, 3.11, 3.12, 3.13 | Runtime for project tooling and workers |
-| **SQLite** | 3 | Embedded database runtime |
-| **Composer** | Latest | PHP dependency manager |
+| Category | Versions |
+|---|---|
+| PHP | 7.4 · 8.0 · 8.1 · 8.2 · 8.3 · 8.4 · 8.5 |
+| Node.js | 16 · 18 · 20 · 22 · 24 |
+| Python | 3.10 · 3.11 · 3.12 · 3.13 |
+| Web servers | Nginx 1.24 · 1.26 · 1.28 — Apache 2.4 |
+| Databases | MySQL 5.7 · 8.0 · 8.4 — MariaDB 10.6 · 10.11 · 11.4 — PostgreSQL 14–17 — MongoDB 6.0 · 7.0 · 8.0 — SQLite 3 |
+| Cache & storage | Redis 6.2 · 7.2 · 7.4 — Memcached 1.6 — MinIO |
+| Tooling | Composer · Git · phpMyAdmin · Mailpit |
 
-### 💾 Database Management
-- **Multi-engine support** - MySQL, MariaDB, PostgreSQL, and MongoDB workflows
-- **Per-version data isolation** - Each version has its own data directory
-- **Database import/export** with `.sql`, `.gz`, PostgreSQL, and MongoDB flows
-- **Progress tracking** for import/export operations
-- **phpMyAdmin integration** for web-based management
-- **Automatic database creation** per project
+See the [runtime reference](https://playpixelpro.github.io/mylocaldev/services.html) for default ports and how multiple versions coexist.
 
-### 🔐 SSL & Security
-- Automatic SSL certificate generation
-- Wildcard certificate support
-- One-click certificate trust
-- `.test` domain support (e.g., `myproject.test`)
+## Install
 
-### 🌍 Public Internet Sharing
-- Share a running project publicly with **Cloudflare Tunnel** or **zrok**
-- Per-project **Share on Internet** toggle with optional **auto-start tunnel** when the project starts
-- Works with both **Nginx** and **Apache** projects, including mixed front-door proxy setups
-- Tunnel proxy rewrites redirects, cookies, and absolute local `.test` URLs so public sessions stay on the tunnel hostname
-- Cloudflare Quick Tunnels use random `*.trycloudflare.com` URLs
-- zrok requires a one-time app-wide enable token in **Binary Manager → Tools**
-- Built for previews and reviews, not for production deployment
+1. **Download** the latest release — `MyLocalDev-Setup-x.y.z.exe` (installer) or `MyLocalDev-x.y.z.exe` (portable).
+2. **Add a runtime** from **Binaries**: a PHP build first, then whatever the project needs.
+3. **Create or import a project** and pick its versions.
+4. **Open the domain** shown on the project screen — e.g. `acme.test`.
 
-### 🎯 Framework Support
-- **Laravel** - Full support with Artisan, Queue Workers, Scheduler
-- **Symfony** - Console commands, Doctrine integration
-- **WordPress** - WP-CLI ready, Multisite support
-- **Custom PHP** - Works with any PHP application
-- **Node.js** - Express, Next.js, Nuxt, Fastify, or any Node.js app
+No PHP, Node or Composer installation is required beforehand.
 
-### 🔧 Binary Manager & Safe In-Place Updates
-- **Download individual components** - Only install what you need
-- **Multi-version management** - Keep multiple versions installed side by side
-- **Safe in-place upgrades** - Update packages (PHP, Node.js, Python, MySQL, MariaDB) while preserving custom `php.ini` configs, custom extensions, and npm packages
-- **Zero-lock process management** - Automatically stops conflicting project workers and background services (like phpMyAdmin), terminating lingering file locks to prevent `EPERM` errors on Windows, and auto-restarting them post-update
-- **Import custom binaries** - Use your own compiled versions
-- **Remote definitions** - Binary metadata and compatibility rules can be updated without shipping a new app build
-
-### ☁️ Cloud Configuration Updates
-- **Remote binary definitions** - New versions available without app update
-- **Compatibility rules sync** - Updated version compatibility warnings
-- **One-click update check** - Check for new binaries and rules from Settings
-- **Offline fallback** - Built-in defaults when offline
-- **Version tracking** - Only download when updates are available
-
-### 💻 Terminal Commands
-- **Direct command access** - Use `php`, `npm`, `node`, `composer`, `mysql`, `mysqldump`, and related tools directly from any terminal
-- **Automatic version detection** - Detects your project and uses the correct PHP/Node.js version
-- **Works everywhere** - VS Code, Windows Terminal, PowerShell, or any terminal emulator
-- **No prefix needed** - Just run `php artisan migrate` instead of complex paths
-- **Prevents version conflicts** - No more "wrong PHP version" issues
-
-### 📊 Logging & Monitoring
-- **Real-time log streaming** per project and service
-- **Color-coded log levels** (info, warning, error)
-- **Log file rotation** and cleanup
-- **Service resource monitoring**
-
-### 🚀 Production Mode & Windows Client Server
-- **Dual Operating Profiles** - Switch between **Local Mode** (interactive debugging, single worker) and **Production Mode** (optimized performance, hardened security) per project or globally
-- **PHP OPcache & JIT Optimization** - Automatically enables OPcache (`opcache.enable=1`, `opcache.jit=1255`) and suppresses public error displays (`display_errors = Off`)
-- **Hardened Web Server Security** - Injects HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `server_tokens off`, and disables directory indexing for Nginx and Apache
-- **Resilient Queue Workers** - Multi-process worker management with `--tries=3`, `--timeout=90`, `--memory=128`, `--max-jobs=1000`, clean-exit restarts, and exponential backoff crash protection
-- **Native Windows Task Scheduler** - Integrates with Windows `schtasks.exe` to trigger `php artisan schedule:run` every minute using a silent runner without flashing CMD windows
-
-> **⚠️ Production Mode Precautions & Intended Use:**
-> - **Deployment Scope:** Production Mode is designed for internal office/LAN servers, dedicated client Windows PCs, kiosk workstations, or staging environments. It is **not** a direct replacement for hardened, dedicated Linux cloud infrastructure (e.g., AWS, DigitalOcean) for mission-critical, public-facing web applications.
-> - **Code Caching:** To maximize performance, `opcache.validate_timestamps` is set to `0`. Modified script files will **not** take effect immediately; you must restart the project or reload the web server to flush cached bytecode.
-> - **Suppressed Error Output:** `display_errors` is turned `Off` to prevent sensitive credentials from leaking to visitors. Check the project **Logs** tab in MyLocalDev to diagnose runtime issues.
-> - **Operating System Considerations:** For continuous unattended hosting on Windows, disable system sleep/hibernation, configure Windows Update active hours, and ensure adequate machine airflow and power supply backup (UPS).
-
-### ⚙️ Project Configuration
-- **Service version selection** per project
-- **Compatibility validation** - Warns about incompatible combinations
-- **Binary validation** - Checks required binaries before project start
-- **php.ini editor** - Customize PHP settings per version
-
----
-
-## 🚀 Quick Start
-
-### Installation
-
-1. **Download** the latest release for your platform:
-  - Windows: `MyLocalDev-Setup-1.0.0.exe`
-  - macOS: `MyLocalDev-1.0.0.dmg`
-
-2. **Install** the application
-  - Windows installer builds silently install or repair the Microsoft Visual C++ Redistributable when `vcredist/VC_redist.x64.exe` is bundled with the release
-
-3. **Download binaries** from the Binary Manager:
-   - Click "Download All" for the full stack, or
-   - Select individual components as needed
-
-### Creating Your First Project
-
-1. Click **"+ New Project"** on the Dashboard
-2. Select your **project type** (Laravel, Symfony, WordPress, Custom PHP, or Node.js)
-3. Choose **project folder** and **PHP/Node.js version**
-4. Configure **services** (MySQL, Redis, etc.)
-5. Set your **domain** (e.g., `myproject.test`)
-6. Click **Create** and you're ready!
-
-### Sharing a Project on the Internet
-
-1. Open the project detail page and enable **Share on Internet**
-2. Choose **Cloudflare Tunnel** or **zrok** as the provider
-3. Optionally enable **Auto-start tunnel** if the project should publish automatically on startup
-4. Start the project, then click **Start Sharing**
-5. Use the generated public URL to access the project from outside your local machine
-
-> **Provider notes:** Cloudflare uses disposable random public URLs on `trycloudflare.com`. zrok requires a one-time app-wide enable step before any project can use it.
-
-> **Production note:** Tunnel sharing is intended for temporary previews, QA, and stakeholder review. Do not use MyLocalDev as a production hosting platform.
-
-### Using Terminal Commands
-
-MyLocalDev lets you use `php`, `npm`, `node`, `composer`, `mysql`, and `mysqldump` directly from any terminal with automatic project version detection:
-
-1. Go to **Settings > CLI Tool** in MyLocalDev
-2. Enable **"Terminal commands"**
-3. Restart your terminal or VS Code
-
-**Usage examples:**
-```bash
-# Navigate to your project folder
-cd C:\Projects\my-laravel-app
-
-# Run PHP with project-specific version (auto-detected)
-php artisan migrate
-php artisan optimize
-
-# Run Composer with correct PHP version
-composer install
-composer update
-
-# Run Node.js/npm with project version (if enabled)
-npm install
-npm run dev
-npx vite build
-
-# Connect to MySQL/MariaDB using the active database version
-mysql -u root
-mysql -u root -p mydb < migration.sql
-mysqldump -u root mydb > backup.sql
-```
-
-> **How it works:** When you run `php`, `mysql`, or `npm` from a project directory, MyLocalDev automatically uses that project's configured version. Outside a project, it uses your default version set in Settings.
-
----
-
-## 💻 Development Setup
-
-### Prerequisites
-
-- Node.js 24+
-- npm
-- Git
-
-### Setup
+## Build from source
 
 ```bash
-# Clone the repository
 git clone https://github.com/playpixelpro/mylocaldev.git
-cd MyLocalDev
-
-# Install dependencies
+cd mylocaldev
 npm install
-
-# Start the Electron app with the Vite renderer dev server
-npm run dev
-
-# Build the renderer bundle only
-npm run build:renderer
-
-# Build platform packages
-npm run build:win
-npm run build:mac
-npm run build:all
+npm run dev            # Vite renderer + Electron
 ```
-
-The renderer dev server runs at `http://localhost:3000`.
-
-### Testing
-
-MyLocalDev includes unit, integration, and end-to-end coverage.
 
 ```bash
-# Run all tests
-npm test
-
-# Run only main process tests
-npm run test:main
-
-# Run only renderer process tests
-npm run test:renderer
-
-# Run End-to-End (E2E) tests
-npm run test:e2e
+npm test               # Vitest (main + renderer)
+npm run test:e2e       # Playwright against the built app
+npm run build:renderer # renderer bundle only
+npm run build:win      # installer + portable build
 ```
 
-The test suite covers the main-process managers, the renderer, and Playwright end-to-end scenarios for project creation, binaries, databases, SSL, and settings persistence.
+Requirements: Node.js 24+, npm, Git.
 
-### Project Structure
+## Releasing
 
-```
-MyLocalDev/
-├── src/
-│   ├── main/                    # Electron main process
-│   │   ├── services/
-│   │   │   ├── BinaryDownloadManager.js  # Thin facade for binary downloads and extraction
-│   │   │   ├── CliManager.js             # Thin facade for terminal integration
-│   │   │   ├── CompatibilityManager.js   # Thin facade for compatibility rules and updates
-│   │   │   ├── DatabaseManager.js        # Thin facade for multi-engine DB operations
-│   │   │   ├── GitManager.js             # Thin facade for Git clone and SSH workflows
-│   │   │   ├── ProjectManager.js         # Thin facade for project lifecycle and vhosts
-│   │   │   ├── ServiceManager.js         # Thin facade for service lifecycle and config generation
-│   │   │   ├── SupervisorManager.js      # Thin facade for worker and process supervision
-│   │   │   ├── binary/                   # Binary manager mixins
-│   │   │   ├── cli/                      # CLI manager mixins
-│   │   │   ├── compatibility/            # Compatibility manager mixins
-│   │   │   ├── database/                 # Database manager mixins
-│   │   │   ├── git/                      # Git manager mixins
-│   │   │   ├── project/                  # Project manager mixins
-│   │   │   ├── service/                  # Service manager mixins
-│   │   │   ├── supervisor/               # Supervisor manager mixins
-│   │   │   └── ...
-│   │   ├── ipc/
-│   │   │   └── handlers.js      # IPC communication
-│   │   ├── utils/
-│   │   │   ├── ConfigStore.js   # Configuration storage
-│   │   │   ├── PortUtils.js     # Port probing and process lookup
-│   │   │   └── SpawnUtils.js    # Safer child-process helpers
-│   │   ├── preload.js           # Preload script
-│   │   └── main.js              # Main entry
-│   │
-│   └── renderer/                # React frontend
-│       ├── src/
-│       │   ├── components/      # Reusable components
-│       │   │   ├── Sidebar.jsx
-│       │   │   ├── PhpIniEditor.jsx
-│       │   │   ├── XTerminal.jsx
-│       │   │   └── ...
-│       │   ├── pages/           # Page components
-│       │   │   ├── Dashboard.jsx
-│       │   │   ├── Projects.jsx
-│       │   │   ├── ProjectDetail.jsx
-│       │   │   ├── Databases.jsx
-│       │   │   ├── Services.jsx
-│       │   │   ├── BinaryManager.jsx
-│       │   │   ├── Settings.jsx
-│       │   │   └── ...
-│       │   ├── context/         # React context
-│       │   │   └── AppContext.jsx
-│       │   └── App.jsx          # Root component
-│       └── index.html
-│
-├── resources/                   # App resources (icons, configs)
-├── config/                      # Remote configuration files
-│   ├── binaries.json            # Binary download definitions
-│   ├── compatibility.json       # Version compatibility rules
-│   └── README.md                # Config contribution guide
-├── screenshots/                 # App screenshots
-├── build/                       # Build resources
-├── electron-builder.config.js   # Electron builder config
-├── package.json
-└── README.MD
+Releases are built and published by GitHub Actions when a version tag is pushed:
+
+```bash
+git tag v1.0.2
+git push origin v1.0.2
 ```
 
----
+The workflow builds on `windows-latest`, writes the tag's version into `package.json`, publishes
+`MyLocalDev-Setup-x.y.z.exe`, the portable build and `latest.yml`, and applies
+`release-notes/<version>.md` if the file exists. Manual runs build artifacts only.
 
-## ⚙️ Configuration
+## ❤️ Sponsor
 
-### Default Ports
-
-| Service | Default Port |
-|---------|-------------|
-| PHP Projects | 8000+ (auto-assigned) |
-| MySQL | 3306 |
-| MariaDB | 3310 |
-| Redis | 6379 |
-| PostgreSQL | 5432 |
-| MongoDB | 27017 |
-| Memcached | 11211 |
-| MinIO API | 9000 |
-| MinIO Console | 9001 |
-| Mailpit SMTP | 1025 |
-| Mailpit Web | 8025 |
-| phpMyAdmin | 8080 |
-| Nginx HTTP | 80 |
-| Nginx HTTPS | 443 |
-| Apache HTTP | 8081 when Apache is not the front-door server |
-| Apache HTTPS | 8444 when Apache is not the front-door server |
-
-Web server ownership is dynamic. The first active web server can claim ports `80` and `443`, while the other is assigned alternate ports and proxied automatically.
-
-### Environment Variables
-
-Projects can use `.env` files with these pre-configured variables:
-
-```env
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://myproject.test
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=myproject
-DB_USERNAME=root
-DB_PASSWORD=
-
-CACHE_DRIVER=redis
-SESSION_DRIVER=redis
-QUEUE_CONNECTION=redis
-
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_MAILER=smtp
-MAIL_HOST=127.0.0.1
-MAIL_PORT=1025
-```
-
----
-
-## 🛠️ Technologies
-
-- **Electron 40** - Cross-platform desktop framework
-- **React 19** - UI library
-- **Vite 7** - Build and dev server
-- **TailwindCSS 4** - Styling pipeline
-- **Vitest** - Unit and integration testing
-- **Playwright** - End-to-end testing
-- **electron-builder** - Distribution packaging
-
----
-
-## 📋 Roadmap
-
-- [x] Multi-PHP version support (7.4 - 8.5)
-- [x] MySQL & MariaDB multi-version support
-- [x] Redis multi-version integration  
-- [x] Nginx & Apache multi-version web servers
-- [x] Automatic SSL certificates
-- [x] Virtual host management
-- [x] Node.js & npm multi-version support
-- [x] Pure Node.js project support (Express, Next.js, etc.)
-- [x] Composer integration
-- [x] Database import/export with compression
-- [x] Per-project service version selection
-- [x] Binary validation before project start
-- [x] php.ini editor
-- [x] Real-time log streaming
-- [x] Cloud config updates (binaries & compatibility rules)
-- [x] PostgreSQL support
-- [x] MongoDB support
-- [x] Project templates
-- [x] Git clone integration with SSH key management
-- [x] Supervisor process management (queues, workers, schedulers)
-- [x] Bulk project and service stop
-- [x] Front-door proxy for Nginx/Apache co-existence
-- [ ] Docker container support
-- [ ] Extension marketplace
-- [ ] Cloud sync settings
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-MyLocalDev is released under the MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-## 🙏 Credits
-
-MyLocalDev is a rebranded fork of **DevBox Pro**, originally created by **Jeffrey Gepiga** and distributed under the MIT License:
-
-- Original project: <https://github.com/JeffGepiga/DevBoxPro>
-- Original copyright: `Copyright (c) 2025 Jeffrey Gepiga`
-
-The MIT license requires this attribution to be preserved. It is also recorded in [NOTICE](NOTICE).
-
----
-
-## 💬 Support
-
-- 🐛 Issues: [GitHub Issues](https://github.com/playpixelpro/mylocaldev/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/playpixelpro/mylocaldev/discussions)
-
----
+MyLocalDev is free, MIT licensed and built in spare time. If it saves you a working day, sponsorship
+covers maintenance, Windows testing and runtime download costs.
 
 <p align="center">
-  Made with ❤️ for PHP & Node.js developers
+  <a href="https://github.com/sponsors/playpixelpro">
+    <img src="https://img.shields.io/badge/Sponsor-❤%20Support%20MyLocalDev-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub">
+  </a>
 </p>
+
+Sponsoring is optional — issues and well-described bug reports are just as valuable.
+
+## Credits
+
+MyLocalDev is a rebranded fork of **DevBox Pro**, originally created by **Jeffrey Gepiga** and released
+under the MIT License. The original copyright is preserved in [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+## License
+
+[MIT](LICENSE) © 2026 PlayPixelPro. Original work © 2025 Jeffrey Gepiga.
