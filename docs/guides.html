@@ -4,13 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guides — MyLocalDev</title>
-  <meta name="description" content="Step-by-step guides for common MyLocalDev tasks: creating projects, managing databases, setting up SSL, using terminal commands, and more.">
+  <meta name="description" content="Practical walkthroughs: import an existing project, run several PHP versions, proxy a Node app, move databases, share a preview and deploy to a Windows box.">
   <link rel="icon" href="images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ============ Navbar ============ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-brand">
@@ -22,563 +21,222 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="features.html">Features</a></li>
-        <li><a href="services.html">Services</a></li>
+        <li><a href="services.html">Runtimes</a></li>
+        <li><a href="getting-started.html">Get started</a></li>
         <li><a href="guides.html" class="active">Guides</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
-        <li style="display:flex; align-items:center;">
-          <iframe src="https://ghbtns.com/github-btn.html?user=playpixelpro&repo=mylocaldev&type=star&count=true" frameborder="0" scrolling="0" width="100" height="20" title="GitHub"></iframe>
-        </li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank">Download Setup</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank" rel="noopener">Download</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ============ Hero ============ -->
-  <section class="page-hero">
+  <header class="page-hero">
     <div class="container">
-      <h1 class="animate-in">
-        <span class="gradient-text">How-To Guides</span>
-      </h1>
-      <p class="subtitle animate-in">
-        Practical, step-by-step instructions for the most common things you'll do in MyLocalDev&nbsp;Pro.
-      </p>
+      <span class="eyebrow">Guides</span>
+      <h1>Recipes for the <span class="gradient-text">awkward cases</span></h1>
+      <p>Short, task-focused walkthroughs. Each one assumes the app is already installed.</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="container stack">
+
+      <article class="card animate-in">
+        <span class="kicker">01 — Migration</span>
+        <h2>Bring in a project you already have</h2>
+        <p>Adding an existing folder should change as little as possible. MyLocalDev reads what is already there before it writes anything.</p>
+        <div class="steps" style="margin-top:1.4rem;">
+          <div class="step"><h3>Add the folder</h3><p>Choose the project root — the directory that contains <code>composer.json</code>, <code>package.json</code> or <code>public/index.php</code>.</p></div>
+          <div class="step"><h3>Confirm the stack</h3><p>The wizard pre-selects what it detected. Adjust the PHP version if the project targets an older one.</p></div>
+          <div class="step"><h3>Keep your environment</h3><p>Values already present in <code>.env</code> — including the app key and database name — are kept instead of being replaced.</p></div>
+        </div>
+        <pre><span class="c"># after importing, verify the project still sees its own settings</span>
+php artisan about
+php artisan config:clear</pre>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">02 — Versions</span>
+        <h2>Run two PHP versions at the same time</h2>
+        <p>Each project stores its own version, so nothing needs toggling when you switch folders.</p>
+        <pre><span class="c"># in the legacy project folder</span>
+php -v   <span class="c">→ PHP 7.4.x</span>
+
+<span class="c"># in the new project folder</span>
+php -v   <span class="c">→ PHP 8.5.x</span>
+
+<span class="c"># both web servers can be up simultaneously</span>
+https://legacy.test   <span class="c">→ 7.4</span>
+https://rewrite.test  <span class="c">→ 8.5</span></pre>
+        <p class="muted">Install both builds from <strong>Binaries</strong> first. The PHP version dropdown on a project only lists what is installed.</p>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">03 — Node</span>
+        <h2>Put a Node app behind Nginx or Apache</h2>
+        <p>Use the project type <strong>Node.js</strong> and give it a start command. MyLocalDev proxies the <code>.test</code> host to the dev server, so the frontend behaves like a real site — cookies and all.</p>
+        <pre><span class="c"># typical project settings</span>
+Start command   npm run dev
+Port            5173
+Domain          app.test</pre>
+        <p class="muted">If the dev server binds to <code>127.0.0.1</code> only, keep the proxy target on localhost. Binding to <code>0.0.0.0</code> is only needed for LAN access.</p>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">04 — Data</span>
+        <h2>Move a database without leaving the app</h2>
+        <p>Exports are plain dumps, so the result works anywhere — another project, another engine, another machine.</p>
+        <pre><span class="c"># export from the Databases screen, then:</span>
+mysql -u root -p shop &lt; shop-2026-11-01.sql
+
+<span class="c"># or restore gzipped dumps the same way</span>
+gunzip &lt; shop.sql.gz | mysql -u root -p shop</pre>
+        <p class="muted">Import progress is tracked in the UI, and a failed import reports the first statement that broke.</p>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">05 — Sharing</span>
+        <h2>Send a working preview for an hour</h2>
+        <p>Enable sharing on a single project. A tunnel is created for that host, and local URLs are rewritten so links and cookies keep working for whoever opens it.</p>
+        <pre><span class="c"># what the recipient gets</span>
+https://random-words.trycloudflare.com</pre>
+        <p class="muted">Turn the toggle off when the review is done. Tunnels are for previews, not for hosting.</p>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">06 — Deployment</span>
+        <h2>Prepare a project for a Windows server</h2>
+        <p>Switch the project to <strong>Production</strong> mode before you copy it. The generated configuration becomes stricter and the runtime gets faster.</p>
+        <ul style="margin-top:0.8rem;display:grid;gap:0.5rem;">
+          <li>Environment values are forced to production and debug output is disabled.</li>
+          <li>OPcache and JIT are enabled; output buffering is tuned.</li>
+          <li>Queue workers start with retry limits and crash backoff.</li>
+          <li>A scheduled task can run <code>schedule:run</code> every minute without a console window.</li>
+        </ul>
+        <pre><span class="c"># verify the production configuration on the server</span>
+php artisan about
+php artisan schedule:list</pre>
+      </article>
+
+      <article class="card animate-in">
+        <span class="kicker">07 — Maintenance</span>
+        <h2>Update a runtime without losing settings</h2>
+        <p>In-place updates keep custom ini directives, PHP extensions, CA certificates and global npm packages. Services and workers holding file locks are stopped first, then restarted.</p>
+        <pre><span class="c"># after an update, confirm the version the project sees</span>
+php -v
+node -v
+npm -v</pre>
+      </article>
+
+      <article class="card animate-in" id="troubleshooting">
+        <span class="kicker">08 — Troubleshooting</span>
+        <h2>When something does not behave</h2>
+        <div class="table-wrap" style="margin-top:1.2rem;">
+          <table>
+            <thead>
+              <tr>
+                <th>Symptom</th>
+                <th>Usual cause</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>.test</code> domain unreachable</td>
+                <td>Hosts entry missing or browser cache</td>
+                <td>Re-apply the domain from the project screen, restart the browser</td>
+              </tr>
+              <tr>
+                <td>502 from the web server</td>
+                <td>PHP-CGI is not running for that project</td>
+                <td>Stop and start the project; check the project log</td>
+              </tr>
+              <tr>
+                <td>Port already in use</td>
+                <td>Another server owns 80 or 443</td>
+                <td>Let MyLocalDev reassign the port, or stop the other server</td>
+              </tr>
+              <tr>
+                <td>Certificate warning</td>
+                <td>Local CA not trusted</td>
+                <td>Trust the certificate authority again from settings</td>
+              </tr>
+              <tr>
+                <td>Database refuses the login</td>
+                <td>Credentials changed after the project was created</td>
+                <td>Update the stored database user/password, then re-save the project environment</td>
+              </tr>
+              <tr>
+                <td>Runtimes not detected</td>
+                <td>Folder moved or antivirus quarantine</td>
+                <td>Re-scan from <strong>Binaries</strong>; reinstall the affected version</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
     </div>
   </section>
 
-  <section class="section" style="padding-top:0; padding-bottom:var(--space-2xl);">
-    <div class="container" style="max-width:900px;">
-      <div class="callout callout-info animate-in" style="margin:0 auto;">
-        <span class="callout-icon">💡</span>
-        <p><strong>Deployment Profiles:</strong> MyLocalDev supports both <strong>Local Mode</strong> (optimized for rapid development and active debugging) and <strong>Production Mode</strong> (hardened security, OPcache, and Windows Task Scheduler integration for hosting client applications).</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Laravel ============ -->
-  <section class="section" id="guide-laravel">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🚀 Creating a Laravel Project</h2>
-        <p>Laravel is one of the most popular PHP frameworks. Here's how to set one up.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Make sure PHP and Composer are downloaded</h3>
-            <p>Open <strong>Binary Manager</strong> and ensure you have at least one PHP version (8.2 or higher recommended) and Composer downloaded.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Click "+ New Project"</h3>
-            <p>On the Dashboard, click the <strong>"+ New Project"</strong> button. In the dialog:</p>
-            <ul style="list-style:none; padding:0; margin-top:var(--space-sm); color:var(--text-secondary);">
-              <li style="padding:3px 0;">• Set <strong style="color:var(--text-primary);">Project Type</strong> to <strong>"Laravel"</strong></li>
-              <li style="padding:3px 0;">• Choose a folder for your project</li>
-              <li style="padding:3px 0;">• Select your PHP version (e.g., PHP 8.4)</li>
-              <li style="padding:3px 0;">• Set your domain (e.g., <code>mylaravel.test</code>)</li>
-              <li style="padding:3px 0;">• Enable MySQL or MariaDB if your app needs a database</li>
-            </ul>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Wait for installation</h3>
-            <p>MyLocalDev will automatically run Composer to install Laravel, generate your app key, install npm dependencies, and create a database. You'll see real-time progress.</p>
-            <div class="screenshot-wrap">
-              <img src="images/shots/create-project.png" alt="MyLocalDev new project wizard">
-              <div class="screenshot-caption">Pick a framework, PHP version and services for a new project</div>
-            </div>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Start and visit your project</h3>
-            <p>Click <strong>"Start"</strong> on the project card, then open <code>https://mylaravel.test</code> in your browser. You should see the Laravel welcome page!</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ Guide: WordPress ============ -->
-  <section class="section section-alt" id="guide-wordpress">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>📝 Setting Up WordPress</h2>
-        <p>Create a local WordPress site for development and testing.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Create a new WordPress project</h3>
-            <p>Click <strong>"+ New Project"</strong> and set the type to <strong>"WordPress"</strong>. Choose PHP 8.2 or 8.3 (WordPress works best with these). Enable MySQL and set your domain (e.g., <code>myblog.test</code>).</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Wait for download</h3>
-            <p>MyLocalDev downloads the latest WordPress automatically and creates your database.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Run the WordPress installer</h3>
-            <p>Start the project, then open <code>https://myblog.test</code>. WordPress will show its famous 5-minute installation wizard. Fill in your site title, username, and password.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Start building!</h3>
-            <p>Your WordPress admin panel is at <code>https://myblog.test/wp-admin</code>. Install themes, add plugins, and customize your site — all running locally on your computer.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Node.js ============ -->
-  <section class="section" id="guide-nodejs">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🟢 Creating a Node.js Project</h2>
-        <p>Set up an Express, Next.js, or any Node.js application.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Download Node.js</h3>
-            <p>Open <strong>Binary Manager</strong> and download the Node.js version you want (Node.js 24 LTS is recommended).</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Create a Node.js project</h3>
-            <p>Click <strong>"+ New Project"</strong> and set the type to <strong>"Node.js"</strong>. Choose your Node.js version and domain. MyLocalDev will configure Nginx to reverse proxy requests to your Node.js app.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Start your app</h3>
-            <p>Use the built-in terminal or any external terminal to run your app's start command (e.g., <code>npm run dev</code>). Visit <code>https://myapp.test</code> to see it in action.</p>
-          </div>
-        </li>
-      </ol>
-
-      <div class="callout callout-tip animate-in">
-        <span class="callout-icon">💡</span>
-        <p><strong>Tip:</strong> When you create a Node.js project, MyLocalDev sets up the reverse proxy automatically so your Node.js app is accessible via a <code>.test</code> domain — just like PHP projects.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Database ============ -->
-  <section class="section section-alt" id="guide-database">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>💾 Managing Databases</h2>
-        <p>Create, import, export, and browse your databases.</p>
-      </div>
-
-      <div class="animate-in">
-        <h3 style="margin-bottom:var(--space-md);">Creating a Database</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          Go to the <strong style="color:var(--text-primary);">Databases</strong> page in the sidebar. Click <strong style="color:var(--text-primary);">"+ Create Database"</strong>, enter a name, and choose which database server to use (MySQL, MariaDB, or PostgreSQL). The database is created instantly.
-        </p>
-
-        <h3 style="margin-bottom:var(--space-md);">Importing Data</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          If you have an existing database backup (a <code>.sql</code> or <code>.sql.gz</code> file), click the <strong style="color:var(--text-primary);">import</strong> button next to a database. Choose your file and MyLocalDev will import it with a progress bar for large files.
-        </p>
-
-        <h3 style="margin-bottom:var(--space-md);">Exporting a Backup</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          Click the <strong style="color:var(--text-primary);">export</strong> button next to any database to download a backup. You can choose to compress it as a <code>.gz</code> file to save space.
-        </p>
-
-        <h3 style="margin-bottom:var(--space-md);">Using phpMyAdmin</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-md);">
-          For a visual way to browse tables and run queries, start <strong style="color:var(--text-primary);">phpMyAdmin</strong> from the Services panel. It will open in your browser at <code>http://localhost:8080</code>. Log in with username <code>root</code> and no password.
-        </p>
-
-        <div class="screenshot-wrap">
-          <img src="images/shots/databases.png" alt="Database management interface">
-          <div class="screenshot-caption">The database management interface — create, import, and export with ease</div>
+  <section>
+    <div class="container">
+      <div class="cta-band animate-in">
+        <h2>Something still stuck?</h2>
+        <p>Open an issue with the project log attached — it usually contains the answer already.</p>
+        <div class="btn-group" style="justify-content:center;">
+          <a href="https://github.com/playpixelpro/mylocaldev/issues" class="btn btn-primary" target="_blank" rel="noopener">Open an issue</a>
+          <a href="faq.html" class="btn btn-secondary">Read the FAQ</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Guide: SSL ============ -->
-  <section class="section" id="guide-ssl">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🔒 Setting Up SSL (HTTPS)</h2>
-        <p>Get secure HTTPS working for your local projects.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>SSL is automatic</h3>
-            <p>When you create a project, MyLocalDev automatically generates an SSL certificate for your <code>.test</code> domain. No action needed from you.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Trust the certificate (one time)</h3>
-            <p>The first time you use HTTPS, your browser may show a security warning because the certificate is self-signed (generated on your computer, not by a company like Let's Encrypt). To fix this:</p>
-            <ul style="list-style:none; padding:0; margin-top:var(--space-sm); color:var(--text-secondary);">
-              <li style="padding:3px 0;">1. Go to <strong style="color:var(--text-primary);">Settings</strong> in MyLocalDev</li>
-              <li style="padding:3px 0;">2. Click <strong style="color:var(--text-primary);">"Trust SSL Certificate"</strong></li>
-              <li style="padding:3px 0;">3. Approve the Windows administrator prompt</li>
-              <li style="padding:3px 0;">4. Restart your browser</li>
-            </ul>
-            <p style="margin-top:var(--space-sm);">After this, all your <code>.test</code> domains will show a green padlock — no more warnings!</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Terminal ============ -->
-  <section class="section section-alt" id="guide-terminal">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>💻 Using Terminal Commands</h2>
-        <p>Run PHP, npm, and database commands from any terminal.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Enable the CLI tool</h3>
-            <p>Go to <strong>Settings → CLI Tool</strong> in MyLocalDev and toggle on <strong>"Terminal commands"</strong>.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Restart your terminal</h3>
-            <p>Close and reopen your terminal (VS Code, PowerShell, or Windows Terminal) so it picks up the new commands.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Navigate to a project &amp; run commands</h3>
-            <p>Use <code>cd</code> to enter a project folder, then use commands as normal:</p>
-            <div class="code-block">
-cd C:\Projects\my-app<br>
-php artisan migrate<br>
-composer install<br>
-npm run dev<br>
-mysql -u root
-            </div>
-            <p style="margin-top:var(--space-sm);">MyLocalDev automatically detects your project and uses the correct PHP/Node.js version.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Internet Sharing ============ -->
-  <section class="section" id="guide-internet-sharing">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🌍 Sharing a Project on the Internet</h2>
-        <p>Expose a local project publicly with Cloudflare Tunnel or zrok.</p>
-      </div>
-
-      <ol class="steps animate-in">
-        <li class="step-item">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Install a tunnel provider</h3>
-            <p>Open <strong>Binary Manager</strong>, go to <strong>Tools</strong>, and download <strong>Cloudflare Tunnel</strong> or <strong>zrok</strong>. If you choose zrok, complete the one-time app-wide enable step after installation.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Enable Share on Internet for the project</h3>
-            <p>Open the project detail page and toggle on <strong>"Share on Internet"</strong>. In the <strong>Public Tunnel</strong> panel, choose <strong>Cloudflare Tunnel</strong> or <strong>zrok</strong>.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Start the project and publish it</h3>
-            <p>Start the project if it is not already running, then click <strong>"Start Sharing"</strong>. MyLocalDev will create a public URL that you can open or send to others.</p>
-          </div>
-        </li>
-        <li class="step-item">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Use auto-start if needed</h3>
-            <p>Enable <strong>"Auto-start tunnel"</strong> if the project should automatically publish whenever it starts.</p>
-          </div>
-        </li>
-      </ol>
-
-      <div class="callout callout-info animate-in">
-        <span class="callout-icon">💡</span>
-        <p><strong>Tunnel note:</strong> Public tunnels (Cloudflare / zrok) provide rapid previews and remote QA review. For hosting client apps directly on your Windows server, configure your domain to point to your machine with MyLocalDev set to <strong>Production Mode</strong>.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Network Sharing ============ -->
-  <section class="section" id="guide-sharing">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🌐 Sharing on Your Local Network</h2>
-        <p>Let others on your Wi-Fi network see your project.</p>
-      </div>
-
-      <div class="animate-in">
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          This is useful for testing your website on a phone, tablet, or another computer connected to the same network (Wi-Fi).
-        </p>
-
-        <ol class="steps">
-          <li class="step-item">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h3>Enable network sharing</h3>
-              <p>Open your project in MyLocalDev and toggle on <strong>"Share on Local Network"</strong>.</p>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h3>Find your IP address</h3>
-              <p>MyLocalDev will display your computer's IP address (something like <code>192.168.1.100</code>).</p>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h3>Open on another device</h3>
-              <p>On your phone or another computer, open a browser and go to <code>http://192.168.1.100</code> (using the IP shown in MyLocalDev). You'll see your project!</p>
-            </div>
-          </li>
-        </ol>
-
-        <div class="callout callout-warning" style="margin-top:var(--space-xl);">
-          <span class="callout-icon">⚠️</span>
-          <p><strong>Note:</strong> Windows Firewall may block incoming connections. If the other device can't connect, check that MyLocalDev is allowed through the firewall.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Importing Projects ============ -->
-  <section class="section section-alt" id="guide-import">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>📥 Importing an Existing Project</h2>
-        <p>Bring your existing codebase into MyLocalDev.</p>
-      </div>
-
-      <div class="animate-in">
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          If you already have a project directory, you don't need to create a new project. You can import it directly.
-        </p>
-
-        <ol class="steps">
-          <li class="step-item">
-            <div class="step-number">1</div>
-            <div class="step-content">
-              <h3>Click "Import Project"</h3>
-              <p>On the Dashboard or Projects tab, click the <strong>"Import"</strong> option next to the New Project button.</p>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-number">2</div>
-            <div class="step-content">
-              <h3>Select your folder</h3>
-              <p>Choose the directory where your existing project is located. MyLocalDev will auto-detect the project type (Laravel, Node.js, etc.).</p>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-number">3</div>
-            <div class="step-content">
-              <h3>Configure Services</h3>
-              <p>Set your desired PHP/Node.js version, assign a <code>.test</code> domain, and enable any databases you need. Click Import, and your project is ready to go!</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Project Details ============ -->
-  <section class="section" id="guide-project-details">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>🛠️ Managing a Project</h2>
-        <p>Explore the features inside the Project Details page.</p>
-      </div>
-
-      <div class="animate-in">
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          When you click on a project card from the Dashboard or Projects list, you'll enter the <strong style="color:var(--text-primary);">Project Details</strong> page. This page gives you granular control over the project through several tabs:
-        </p>
-
-        <!-- Overview Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">1. Overview</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-md);">
-          The central command center for your project:
-        </p>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>Web Server & PHP/Node Version:</strong> Change the assigned framework versions or switch between Nginx/Apache on the fly.</li>
-          <li style="padding:4px 0;">• <strong>Services:</strong> Toggle specific databases (MySQL, PostgreSQL, MongoDB, etc.) or caching layers (Redis, Memcached) exclusively for this project.</li>
-          <li style="padding:4px 0;">• <strong>Domains & Network:</strong> Add custom domain aliases, change the document root folder, enable <code>Share on Local Network</code>, or turn on <code>Share on Internet</code> to publish a temporary tunnel URL.</li>
-        </ul>
-
-        <!-- Terminal Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">2. Terminal</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          A fully featured, built-in command line interface that automatically opens in your project's folder. Run <code>npm install</code>, <code>composer update</code>, or <code>php artisan</code> commands directly inside MyLocalDev without opening a separate terminal window.
-        </p>
-
-        <!-- Logs Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">3. Logs</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          View real-time, consolidated logs for the project. Includes access logs, error logs, and output from any running Node.js process. You can toggle auto-refresh to watch logs stream in live as you develop.
-        </p>
-
-        <!-- Workers Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">4. Workers & Scheduled Tasks</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          Manage background processes using the built-in Supervisor integration. Add persistent background workers like Laravel Queue workers, Horizon, or any custom long-running scripts (e.g., <code>php artisan queue:work</code>). In Production Mode, queue workers automatically scale to multiple processes with retries, memory caps, and crash protection. MyLocalDev also integrates natively with <strong>Windows Task Scheduler</strong> to run Laravel cron schedules silently in the background every minute.
-        </p>
-
-        <!-- Environment Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">5. Environment</h3>
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          A built-in editor for your project's <code>.env</code> file. Easily update connection strings, api keys, and environment variables without needing to open your code editor.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Guide: Settings ============ -->
-  <section class="section" id="guide-settings">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>⚙️ Configuring Settings</h2>
-        <p>Complete guide to MyLocalDev's preferences and configuration.</p>
-      </div>
-
-      <div class="animate-in">
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-lg);">
-          MyLocalDev is highly customizable. The <strong style="color:var(--text-primary);">Settings</strong> page is divided into 5 major tabs:
-        </p>
-
-        <!-- General Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">1. General</h3>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>Projects:</strong> Set the default folder where new projects are created and choose your preferred local Top-Level Domain (TLD) like <code>.test</code> or <code>.local</code>.</li>
-          <li style="padding:4px 0;">• <strong>Startup:</strong> Choose whether MyLocalDev opens automatically when you log into your computer.</li>
-          <li style="padding:4px 0;">• <strong>Default Editor:</strong> Select your preferred code editor (VS Code, Cursor, PhpStorm, etc.) to quickly open project directories directly from the app.</li>
-        </ul>
-
-        <!-- CLI Tool Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">2. CLI Tool</h3>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>Terminal Commands:</strong> Enable global shims so you can use commands like <code>php</code>, <code>npm</code>, <code>node</code>, <code>composer</code>, and <code>mysql</code> directly from any external terminal. MyLocalDev natively intercepts these and routes them to the correct local version based on what folder you are in.</li>
-          <li style="padding:4px 0;">• <strong>Default Versions:</strong> Set the fallback PHP and Node.js versions to use when you type terminal commands outside of a known project directory.</li>
-        </ul>
-
-        <!-- Network Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">3. Network</h3>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>Database Credentials:</strong> Configure the universal username/password for MySQL, MariaDB, and PostgreSQL. Changing these restarts the databases automatically to apply the new credentials.</li>
-          <li style="padding:4px 0;">• <strong>Server Timezone:</strong> Synchronize the timezone configuration for PHP and database engines.</li>
-          <li style="padding:4px 0;">• <strong>Port Configuration:</strong> Easily re-map the default ports for databases, object, and caching services if they conflict with software you already have installed.</li>
-          <li style="padding:4px 0;">• <strong>SSL:</strong> Choose if new projects should be generated with valid HTTPS certificates by default.</li>
-        </ul>
-
-        <!-- Appearance Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">4. Appearance</h3>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>Theme:</strong> Force Light mode, Dark mode, or follow your System settings.</li>
-          <li style="padding:4px 0;">• <strong>Accent Color & Textures:</strong> Tailor the primary UI color and background pattern of the app to your liking.</li>
-          <li style="padding:4px 0;">• <strong>Dark Mode Surface:</strong> Fine-tune the tint and contrast levels of dark mode components.</li>
-        </ul>
-
-        <!-- Advanced Tab -->
-        <h3 style="margin-bottom:var(--space-sm);">5. Advanced</h3>
-        <ul style="list-style:none; padding:0; margin-bottom:var(--space-lg); color:var(--text-secondary);">
-          <li style="padding:4px 0;">• <strong>App Updates & Rollbacks:</strong> Check for MyLocalDev client updates, or safely roll back to a previous version if an update causes issues.</li>
-          <li style="padding:4px 0;">• <strong>Cloud Updates:</strong> Pull the latest compatibility rules and binary definitions catalog straight from the cloud without updating the core app.</li>
-          <li style="padding:4px 0;">• <strong>Data Management:</strong> Review the raw App Data path, or perform a total factory reset (Clear All Data), which can wipe databases and projects if requested.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Footer ============ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-brand">
-            <img src="images/logo.png" alt="MyLocalDev logo">
-            MyLocalDev
-          </a>
-          <p>Your all-in-one local development environment for PHP &amp; Node.js. Run any version, build any project.</p>
+        <div>
+          <div class="footer-brand">
+            <img src="images/logo.png" alt="">
+            <span>MyLocalDev</span>
+          </div>
+          <p style="max-width:22rem;font-size:0.92rem;">
+            A desktop control panel for versioned PHP, Node and database runtimes on one machine.
+          </p>
+          <p class="muted">MIT licensed. Source available on GitHub.</p>
         </div>
-        <div class="footer-col">
-          <h4>Documentation</h4>
+        <div>
+          <h4>Product</h4>
           <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
             <li><a href="features.html">Features</a></li>
-            <li><a href="services.html">Services</a></li>
+            <li><a href="services.html">Runtimes</a></li>
+            <li><a href="getting-started.html">Installation</a></li>
             <li><a href="guides.html">Guides</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
+        <div>
+          <h4>Project</h4>
           <ul>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank">Downloads</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">Repository</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank" rel="noopener">Releases</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank" rel="noopener">Report a bug</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank" rel="noopener">Discussions</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Support</h4>
+        <div>
+          <h4>Help</h4>
           <ul>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Report a Bug</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank">Discussions</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Support</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html#requirements">Requirements</a></li>
+            <li><a href="guides.html#troubleshooting">Troubleshooting</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 MyLocalDev. Made with ❤️ for PHP &amp; Node.js developers.</p>
+        <span>&copy; 2026 PlayPixelPro. All rights reserved.</span>
+        <span>Built for Windows desktops.</span>
       </div>
     </div>
   </footer>

@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services &amp; Binaries — MyLocalDev</title>
-  <meta name="description" content="Complete reference of all services bundled with MyLocalDev: PHP, Node.js, MySQL, MariaDB, PostgreSQL, MongoDB, Redis, Nginx, Apache, and more with version tables and port numbers.">
+  <title>Runtimes &amp; versions — MyLocalDev</title>
+  <meta name="description" content="Supported PHP, Node.js, Python, database, cache and web server versions, with default ports and how multiple versions coexist.">
   <link rel="icon" href="images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ============ Navbar ============ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-brand">
@@ -22,490 +21,240 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="features.html">Features</a></li>
-        <li><a href="services.html" class="active">Services</a></li>
+        <li><a href="services.html" class="active">Runtimes</a></li>
+        <li><a href="getting-started.html">Get started</a></li>
         <li><a href="guides.html">Guides</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
-        <li style="display:flex; align-items:center;">
-          <iframe src="https://ghbtns.com/github-btn.html?user=playpixelpro&repo=mylocaldev&type=star&count=true" frameborder="0" scrolling="0" width="100" height="20" title="GitHub"></iframe>
-        </li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank">Download Setup</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank" rel="noopener">Download</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ============ Hero ============ -->
-  <section class="page-hero">
+  <header class="page-hero">
     <div class="container">
-      <h1 class="animate-in">
-        <span class="gradient-text">Services &amp; Binaries</span>
-      </h1>
-      <p class="subtitle animate-in">
-        A complete reference of every tool and service bundled with MyLocalDev — with versions, descriptions, and default ports.
-      </p>
+      <span class="eyebrow">Runtimes</span>
+      <h1>Supported versions, <span class="gradient-text">without the guesswork</span></h1>
+      <p>Download only what a project needs. Everything else stays off your disk.</p>
     </div>
-  </section>
+  </header>
 
-  <!-- ============ Overview ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>What Are Services?</h2>
-        <p>Services are the behind-the-scenes programs that power your websites and applications.</p>
-      </div>
 
-      <div class="animate-in" style="max-width:800px; margin:0 auto;">
-        <p style="color:var(--text-secondary); line-height:1.8; margin-bottom:var(--space-md);">
-          When you visit a website, many programs work together: a <strong style="color:var(--text-primary);">web server</strong> handles the page request, a <strong style="color:var(--text-primary);">programming language</strong> generates the content, and a <strong style="color:var(--text-primary);">database</strong> stores the data. MyLocalDev bundles all of these so they run right on your computer.
-        </p>
-        <p style="color:var(--text-secondary); line-height:1.8;">
-          You don't need to understand every service — MyLocalDev configures them automatically when you create a project. This page is here as a reference if you'd like to know what's available.
-        </p>
+      <div class="section-head">
+        <span class="kicker">Languages</span>
+        <h2>PHP, Node.js and Python</h2>
+        <p>Each version is a separate install with its own extensions, ini file and global packages.</p>
       </div>
-
-      <div class="screenshot-wrap animate-in" style="max-width:800px; margin:var(--space-2xl) auto 0;">
-        <img src="images/shots/services.png" alt="Services panel showing running services with status indicators">
-        <div class="screenshot-caption">The Services panel — start and stop each service independently</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Programming Languages ============ -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>🐘 Programming Languages</h2>
-        <p>The languages your projects are written in.</p>
-      </div>
-
-      <!-- PHP -->
-      <div class="animate-in" style="margin-bottom:var(--space-3xl);">
-        <h3 style="margin-bottom:var(--space-lg);">PHP</h3>
-        <p style="color:var(--text-secondary); margin-bottom:var(--space-lg); max-width:700px;">
-          PHP powers popular frameworks like Laravel, WordPress, and Symfony. MyLocalDev lets you run <strong style="color:var(--text-primary);">multiple PHP versions simultaneously</strong> — each project can use a different version.
-        </p>
-        <table class="version-table">
+      <div class="table-wrap animate-in">
+        <table>
           <thead>
-            <tr><th>Version</th><th>Status</th><th>Notes</th></tr>
+            <tr>
+              <th>Runtime</th>
+              <th>Versions</th>
+              <th>Notes</th>
+            </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>PHP 8.5</strong></td>
-              <td><span class="badge badge-latest">Latest</span></td>
-              <td>Newest release with cutting-edge features</td>
+              <td><strong>PHP</strong></td>
+              <td>7.4 · 8.0 · 8.1 · 8.2 · 8.3 · 8.4 · 8.5</td>
+              <td>Extensions and <code>php.ini</code> editable per version; OPcache and JIT available in production mode</td>
             </tr>
             <tr>
-              <td><strong>PHP 8.4</strong></td>
-              <td><span class="badge badge-latest">Active</span></td>
-              <td>Current stable release — recommended for new projects</td>
+              <td><strong>Node.js</strong></td>
+              <td>16 · 18 · 20 · 22 · 24</td>
+              <td>Each version ships npm and npx; global packages survive runtime updates</td>
             </tr>
             <tr>
-              <td><strong>PHP 8.3</strong></td>
-              <td><span class="badge badge-lts">Security Only</span></td>
-              <td>Receiving security updates only</td>
+              <td><strong>Python</strong></td>
+              <td>3.10 · 3.11 · 3.12 · 3.13</td>
+              <td>Useful for tooling and background scripts attached to a project</td>
             </tr>
             <tr>
-              <td><strong>PHP 8.2</strong></td>
-              <td><span class="badge badge-lts">Stable</span></td>
-              <td>Widely used, well-tested</td>
-            </tr>
-            <tr>
-              <td><strong>PHP 8.1</strong></td>
-              <td><span class="badge badge-lts">Stable</span></td>
-              <td>Mature release with good compatibility</td>
-            </tr>
-            <tr>
-              <td><strong>PHP 8.0</strong></td>
-              <td><span class="badge badge-legacy">Legacy</span></td>
-              <td>For older projects only — no longer receiving updates</td>
-            </tr>
-            <tr>
-              <td><strong>PHP 7.4</strong></td>
-              <td><span class="badge badge-legacy">Legacy</span></td>
-              <td>For legacy applications — end of life</td>
+              <td><strong>SQLite</strong></td>
+              <td>3</td>
+              <td>Embedded engine — no port, no daemon</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Node.js -->
-      <div class="animate-in">
-        <h3 style="margin-bottom:var(--space-lg);">Node.js</h3>
-        <p style="color:var(--text-secondary); margin-bottom:var(--space-lg); max-width:700px;">
-          Node.js runs JavaScript outside the browser. It's used for frameworks like Next.js, Express, Nuxt, and for front-end build tools like npm and Vite.
-        </p>
-        <table class="version-table">
+      <div class="section-head" style="margin-top:3rem;">
+        <span class="kicker">Web servers</span>
+        <h2>Nginx, Apache, or both</h2>
+        <p>The first server started claims 80 and 443; the other is proxied behind it automatically.</p>
+      </div>
+      <div class="table-wrap animate-in">
+        <table>
           <thead>
-            <tr><th>Version</th><th>Status</th><th>Notes</th></tr>
+            <tr>
+              <th>Server</th>
+              <th>Versions</th>
+              <th>Default ports</th>
+            </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Node.js 24</strong></td>
-              <td><span class="badge badge-lts">LTS</span></td>
-              <td>Current Long-Term Support — recommended</td>
+              <td><strong>Nginx</strong></td>
+              <td>1.24 · 1.26 · 1.28</td>
+              <td>80 / 443</td>
             </tr>
             <tr>
-              <td><strong>Node.js 22</strong></td>
-              <td><span class="badge badge-lts">Maintenance LTS</span></td>
-              <td>Stable, widely used</td>
-            </tr>
-            <tr>
-              <td><strong>Node.js 20</strong></td>
-              <td><span class="badge badge-lts">Maintenance LTS</span></td>
-              <td>End of life April 2026</td>
-            </tr>
-            <tr>
-              <td><strong>Node.js 18</strong></td>
-              <td><span class="badge badge-legacy">Legacy (EOL)</span></td>
-              <td>For older projects only</td>
-            </tr>
-            <tr>
-              <td><strong>Node.js 16</strong></td>
-              <td><span class="badge badge-legacy">Legacy</span></td>
-              <td>For legacy applications</td>
+              <td><strong>Apache</strong></td>
+              <td>2.4</td>
+              <td>80 / 443 when it owns the front door, otherwise 8081 / 8444</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Python -->
-      <div class="animate-in" style="margin-top:var(--space-3xl);">
-        <h3 style="margin-bottom:var(--space-lg);">Python</h3>
-        <p style="color:var(--text-secondary); margin-bottom:var(--space-lg); max-width:700px;">
-          Python is available for scripting, automation, and projects that require it.
-        </p>
-        <table class="version-table">
+      <div class="section-head" style="margin-top:3rem;">
+        <span class="kicker">Databases</span>
+        <h2>Relational, document, embedded</h2>
+        <p>One version active per engine at a time; data directories are version-specific, so switching never migrates silently.</p>
+      </div>
+      <div class="table-wrap animate-in">
+        <table>
           <thead>
-            <tr><th>Version</th><th>Status</th></tr>
+            <tr>
+              <th>Engine</th>
+              <th>Versions</th>
+              <th>Base port</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td><strong>Python 3.13</strong></td><td><span class="badge badge-latest">Latest</span></td></tr>
-            <tr><td><strong>Python 3.12</strong></td><td><span class="badge badge-lts">LTS</span></td></tr>
-            <tr><td><strong>Python 3.11</strong></td><td><span class="badge badge-lts">Stable</span></td></tr>
-            <tr><td><strong>Python 3.10</strong></td><td><span class="badge badge-legacy">Legacy</span></td></tr>
+            <tr><td><strong>MySQL</strong></td><td>5.7 · 8.0 · 8.4</td><td>3306</td></tr>
+            <tr><td><strong>MariaDB</strong></td><td>10.6 · 10.11 · 11.4</td><td>3310</td></tr>
+            <tr><td><strong>PostgreSQL</strong></td><td>14 · 15 · 16 · 17</td><td>5432</td></tr>
+            <tr><td><strong>MongoDB</strong></td><td>6.0 · 7.0 · 8.0</td><td>27017</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
-  </section>
 
-  <!-- ============ Web Servers ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>🌐 Web Servers</h2>
-        <p>The software that serves your web pages to browsers.</p>
+      <div class="section-head" style="margin-top:3rem;">
+        <span class="kicker">Cache, storage and mail</span>
+        <h2>The services most projects end up needing</h2>
+      </div>
+      <div class="table-wrap animate-in">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Versions</th>
+              <th>Ports</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Redis</strong></td><td>6.2 · 7.2 · 7.4</td><td>6379</td></tr>
+            <tr><td><strong>Memcached</strong></td><td>1.6</td><td>11211</td></tr>
+            <tr><td><strong>MinIO</strong></td><td>Latest (S3-compatible)</td><td>9000 API · 9001 console</td></tr>
+            <tr><td><strong>Mailpit</strong></td><td>Latest</td><td>1025 SMTP · 8025 web</td></tr>
+            <tr><td><strong>phpMyAdmin</strong></td><td>Latest</td><td>8080</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="grid-2 animate-in" style="max-width:900px; margin:0 auto;">
-        <div class="card">
-          <div class="card-icon">⚡</div>
-          <h3>Nginx</h3>
-          <p>Fast and lightweight. <strong>Recommended</strong> for most projects. Uses very little memory.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>Nginx 1.28</td><td><span class="badge badge-latest">Stable</span></td></tr>
-              <tr><td>Nginx 1.26</td><td><span class="badge badge-lts">Previous Stable</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <div class="card-icon">🪶</div>
-          <h3>Apache</h3>
-          <p>Best when your project uses <code>.htaccess</code> files. Full mod_rewrite support included.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>Apache 2.4</td><td><span class="badge badge-lts">Stable</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="section-head" style="margin-top:3rem;">
+        <span class="kicker">Tooling</span>
+        <h2>Composer and Git</h2>
+        <p>Both are managed like any other runtime: install once, use it from the built-in terminal and from project commands.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ============ Databases ============ -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>💾 Databases</h2>
-        <p>Where your applications store their data — users, posts, products, settings, etc.</p>
-      </div>
-
-      <div class="grid-2 animate-in">
-        <!-- MySQL -->
-        <div class="card">
-          <div class="card-icon">🐬</div>
-          <h3>MySQL</h3>
-          <p>The most popular database for web applications. Used by WordPress, Laravel, and countless other&nbsp;apps.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>MySQL 8.4</td><td><span class="badge badge-lts">LTS</span></td></tr>
-              <tr><td>MySQL 8.0</td><td><span class="badge badge-legacy">Legacy (EOL Apr 2026)</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- MariaDB -->
-        <div class="card">
-          <div class="card-icon">🦭</div>
-          <h3>MariaDB</h3>
-          <p>A community-driven alternative to MySQL. Fully compatible — you can use it as a drop-in replacement.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>MariaDB 11.4</td><td><span class="badge badge-latest">Latest</span></td></tr>
-              <tr><td>MariaDB 10.11</td><td><span class="badge badge-lts">LTS</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- PostgreSQL -->
-        <div class="card">
-          <div class="card-icon">🐘</div>
-          <h3>PostgreSQL</h3>
-          <p>A powerful, feature-rich database known for reliability. Popular with Rails, Django, and modern PHP apps.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>PostgreSQL 17</td><td><span class="badge badge-latest">Latest</span></td></tr>
-              <tr><td>PostgreSQL 16</td><td><span class="badge badge-lts">LTS</span></td></tr>
-              <tr><td>PostgreSQL 15</td><td><span class="badge badge-lts">Stable</span></td></tr>
-              <tr><td>PostgreSQL 14</td><td><span class="badge badge-legacy">Legacy</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- MongoDB -->
-        <div class="card">
-          <div class="card-icon">🍃</div>
-          <h3>MongoDB</h3>
-          <p>A document-based (NoSQL) database that stores data as JSON-like documents instead of traditional tables.</p>
-          <table class="version-table" style="margin-top:var(--space-md);">
-            <tbody>
-              <tr><td>MongoDB 8.0</td><td><span class="badge badge-latest">Latest</span></td></tr>
-              <tr><td>MongoDB 7.0</td><td><span class="badge badge-lts">LTS</span></td></tr>
-              <tr><td>MongoDB 6.0</td><td><span class="badge badge-legacy">Legacy</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="grid-2 animate-in" style="max-width:600px; margin:var(--space-xl) auto 0;">
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg);">📄</div>
-          <h3>SQLite 3</h3>
-          <p>Embedded, file-based database. No separate server needed — just include it.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg);">🔍</div>
-          <h3>phpMyAdmin</h3>
-          <p>A web-based tool for browsing and managing MySQL and MariaDB databases visually.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Caching & Other ============ -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>⚡ Caching &amp; Other Services</h2>
-        <p>Speed up your apps and test emails locally.</p>
-      </div>
-
-      <div class="grid-4 animate-in">
-        <div class="card service-card">
-          <div class="card-icon">🔴</div>
-          <h3>Redis</h3>
-          <p>In-memory cache and session storage. Makes your apps faster.</p>
-          <p style="margin-top:var(--space-sm);"><span class="badge badge-latest">7.4</span> <span class="badge badge-lts">7.2</span></p>
-        </div>
-        <div class="card service-card">
-          <div class="card-icon">🧊</div>
-          <h3>Memcached</h3>
-          <p>High-performance caching for frequently accessed data.</p>
-          <p style="margin-top:var(--space-sm);"><span class="badge badge-lts">1.6</span></p>
-        </div>
-        <div class="card service-card">
-          <div class="card-icon">📧</div>
-          <h3>Mailpit</h3>
-          <p>Catches all emails sent by your app. Perfect for testing without sending real emails.</p>
-          <p style="margin-top:var(--space-sm);"><span class="badge badge-latest">Latest</span></p>
-        </div>
-        <div class="card service-card">
-          <div class="card-icon">📦</div>
-          <h3>MinIO</h3>
-          <p>S3-compatible object storage. Test file uploads without using Amazon AWS.</p>
-          <p style="margin-top:var(--space-sm);"><span class="badge badge-latest">Latest</span></p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ Tools ============ -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>🛠️ Development Tools</h2>
-        <p>Extra tools that help with development workflows.</p>
-      </div>
-
-      <div class="grid-3 animate-in" style="max-width:900px; margin:0 auto;">
-        <div class="card service-card">
-          <div class="card-icon">🎼</div>
+      <div class="cards two animate-in">
+        <article class="card">
+          <div class="icon">◧</div>
           <h3>Composer</h3>
-          <p>PHP's package manager. Install libraries and frameworks with <code>composer install</code>.</p>
-        </div>
-        <div class="card service-card">
-          <div class="card-icon">🔀</div>
+          <p>Installed next to your PHP builds so dependencies resolve against the version the project actually uses.</p>
+          <ul>
+            <li>Works from the GUI and the CLI</li>
+            <li>Can be imported manually as a phar</li>
+            <li>Updates independently of PHP</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="icon">⑂</div>
           <h3>Git</h3>
-          <p>Version control system. Clone repos and manage code history.</p>
-        </div>
-        <div class="card service-card">
-          <div class="card-icon">🐚</div>
-          <h3>mongosh</h3>
-          <p>MongoDB Shell for interacting with MongoDB databases from the command line.</p>
+          <p>Clone a repository straight into a project, with SSH keys generated and managed locally.</p>
+          <ul>
+            <li>HTTPS and SSH remotes</li>
+            <li>Public key copied in one click</li>
+            <li>Uses your system Git when present</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="callout info animate-in" style="margin-top:2.5rem;">
+        <div>
+          <strong>How ports stay predictable</strong>
+          <p>
+            Versions of the same engine are offset from its base port — MySQL 8.4 on 3306, 8.0 on
+            3307, 5.7 on 3308 — so two projects can talk to different builds at the same time.
+            Every project screen shows the exact port in use.
+          </p>
         </div>
       </div>
+
     </div>
   </section>
 
-  <!-- ============ Port Reference ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>📋 Default Ports</h2>
-        <p>Each service uses a specific port number. Here's the full reference.</p>
-      </div>
-
-      <div class="animate-in" style="max-width:700px; margin:0 auto;">
-        <div class="callout callout-info" style="margin-bottom:var(--space-xl);">
-          <span class="callout-icon">💡</span>
-          <p><strong>What's a port?</strong> Think of ports like channels on a TV. Each service uses a different channel (port number) so they don't interfere with each other. You don't need to memorize these — MyLocalDev handles them automatically.</p>
+      <div class="cta-band animate-in">
+        <h2>Only install what you actually use</h2>
+        <p>The default is an empty machine. Add a runtime the first time a project asks for it.</p>
+        <div class="btn-group" style="justify-content:center;">
+          <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank" rel="noopener">Download setup</a>
+          <a href="getting-started.html" class="btn btn-secondary">Installation guide</a>
         </div>
-
-        <table class="version-table port-table">
-          <thead>
-            <tr><th>Service</th><th>Default Port</th><th>Notes</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Nginx (HTTP)</strong></td>
-              <td>80</td>
-              <td>Main web traffic</td>
-            </tr>
-            <tr>
-              <td><strong>Nginx (HTTPS)</strong></td>
-              <td>443</td>
-              <td>Secure web traffic</td>
-            </tr>
-            <tr>
-              <td><strong>Apache (HTTP)</strong></td>
-              <td>80 or 8081</td>
-              <td>Falls back to 8081 if Nginx is using port 80</td>
-            </tr>
-            <tr>
-              <td><strong>MySQL</strong></td>
-              <td>3306</td>
-              <td>Standard MySQL port</td>
-            </tr>
-            <tr>
-              <td><strong>MariaDB</strong></td>
-              <td>3306 or 3307</td>
-              <td>Uses 3307 if MySQL is also running</td>
-            </tr>
-            <tr>
-              <td><strong>PostgreSQL</strong></td>
-              <td>5432</td>
-              <td>Standard PostgreSQL port</td>
-            </tr>
-            <tr>
-              <td><strong>MongoDB</strong></td>
-              <td>27017</td>
-              <td>Standard MongoDB port</td>
-            </tr>
-            <tr>
-              <td><strong>Redis</strong></td>
-              <td>6379</td>
-              <td>Standard Redis port</td>
-            </tr>
-            <tr>
-              <td><strong>Memcached</strong></td>
-              <td>11211</td>
-              <td>Standard Memcached port</td>
-            </tr>
-            <tr>
-              <td><strong>Mailpit (SMTP)</strong></td>
-              <td>1025</td>
-              <td>Email sending</td>
-            </tr>
-            <tr>
-              <td><strong>Mailpit (Web UI)</strong></td>
-              <td>8025</td>
-              <td>View caught emails in browser</td>
-            </tr>
-            <tr>
-              <td><strong>phpMyAdmin</strong></td>
-              <td>8080</td>
-              <td>Database management UI</td>
-            </tr>
-            <tr>
-              <td><strong>MinIO (API)</strong></td>
-              <td>9000</td>
-              <td>Object storage</td>
-            </tr>
-            <tr>
-              <td><strong>MinIO (Console)</strong></td>
-              <td>9001</td>
-              <td>MinIO management UI</td>
-            </tr>
-            <tr>
-              <td><strong>PHP Projects</strong></td>
-              <td>8000+</td>
-              <td>Auto-assigned per project</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </section>
 
-  <!-- ============ Footer ============ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-brand">
-            <img src="images/logo.png" alt="MyLocalDev logo">
-            MyLocalDev
-          </a>
-          <p>Your all-in-one local development environment for PHP &amp; Node.js. Run any version, build any project.</p>
+        <div>
+          <div class="footer-brand">
+            <img src="images/logo.png" alt="">
+            <span>MyLocalDev</span>
+          </div>
+          <p style="max-width:22rem;font-size:0.92rem;">
+            A desktop control panel for versioned PHP, Node and database runtimes on one machine.
+          </p>
+          <p class="muted">MIT licensed. Source available on GitHub.</p>
         </div>
-        <div class="footer-col">
-          <h4>Documentation</h4>
+        <div>
+          <h4>Product</h4>
           <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
             <li><a href="features.html">Features</a></li>
-            <li><a href="services.html">Services</a></li>
+            <li><a href="services.html">Runtimes</a></li>
+            <li><a href="getting-started.html">Installation</a></li>
             <li><a href="guides.html">Guides</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
+        <div>
+          <h4>Project</h4>
           <ul>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank">Downloads</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">Repository</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank" rel="noopener">Releases</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank" rel="noopener">Report a bug</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank" rel="noopener">Discussions</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Support</h4>
+        <div>
+          <h4>Help</h4>
           <ul>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Report a Bug</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank">Discussions</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Support</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html#requirements">Requirements</a></li>
+            <li><a href="guides.html#troubleshooting">Troubleshooting</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 MyLocalDev. Made with ❤️ for PHP &amp; Node.js developers.</p>
+        <span>&copy; 2026 PlayPixelPro. All rights reserved.</span>
+        <span>Built for Windows desktops.</span>
       </div>
     </div>
   </footer>

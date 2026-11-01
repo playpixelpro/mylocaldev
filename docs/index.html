@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyLocalDev — Local Development Made Simple</title>
-  <meta name="description" content="MyLocalDev is a desktop app that lets you run PHP and Node.js projects side by side with zero configuration. No Docker, no complex setup — just install and start coding.">
+  <title>MyLocalDev — a cleaner way to run PHP &amp; Node locally</title>
+  <meta name="description" content="MyLocalDev puts every PHP, Node, database and web server version on one machine, with real .test domains and none of the Docker overhead.">
   <link rel="icon" href="images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ============ Navbar ============ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-brand">
@@ -22,246 +21,286 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="features.html">Features</a></li>
-        <li><a href="services.html">Services</a></li>
+        <li><a href="services.html">Runtimes</a></li>
+        <li><a href="getting-started.html">Get started</a></li>
         <li><a href="guides.html">Guides</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
-        <li style="display:flex; align-items:center;">
-          <iframe src="https://ghbtns.com/github-btn.html?user=playpixelpro&repo=mylocaldev&type=star&count=true" frameborder="0" scrolling="0" width="100" height="20" title="GitHub"></iframe>
-        </li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank">Download Setup</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank" rel="noopener">Download</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ============ Hero ============ -->
-  <section class="page-hero home-hero">
+  <header class="hero">
     <div class="container">
-      <h1 class="animate-in">
-        Your All-in-One<br>
-        <span class="gradient-text">Local Dev Environment</span>
-      </h1>
-      <p class="subtitle animate-in">
-        Run PHP and Node.js projects side by side — no conflicts, no headaches. Everything you need in one beautiful desktop app.
-      </p>
-      <div class="btn-group animate-in">
-        <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank">⬇ Download Setup</a>
-        <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-secondary download-portable-btn" target="_blank">⬇ Download Portable</a>
+      <div>
+        <span class="eyebrow">Local development, minus the mess</span>
+        <h1>
+          Every project version.<br>
+          <span class="gradient-text">One quiet machine.</span>
+        </h1>
+        <p class="lead">
+          MyLocalDev keeps PHP, Node, databases and web servers apart per project — so a legacy
+          7.4 app and a brand-new 8.5 build can share one machine without touching each other.
+        </p>
+        <div class="btn-group">
+          <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank" rel="noopener">Download for Windows</a>
+          <a href="features.html" class="btn btn-secondary">See what's inside</a>
+        </div>
+        <p class="hero-note">
+          <strong>Free and open source.</strong> No account, no telemetry, no Docker.
+        </p>
+      </div>
+      <div class="frame animate-in">
+        <div class="frame-bar"><i></i><i></i><i></i><span>MyLocalDev — Dashboard</span></div>
+        <img src="images/shots/dashboard.png" alt="MyLocalDev dashboard with three projects and live service status">
+      </div>
+    </div>
+  </header>
+
+  <section style="padding-top:0;">
+    <div class="container">
+      <div class="stats animate-in">
+        <div><strong>7</strong><span>PHP versions</span></div>
+        <div><strong>5</strong><span>Node.js versions</span></div>
+        <div><strong>17</strong><span>managed runtimes</span></div>
+        <div><strong>0</strong><span>containers required</span></div>
       </div>
     </div>
   </section>
 
-  <section class="section" style="padding-top:0; padding-bottom:var(--space-2xl);">
-    <div class="container" style="max-width:900px;">
-      <div class="callout callout-info animate-in" style="margin:0 auto;">
-        <span class="callout-icon">🚀</span>
-        <p><strong>New in v1.0.0:</strong> MyLocalDev now features dedicated <strong>Production Mode</strong> with optimized runtime configurations, OPcache, hardened web server security headers, supervisor process management, and native Windows Task Scheduler integration for reliable production client hosting.</p>
+  <section>
+    <div class="container">
+      <div class="section-head center animate-in">
+        <span class="kicker">Why developers keep it installed</span>
+        <h2>Built for the projects you actually maintain</h2>
+        <p>Old client sites, new greenfield builds, a frontend in Node behind a backend in PHP — all at once, each on its own version.</p>
+      </div>
+      <div class="cards animate-in">
+        <article class="card">
+          <div class="icon">◈</div>
+          <h3>One version per project</h3>
+          <p>Pin PHP 7.4 to the legacy app and 8.5 to the rewrite. Both stay running; neither notices the other.</p>
+          <ul>
+            <li>Per-project PHP, Node and database</li>
+            <li>Isolated data directories</li>
+            <li>No global version switching</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="icon">◎</div>
+          <h3>Real domains, real TLS</h3>
+          <p>Projects answer on <code>name.test</code> with certificates your browser already trusts.</p>
+          <ul>
+            <li>Automatic hosts-file entries</li>
+            <li>Local certificate authority</li>
+            <li>Wildcards for subdomains</li>
+          </ul>
+        </article>
+        <article class="card">
+          <div class="icon">▦</div>
+          <h3>Services without setup</h3>
+          <p>MySQL, MariaDB, PostgreSQL, MongoDB, Redis, Mailpit, MinIO and phpMyAdmin come from one screen.</p>
+          <ul>
+            <li>Install on demand, update in place</li>
+            <li>Version-specific ports</li>
+            <li>Start and stop individually</li>
+          </ul>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ============ Stats ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="stats-bar animate-in">
-        <div class="stat-item">
-          <div class="stat-number">7+</div>
-          <div class="stat-label">PHP Versions</div>
+      <div class="split animate-in">
+        <div class="split-media frame frame-plain">
+          <div class="frame-bar"><i></i><i></i><i></i><span>Acme Commerce — Project</span></div>
+          <img src="images/shots/project-overview.png" alt="Project detail page showing PHP, web server, SSL and service settings">
         </div>
-        <div class="stat-item">
-          <div class="stat-number">5+</div>
-          <div class="stat-label">Node.js Versions</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">15+</div>
-          <div class="stat-label">Bundled Services</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">1‑Click</div>
-          <div class="stat-label">Project Setup</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ What Is MyLocalDev ============ -->
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header animate-in">
-        <h2>What is MyLocalDev?</h2>
-        <p>Think of it as your personal web server — packaged neatly inside a desktop app.</p>
-      </div>
-
-      <div class="grid-2 animate-in" style="max-width:900px; margin:0 auto;">
-        <div>
-          <p style="color:var(--text-secondary); line-height:1.9; font-size:var(--font-size-lg);">
-            MyLocalDev is a <strong style="color:var(--text-primary);">desktop application</strong> for Windows that bundles everything a web developer needs to build and test websites on their own computer.
+        <div class="split-copy">
+          <span class="kicker">Projects</span>
+          <h2>One screen that tells you the truth</h2>
+          <p>
+            Open a project and see exactly what it runs on: PHP build, web server, database,
+            domain, certificate state and the services it depends on. Change any of it without
+            hunting through config files.
           </p>
-          <p style="color:var(--text-secondary); line-height:1.9; margin-top:var(--space-md);">
-            It includes <strong style="color:var(--text-primary);">PHP</strong>, <strong style="color:var(--text-primary);">Node.js</strong>, <strong style="color:var(--text-primary);">databases</strong> (MySQL, MariaDB, PostgreSQL, MongoDB), <strong style="color:var(--text-primary);">web servers</strong> (Nginx, Apache), and many other tools — all managed through a simple, visual interface. No command-line knowledge required.
+          <ul>
+            <li>Start, stop and restart from the same view</li>
+            <li>Add subdomains without editing vhosts</li>
+            <li>Switch web servers per project</li>
+            <li>See live status instead of guessing</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="split reverse animate-in">
+        <div class="split-copy">
+          <span class="kicker">Databases</span>
+          <h2>Your data, on your disk</h2>
+          <p>
+            Every engine gets its own versioned data directory, so MySQL 5.7 and 8.4 can coexist
+            for the two projects that demand them. Import a dump, export one, or browse tables in
+            phpMyAdmin — no external client needed.
           </p>
+          <ul>
+            <li>MySQL, MariaDB, PostgreSQL and MongoDB</li>
+            <li>SQL and gzipped import/export with progress</li>
+            <li>Databases created per project</li>
+            <li>Backups kept next to the engine</li>
+          </ul>
         </div>
-        <div class="screenshot-wrap">
-          <img src="images/shots/dashboard.png" alt="MyLocalDev dashboard showing active projects">
-          <div class="screenshot-caption">The MyLocalDev Dashboard</div>
+        <div class="split-media frame frame-plain">
+          <div class="frame-bar"><i></i><i></i><i></i><span>Databases</span></div>
+          <img src="images/shots/databases.png" alt="Database manager listing databases with import and export actions">
+        </div>
+      </div>
+
+      <div class="split animate-in">
+        <div class="split-media frame frame-plain">
+          <div class="frame-bar"><i></i><i></i><i></i><span>Binary Manager</span></div>
+          <img src="images/shots/binaries-language.png" alt="Binary manager with PHP, Node.js, Python and Composer">
+        </div>
+        <div class="split-copy">
+          <span class="kicker">Runtimes</span>
+          <h2>Install a version, not a toolchain</h2>
+          <p>
+            Nothing is preinstalled and nothing hides in Program Files. Pick a version, let
+            MyLocalDev fetch it, and it stays contained in one folder you can delete later.
+          </p>
+          <ul>
+            <li>Download, import a ZIP, or update in place</li>
+            <li>Existing settings survive updates</li>
+            <li>Extensions handled per PHP version</li>
+            <li>Composer, Git and Python included in the same manager</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Key Benefits ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>Why MyLocalDev?</h2>
-        <p>Built to solve the most common pain points of local web development.</p>
+      <div class="section-head center animate-in">
+        <span class="kicker">Also included</span>
+        <h2>The parts you'd otherwise bolt on</h2>
       </div>
-
-      <div class="grid-3 animate-in">
-        <div class="card">
-          <div class="card-icon">🔄</div>
-          <h3>Multiple Versions, Zero Conflicts</h3>
-          <p>Run PHP 7.4 for a legacy project and PHP 8.4 for a new one at the same time. Each project uses its own version — automatically.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📦</div>
-          <h3>Everything Included</h3>
-          <p>PHP, Node.js, MySQL, MariaDB, PostgreSQL, MongoDB, Redis, Memcached, Nginx, Apache, Mailpit, phpMyAdmin — all in one installer.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🚀</div>
-          <h3>One-Click Projects</h3>
-          <p>Create a new Laravel, WordPress, Symfony, or Node.js project with a single click. MyLocalDev handles installation, configuration, and domain setup.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🔒</div>
-          <h3>Automatic HTTPS</h3>
-          <p>Every project gets its own .test domain with a free SSL certificate. Browse your projects at https://myapp.test — just like production.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">🌍</div>
-          <h3>Public Tunnel Sharing</h3>
-          <p>Expose a project with Cloudflare Tunnel or zrok when you need remote QA, client review, or off-network testing without deploying it.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">💻</div>
-          <h3>Terminal Ready</h3>
-          <p>Use php, npm, composer, and mysql commands directly from any terminal. MyLocalDev auto-detects which versions to use for each project.</p>
-        </div>
+      <div class="cards animate-in">
+        <article class="card">
+          <div class="icon">⇄</div>
+          <h3>Node behind Nginx or Apache</h3>
+          <p>Point a proxy at your dev server and the Node app gets the same <code>.test</code> domain as everything else.</p>
+        </article>
+        <article class="card">
+          <div class="icon">◐</div>
+          <h3>Local &amp; production modes</h3>
+          <p>Switch a project to production mode for OPcache, hardened headers and extra workers before it leaves your machine.</p>
+        </article>
+        <article class="card">
+          <div class="icon">◔</div>
+          <h3>Queue workers, supervised</h3>
+          <p>Run Laravel queues with crash-loop protection, restart backoff and per-worker logs that stay readable.</p>
+        </article>
+        <article class="card">
+          <div class="icon">◎</div>
+          <h3>Scheduled tasks</h3>
+          <p>Register a Windows scheduled task for <code>artisan schedule:run</code> and let it tick every minute without a console window.</p>
+        </article>
+        <article class="card">
+          <div class="icon">↗</div>
+          <h3>Public previews</h3>
+          <p>Expose one project through a Cloudflare tunnel or zrok when a client needs to see it — then close it again.</p>
+        </article>
+        <article class="card">
+          <div class="icon">›_</div>
+          <h3>A terminal that agrees</h3>
+          <p><code>php</code>, <code>composer</code>, <code>npm</code> and <code>mysql</code> resolve to the version of the folder you're in.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- ============ Screenshot Gallery ============ -->
-  <section class="section section-alt">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>See It in Action</h2>
-        <p>A visual tour of MyLocalDev's main features.</p>
+      <div class="section-head center animate-in">
+        <span class="kicker">From download to running</span>
+        <h2>Three steps, no configuration marathon</h2>
       </div>
-
-      <div class="grid-2">
-        <div class="animate-in">
-          <div class="screenshot-wrap">
-          <img src="images/shots/projects.png" alt="Projects list view">
-          <div class="screenshot-caption">Projects list view</div>
+      <div class="steps animate-in">
+        <div class="step">
+          <h3>Install the app</h3>
+          <p>Grab the setup or the portable build. Nothing else is required — runtimes are downloaded from inside MyLocalDev.</p>
         </div>
+        <div class="step">
+          <h3>Add a project</h3>
+          <p>Create a new app or point MyLocalDev at a folder you already work in. It reads <code>.env</code> instead of overwriting it.</p>
         </div>
-        <div class="animate-in">
-          <div class="screenshot-wrap">
-            <img src="images/shots/databases.png" alt="Database management">
-            <div class="screenshot-caption">Database management — create, import, and export with a few clicks</div>
-          </div>
-        </div>
-        <div class="animate-in">
-          <div class="screenshot-wrap">
-          <img src="images/shots/binaries-language.png" alt="Binary Manager">
-          <div class="screenshot-caption">Binary Manager overview</div>
-        </div>
-        </div>
-        <div class="animate-in">
-          <div class="screenshot-wrap">
-            <img src="images/shots/services.png" alt="Running services panel">
-            <div class="screenshot-caption">Services panel — start and stop MySQL, Redis, and more independently</div>
-          </div>
+        <div class="step">
+          <h3>Open the domain</h3>
+          <p>Start the project, visit <code>your-project.test</code>, and get to work. Services start only when you need them.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Quick Start ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>Get Started in 3 Steps</h2>
-        <p>From download to your first project in under 5 minutes.</p>
-      </div>
-
-      <div class="grid-3 animate-in">
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg); font-size:2rem;">1️⃣</div>
-          <h3>Download &amp; Install</h3>
-          <p>Grab the installer from the releases page and run it. That's it — no prerequisites needed.</p>
+      <div class="cta-band animate-in">
+        <h2>Try it on the project that hurts most</h2>
+        <p>Keep your current machine set up. MyLocalDev installs side by side, so you can compare before you commit.</p>
+        <div class="btn-group" style="justify-content:center;">
+          <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank" rel="noopener">Download setup</a>
+          <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-secondary download-portable-btn" target="_blank" rel="noopener">Portable build</a>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg); font-size:2rem;">2️⃣</div>
-          <h3>Get Your Tools</h3>
-          <p>Open the Binary Manager and download the PHP, Node.js, and database versions you need.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg); font-size:2rem;">3️⃣</div>
-          <h3>Create a Project</h3>
-          <p>Click "+ New Project", pick your framework, and MyLocalDev sets everything up automatically.</p>
-        </div>
-      </div>
-
-      <div style="text-align:center; margin-top:var(--space-2xl);" class="animate-in">
-        <a href="getting-started.html" class="btn btn-primary">Read the Full Guide →</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ Footer ============ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-brand">
-            <img src="images/logo.png" alt="MyLocalDev logo">
-            MyLocalDev
-          </a>
-          <p>Your all-in-one local development environment for PHP &amp; Node.js. Run any version, build any project.</p>
+        <div>
+          <div class="footer-brand">
+            <img src="images/logo.png" alt="">
+            <span>MyLocalDev</span>
+          </div>
+          <p style="max-width:22rem;font-size:0.92rem;">
+            A desktop control panel for versioned PHP, Node and database runtimes on one machine.
+          </p>
+          <p class="muted">MIT licensed. Source available on GitHub.</p>
         </div>
-        <div class="footer-col">
-          <h4>Documentation</h4>
+        <div>
+          <h4>Product</h4>
           <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
             <li><a href="features.html">Features</a></li>
-            <li><a href="services.html">Services</a></li>
+            <li><a href="services.html">Runtimes</a></li>
+            <li><a href="getting-started.html">Installation</a></li>
             <li><a href="guides.html">Guides</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
+        <div>
+          <h4>Project</h4>
           <ul>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank">Downloads</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">Repository</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank" rel="noopener">Releases</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank" rel="noopener">Report a bug</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank" rel="noopener">Discussions</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Support</h4>
+        <div>
+          <h4>Help</h4>
           <ul>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Report a Bug</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank">Discussions</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Support</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html#requirements">Requirements</a></li>
+            <li><a href="guides.html#troubleshooting">Troubleshooting</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 MyLocalDev. Made with ❤️ for PHP &amp; Node.js developers.</p>
+        <span>&copy; 2026 PlayPixelPro. All rights reserved.</span>
+        <span>Built for Windows desktops.</span>
       </div>
     </div>
   </footer>

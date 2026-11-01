@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Getting Started — MyLocalDev</title>
-  <meta name="description" content="Download and install MyLocalDev, set up your first project, and start building in under 5 minutes. Step-by-step guide for beginners.">
+  <title>Get started — MyLocalDev</title>
+  <meta name="description" content="Install MyLocalDev on Windows, add your first PHP or Node project, and open it on a trusted .test domain in a few minutes.">
   <link rel="icon" href="images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ============ Navbar ============ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-brand">
@@ -22,263 +21,233 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="getting-started.html" class="active">Getting Started</a></li>
         <li><a href="features.html">Features</a></li>
-        <li><a href="services.html">Services</a></li>
+        <li><a href="services.html">Runtimes</a></li>
+        <li><a href="getting-started.html" class="active">Get started</a></li>
         <li><a href="guides.html">Guides</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
-        <li style="display:flex; align-items:center;">
-          <iframe src="https://ghbtns.com/github-btn.html?user=playpixelpro&repo=mylocaldev&type=star&count=true" frameborder="0" scrolling="0" width="100" height="20" title="GitHub"></iframe>
-        </li>
-        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank">Download Setup</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank" rel="noopener">Download</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ============ Hero ============ -->
-  <section class="page-hero">
+  <header class="page-hero">
     <div class="container">
-      <h1 class="animate-in">
-        <span class="gradient-text">Getting Started</span>
-      </h1>
-      <p class="subtitle animate-in">
-        From download to your first running project in under 5&nbsp;minutes. No technical experience needed.
-      </p>
+      <span class="eyebrow">Installation</span>
+      <h1>Running in <span class="gradient-text">under ten minutes</span></h1>
+      <p>No PHP on the PATH, no global Composer, no Docker daemon. The app brings its own runtimes.</p>
     </div>
-  </section>
+  </header>
 
-  <section class="section" style="padding-top:0; padding-bottom:var(--space-2xl);">
-    <div class="container" style="max-width:900px;">
-      <div class="callout callout-info animate-in" style="margin:0 auto;">
-        <span class="callout-icon">💡</span>
-        <p><strong>Deployment Mode:</strong> Set your project to <strong>Local Mode</strong> during active coding and debugging, or switch to <strong>Production Mode</strong> when deploying and hosting your application on a Windows server.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ System Requirements ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>System Requirements</h2>
-        <p>Make sure your computer meets these minimum specifications.</p>
-      </div>
-
-      <div class="grid-3 animate-in" style="max-width:900px; margin:0 auto;">
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg);">🖥️</div>
-          <h3>Operating System</h3>
-          <p>Windows 10 or Windows 11 (64-bit)</p>
+      <div class="split" id="requirements">
+        <div class="split-copy">
+          <span class="kicker">Before you start</span>
+          <h2>What the machine needs</h2>
+          <ul>
+            <li>Windows 10 or 11, 64-bit</li>
+            <li>About 400&nbsp;MB for the app itself</li>
+            <li>Extra disk space for the runtimes you install</li>
+            <li>An internet connection for the first download of each runtime</li>
+            <li>Administrator rights once, to add hosts entries and trust the local certificate</li>
+          </ul>
+          <p class="muted" style="margin-top:1rem;">
+            You do not need PHP, Node.js, MySQL or Composer installed beforehand. If they already
+            exist, they are left untouched.
+          </p>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg);">🧠</div>
-          <h3>Memory (RAM)</h3>
-          <p>4 GB minimum<br>8 GB recommended</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="card-icon" style="margin:0 auto var(--space-lg);">💾</div>
-          <h3>Disk Space</h3>
-          <p>2 GB for the app + extra space for the services you download</p>
+        <div class="split-media">
+          <div class="card">
+            <div class="icon">⇩</div>
+            <h3>Two ways to install</h3>
+            <p><strong>Setup</strong> adds Start Menu and desktop shortcuts and registers an uninstaller. <strong>Portable</strong> runs from any folder and keeps its data beside the executable.</p>
+            <div class="btn-group" style="margin-top:1.1rem;">
+              <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank" rel="noopener">Setup</a>
+              <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-secondary download-portable-btn" target="_blank" rel="noopener">Portable</a>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="callout callout-info animate-in" style="max-width:700px; margin:var(--space-xl) auto;">
-        <span class="callout-icon">💡</span>
-        <p><strong>macOS support</strong> is coming in a future release. Stay tuned!</p>
-      </div>
     </div>
   </section>
 
-  <!-- ============ Step-by-Step ============ -->
-  <section class="section section-alt">
-    <div class="container" style="max-width:900px;">
-      <div class="section-header animate-in">
-        <h2>Step-by-Step Installation</h2>
-      </div>
-
-      <ol class="steps">
-        <!-- Step 1 -->
-        <li class="step-item animate-in">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Download MyLocalDev</h3>
-            <p>
-              Go to the <a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank">GitHub Releases page</a> and download the latest version. You have two options:
-            </p>
-            <ul style="margin-top:var(--space-sm); list-style:none; padding:0;">
-              <li style="padding:4px 0; color:var(--text-secondary);">
-                <strong style="color:var(--text-primary);">MyLocalDev-Setup-x.x.x.exe</strong> — the installer (recommended for most&nbsp;users)
-              </li>
-              <li style="padding:4px 0; color:var(--text-secondary);">
-                <strong style="color:var(--text-primary);">MyLocalDev-x.x.x.exe</strong> — portable version (no installation needed, runs from any folder)
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <!-- Step 2 -->
-        <li class="step-item animate-in">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Install &amp; Launch</h3>
-            <p>
-              Run the installer and follow the on-screen prompts. When it finishes, MyLocalDev will open automatically. The first launch may take a few seconds while it initializes — this is normal.
-            </p>
-            <div class="callout callout-tip" style="margin-top:var(--space-md);">
-              <span class="callout-icon">🛡️</span>
-              <p>Windows Defender may ask you to allow network access the first time you start a web server. Click <strong>"Allow"</strong> so your projects can be accessed in the browser.</p>
-            </div>
-          </div>
-        </li>
-
-        <!-- Step 3 -->
-        <li class="step-item animate-in">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>Download Your Tools (Binaries)</h3>
-            <p>
-              Before creating projects, you need to download the components you'll use. Click on <strong>"Binary Manager"</strong> in the sidebar.
-            </p>
-            <p style="margin-top:var(--space-sm);">
-              You can click <strong>"Download All"</strong> to get everything, or pick and choose only what you need — for example, PHP 8.4, Nginx 1.28, MySQL 8.4, and Node.js 24.
-            </p>
-            <div class="screenshot-wrap" style="margin-top:var(--space-lg);">
-              <img src="images/shots/binaries-language.png" alt="Binary Manager showing downloadable PHP versions">
-              <div class="screenshot-caption">The Binary Manager — pick the versions you want to use</div>
-            </div>
-          </div>
-        </li>
-
-        <!-- Step 4 -->
-        <li class="step-item animate-in">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h3>Create Your First Project</h3>
-            <p>
-              Click the <strong>"+ New Project"</strong> button on the Dashboard. A dialog will appear where you can:
-            </p>
-            <ul style="margin-top:var(--space-sm); list-style:none; padding:0; color:var(--text-secondary);">
-              <li style="padding:4px 0;">✓ Pick your <strong style="color:var(--text-primary);">project type</strong> — Laravel, WordPress, Symfony, custom PHP, or Node.js</li>
-              <li style="padding:4px 0;">✓ Choose a <strong style="color:var(--text-primary);">folder</strong> on your computer for the project files</li>
-              <li style="padding:4px 0;">✓ Select the <strong style="color:var(--text-primary);">PHP or Node.js version</strong> to use</li>
-              <li style="padding:4px 0;">✓ Pick which <strong style="color:var(--text-primary);">services</strong> to enable (MySQL, Redis, etc.)</li>
-              <li style="padding:4px 0;">✓ Set your <strong style="color:var(--text-primary);">local domain</strong> (e.g., <code>myproject.test</code>)</li>
-            </ul>
-            <p style="margin-top:var(--space-sm);">
-              Click <strong>"Create"</strong> and MyLocalDev will handle the rest — installing frameworks, setting up the database, and configuring virtual hosts.
-            </p>
-            <div class="screenshot-wrap" style="margin-top:var(--space-lg);">
-              <img src="images/shots/create-project.png" alt="Create a new project with the setup wizard">
-              <div class="screenshot-caption">Creating a Laravel project — MyLocalDev handles every step automatically</div>
-            </div>
-          </div>
-        </li>
-
-        <!-- Step 5 -->
-        <li class="step-item animate-in">
-          <div class="step-number">5</div>
-          <div class="step-content">
-            <h3>Open Your Project</h3>
-            <p>
-              Once the project is created, click <strong>"Start"</strong> on the project card. MyLocalDev will boot the web server and any enabled services. Then simply open your browser and go to:
-            </p>
-            <div class="code-block" style="margin-top:var(--space-md);">
-              https://myproject.test
-            </div>
-            <p style="margin-top:var(--space-sm);">
-              That's it — your website is live on your computer! 🎉
-            </p>
-          </div>
-        </li>
-
-        <li class="step-item animate-in">
-          <div class="step-number">6</div>
-          <div class="step-content">
-            <h3>Optional: Share It on the Internet</h3>
-            <p>
-              If you need to show the project outside your local network, download <strong>Cloudflare Tunnel</strong> or <strong>zrok</strong> from <strong>Binary Manager → Tools</strong>, then open the project detail page and enable <strong>"Share on Internet"</strong>.
-            </p>
-            <p style="margin-top:var(--space-sm);">
-              Choose a provider, optionally enable <strong>"Auto-start tunnel"</strong>, then click <strong>"Start Sharing"</strong> to get a public URL.
-            </p>
-            <div class="callout callout-info" style="margin-top:var(--space-md);">
-              <span class="callout-icon">🌍</span>
-              <p>Tunnel sharing creates secure, temporary preview URLs for testing and client review without configuring router port forwarding.</p>
-            </div>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ What's Next ============ -->
-  <section class="section">
+  <section>
     <div class="container">
-      <div class="section-header animate-in">
-        <h2>What's Next?</h2>
-        <p>Now that you're set up, explore everything MyLocalDev can do.</p>
+      <div class="section-head">
+        <span class="kicker">First run</span>
+        <h2>Four things to do once</h2>
       </div>
-
-      <div class="grid-3 animate-in">
-        <a href="features.html" class="card guide-card">
-          <div class="card-icon">✨</div>
-          <h3>Explore Features</h3>
-          <p>Discover multi-version support, SSL certificates, log streaming, and more.</p>
-        </a>
-        <a href="guides.html" class="card guide-card">
-          <div class="card-icon">📖</div>
-          <h3>Follow a Guide</h3>
-          <p>Step-by-step tutorials for creating projects, managing databases, and using the terminal.</p>
-        </a>
-        <a href="services.html" class="card guide-card">
-          <div class="card-icon">📦</div>
-          <h3>Browse Services</h3>
-          <p>See all available services, versions, and default port numbers.</p>
-        </a>
+      <div class="steps animate-in">
+        <div class="step">
+          <h3>Install a runtime</h3>
+          <p>Open <strong>Binaries</strong> and add a PHP build — 8.3 or 8.4 is a safe start. Nginx and a database follow the first time a project needs them.</p>
+        </div>
+        <div class="step">
+          <h3>Trust the certificate authority</h3>
+          <p>On first project start, allow the app to add its local CA. Without it, HTTPS projects show a browser warning.</p>
+        </div>
+        <div class="step">
+          <h3>Create a project</h3>
+          <p>Use the wizard for a new Laravel, Symfony, WordPress or Node app — or add an existing folder and keep its files exactly as they are.</p>
+        </div>
+        <div class="step">
+          <h3>Open the domain</h3>
+          <p>The project appears on <code>your-project.test</code>. Start it, open the URL, done.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Footer ============ -->
+  <section>
+    <div class="container">
+      <div class="split animate-in">
+        <div class="split-media frame frame-plain">
+          <div class="frame-bar"><i></i><i></i><i></i><span>New project</span></div>
+          <img src="images/shots/create-project.png" alt="New project wizard with framework, PHP version and service options">
+        </div>
+        <div class="split-copy">
+          <span class="kicker">The wizard</span>
+          <h2>Decide the stack once, reuse it</h2>
+          <p>
+            The wizard asks for the framework, the PHP or Node version, the web server and the
+            services you want. It then builds a virtual host and database to match.
+          </p>
+          <ul>
+            <li>Laravel, Symfony, WordPress, or a plain PHP folder</li>
+            <li>Express, Next.js, Nuxt and other Node frameworks</li>
+            <li>Databases created with the project</li>
+            <li>Every choice can be changed later from the project screen</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">Everyday use</span>
+        <h2>Terminal commands that follow the folder</h2>
+        <p>Inside a project directory, the usual tools resolve to that project's versions.</p>
+      </div>
+      <div class="cards two animate-in">
+        <div class="card">
+          <h3>PHP and Composer</h3>
+<pre><span class="c"># uses the project's PHP version</span>
+php artisan migrate
+composer require laravel/sanctum
+
+<span class="c"># outside a project, the default version applies</span>
+php -v</pre>
+        </div>
+        <div class="card">
+          <h3>Node and databases</h3>
+<pre><span class="c"># Node and npm match the project</span>
+npm install
+npm run dev
+
+<span class="c"># talks to the active MySQL or MariaDB build</span>
+mysql -u root -p my_project</pre>
+        </div>
+      </div>
+      <div class="callout info animate-in" style="margin-top:2rem;">
+        <div>
+          <strong>Where your files live</strong>
+          <p>
+            Application data, databases, certificates and logs sit under your user profile in a
+            single folder, with downloaded runtimes in the app's own resource directory. The
+            <strong>Settings</strong> screen shows both paths, so nothing is hidden.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="section-head">
+        <span class="kicker">If something is off</span>
+        <h2>Three quick checks</h2>
+      </div>
+      <div class="cards animate-in">
+        <article class="card">
+          <div class="icon">1</div>
+          <h3>The domain does not resolve</h3>
+          <p>Confirm the hosts entry was added — the app asks for administrator rights the first time it writes one. Restart the browser afterwards.</p>
+        </article>
+        <article class="card">
+          <div class="icon">2</div>
+          <h3>Port 80 or 443 is busy</h3>
+          <p>Another server is already listening. MyLocalDev reports which process holds the port and can move the project to alternate ports.</p>
+        </article>
+        <article class="card">
+          <div class="icon">3</div>
+          <h3>The browser warns about HTTPS</h3>
+          <p>The local certificate authority is not trusted yet. Re-run the trust action from the project or settings screen.</p>
+        </article>
+      </div>
+      <p class="muted" style="margin-top:1.5rem;">More scenarios live in the <a href="guides.html#troubleshooting">guides</a> and the <a href="faq.html">FAQ</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-band animate-in">
+        <h2>Start with the project you dread opening</h2>
+        <p>Import it, pick its original versions, and see whether the machine finally behaves.</p>
+        <div class="btn-group" style="justify-content:center;">
+          <a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="btn btn-primary download-setup-btn" target="_blank" rel="noopener">Download setup</a>
+          <a href="guides.html" class="btn btn-secondary">Browse guides</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="nav-brand">
-            <img src="images/logo.png" alt="MyLocalDev logo">
-            MyLocalDev
-          </a>
-          <p>Your all-in-one local development environment for PHP &amp; Node.js. Run any version, build any project.</p>
+        <div>
+          <div class="footer-brand">
+            <img src="images/logo.png" alt="">
+            <span>MyLocalDev</span>
+          </div>
+          <p style="max-width:22rem;font-size:0.92rem;">
+            A desktop control panel for versioned PHP, Node and database runtimes on one machine.
+          </p>
+          <p class="muted">MIT licensed. Source available on GitHub.</p>
         </div>
-        <div class="footer-col">
-          <h4>Documentation</h4>
+        <div>
+          <h4>Product</h4>
           <ul>
-            <li><a href="getting-started.html">Getting Started</a></li>
             <li><a href="features.html">Features</a></li>
-            <li><a href="services.html">Services</a></li>
+            <li><a href="services.html">Runtimes</a></li>
+            <li><a href="getting-started.html">Installation</a></li>
             <li><a href="guides.html">Guides</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Resources</h4>
+        <div>
+          <h4>Project</h4>
           <ul>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank">Downloads</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">Repository</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/releases" target="_blank" rel="noopener">Releases</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank" rel="noopener">Report a bug</a></li>
+            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank" rel="noopener">Discussions</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h4>Support</h4>
+        <div>
+          <h4>Help</h4>
           <ul>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Report a Bug</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/discussions" target="_blank">Discussions</a></li>
-            <li><a href="https://github.com/playpixelpro/mylocaldev/issues" target="_blank">Support</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="getting-started.html#requirements">Requirements</a></li>
+            <li><a href="guides.html#troubleshooting">Troubleshooting</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 MyLocalDev. Made with ❤️ for PHP &amp; Node.js developers.</p>
+        <span>&copy; 2026 PlayPixelPro. All rights reserved.</span>
+        <span>Built for Windows desktops.</span>
       </div>
     </div>
   </footer>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page not found - MyLocalDev</title>
-  <meta name="description" content="The page you were looking for could not be found.">
+  <title>Page not found — MyLocalDev</title>
+  <meta name="description" content="That page could not be found.">
   <link rel="icon" href="images/logo.png" type="image/png">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -16,36 +16,65 @@
         <img src="images/logo.png" alt="MyLocalDev logo">
         MyLocalDev
       </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="getting-started.html">Getting Started</a></li>
         <li><a href="features.html">Features</a></li>
-        <li><a href="services.html">Services</a></li>
+        <li><a href="services.html">Runtimes</a></li>
+        <li><a href="getting-started.html">Get started</a></li>
         <li><a href="guides.html">Guides</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="https://github.com/playpixelpro/mylocaldev" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://github.com/playpixelpro/mylocaldev/releases/latest" class="nav-cta download-setup-btn" target="_blank" rel="noopener">Download</a></li>
       </ul>
     </div>
   </nav>
 
-  <section class="page-hero">
-    <div class="container" style="text-align:center; max-width:640px;">
-      <h1>404</h1>
-      <p class="subtitle">
-        That page doesn't exist. It may have been renamed or the link is out of date.
-      </p>
-      <div class="btn-group">
+  <header class="page-hero" style="padding-top:5rem;">
+    <div class="container">
+      <span class="eyebrow">404</span>
+      <h1>This page wandered <span class="gradient-text">off the map</span></h1>
+      <p>The link is stale, or the page moved. Nothing is broken — pick a direction below.</p>
+      <div class="btn-group" style="justify-content:center;margin-top:1.8rem;">
         <a href="index.html" class="btn btn-primary">Back to home</a>
-        <a href="getting-started.html" class="btn btn-secondary">Getting Started</a>
+        <a href="getting-started.html" class="btn btn-secondary">Get started</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="cards animate-in">
+        <a class="card" href="features.html">
+          <div class="icon">◈</div>
+          <h3>Features</h3>
+          <p>What the app manages and how it behaves in local and production modes.</p>
+        </a>
+        <a class="card" href="services.html">
+          <div class="icon">▦</div>
+          <h3>Runtimes</h3>
+          <p>Supported versions, default ports and how multiple builds coexist.</p>
+        </a>
+        <a class="card" href="faq.html">
+          <div class="icon">?</div>
+          <h3>FAQ</h3>
+          <p>Data storage, licences, admin rights and other common questions.</p>
+        </a>
       </div>
     </div>
   </section>
 
   <footer class="footer">
     <div class="container">
-      <p>&copy; 2026 PlayPixelPro. All rights reserved.</p>
+      <div class="footer-bottom">
+        <span>&copy; 2026 PlayPixelPro. All rights reserved.</span>
+        <span>Built for Windows desktops.</span>
+      </div>
     </div>
   </footer>
 
+  <script src="js/main.js"></script>
 </body>
 </html>
