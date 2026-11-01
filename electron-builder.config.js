@@ -168,5 +168,6 @@ module.exports = {
     provider: 'github',
     owner: 'playpixelpro',
     repo: 'mylocaldev',
+    releaseType: 'release',
   },
 };
