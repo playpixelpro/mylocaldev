@@ -87,6 +87,45 @@ describe('cli/binaries', () => {
     process.env.PATH = originalPath;
   });
 
+  it('builds managed PATH entries from selected runtime versions and installed tools', () => {
+    const ctx = makeContext({
+      getCliPath: vi.fn(() => path.join('/data', 'cli')),
+      getDefaultPhpVersion: vi.fn(() => '8.4'),
+      getDefaultNodeVersion: vi.fn(() => '22'),
+      getDefaultPythonVersion: vi.fn(() => '3.13'),
+      getFirstInstalledPhpVersion: vi.fn(() => '8.3'),
+      getFirstInstalledNodeVersion: vi.fn(() => '20'),
+      getFirstInstalledPythonVersion: vi.fn(() => '3.12'),
+      getActiveMysqlInfo: vi.fn(() => ({ dbType: 'mysql', version: '8.4' })),
+      getMysqlClientPath: vi.fn(() => path.join('/resources', 'mysql', '8.4', 'win', 'bin', 'mysql.exe')),
+      getFirstInstalledMysqlVersion: vi.fn(() => ({ dbType: 'mysql', version: '8.4' })),
+      getFirstInstalledVersion: vi.fn((serviceName) => ({
+        postgresql: '17',
+        mongodb: '8.0',
+        redis: '7',
+        nginx: '1.27',
+        apache: '2.4',
+        memcached: '1.6',
+      }[serviceName] || null)),
+      getComposerPath: vi.fn(() => path.join('/resources', 'composer', 'composer.phar')),
+      resourcesPath: '/resources',
+    });
+
+    vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+    vi.spyOn(fs, 'statSync').mockReturnValue({ isDirectory: () => true });
+
+    const entries = ctx.getManagedPathEntries();
+
+    expect(entries[0]).toBe(path.join('/resources', 'php', '8.4', 'win'));
+    expect(entries).toContain(path.join('/resources', 'nodejs', '22', 'win'));
+    expect(entries).toContain(path.join('/resources', 'composer'));
+    expect(entries).toContain(path.join('/resources', 'mysql', '8.4', 'win', 'bin'));
+    expect(entries).toContain(path.join('/resources', 'python', '3.13', 'win'));
+    expect(entries).toContain(path.join('/resources', 'python', '3.13', 'win', 'Scripts'));
+    expect(entries).toContain(path.join('/data', 'cli'));
+    expect(entries.indexOf(path.join('/data', 'cli'))).toBe(entries.length - 1);
+  });
+
   it('falls back to sqlite3 on non-Windows platforms', () => {
     const originalPlatform = process.platform;
     Object.defineProperty(process, 'platform', { value: 'darwin' });

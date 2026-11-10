@@ -63,15 +63,15 @@ describe('cli/path', () => {
 
     const result = await ctx.addToUnixPath('/cli/bin');
 
-    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Added to .bashrc' }));
+    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Added selected binaries to .bashrc' }));
     expect(writeFileSpy).toHaveBeenCalledWith(
       path.join('/home/tester', '.bashrc'),
-      'export PATH="/cli/bin:$PATH"  # MyLocalDev CLI\nexport PATH="/usr/local/bin:$PATH"\n',
+      'export PATH="/cli/bin:$PATH"  # MyLocalDev PATH\nexport PATH="/usr/local/bin:$PATH"\n',
       'utf8'
     );
   });
 
-  it('returns early when the Unix rc file is already configured', async () => {
+  it('rewrites the managed Unix PATH line so version changes take effect', async () => {
     const ctx = makeContext();
     vi.spyOn(os, 'homedir').mockReturnValue('/home/tester');
     vi.spyOn(fs, 'pathExists').mockResolvedValue(true);
@@ -80,8 +80,12 @@ describe('cli/path', () => {
 
     const result = await ctx.addToUnixPath('/cli/bin');
 
-    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Already in PATH' }));
-    expect(writeFileSpy).not.toHaveBeenCalled();
+    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Added selected binaries to .bashrc' }));
+    expect(writeFileSpy).toHaveBeenCalledWith(
+      path.join('/home/tester', '.bashrc'),
+      'export PATH="/cli/bin:$PATH"  # MyLocalDev PATH\n',
+      'utf8'
+    );
   });
 
   it('removes the MyLocalDev CLI marker line from a Unix rc file', async () => {
@@ -95,7 +99,7 @@ describe('cli/path', () => {
 
     const result = await ctx.removeFromUnixPath('/cli/bin');
 
-    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Removed from .bashrc' }));
+    expect(result).toEqual(expect.objectContaining({ success: true, message: 'Removed MyLocalDev binaries from .bashrc' }));
     expect(writeFileSpy).toHaveBeenCalledWith(
       path.join('/home/tester', '.bashrc'),
       'export PATH="/usr/local/bin:$PATH"\n',
@@ -122,16 +126,16 @@ describe('cli/path', () => {
     const ctx = makeContext({
       getCliPath: vi.fn(() => 'C:/MyLocalDev/cli/'),
       tryAddToSystemPath: vi.fn(async () => ({ success: false, reason: 'uac_cancelled' })),
-      addToUserPath: vi.fn(async () => ({ success: true, message: 'Added to User PATH' })),
+      addToUserPath: vi.fn(async () => ({ success: true, message: 'Updated User PATH' })),
     });
 
     const result = await ctx.addToPath();
 
-    expect(ctx.tryAddToSystemPath).toHaveBeenCalledWith('C:/MyLocalDev/cli');
-    expect(ctx.addToUserPath).toHaveBeenCalledWith('C:/MyLocalDev/cli');
+    expect(ctx.tryAddToSystemPath).toHaveBeenCalledWith(['C:/MyLocalDev/cli'], ['C:/MyLocalDev/cli']);
+    expect(ctx.addToUserPath).toHaveBeenCalledWith(['C:/MyLocalDev/cli'], ['C:/MyLocalDev/cli']);
     expect(result).toEqual(expect.objectContaining({
       success: true,
-      message: 'Added to User PATH (at the beginning for priority)',
+      message: 'Added selected binaries to User PATH',
     }));
   });
 });
