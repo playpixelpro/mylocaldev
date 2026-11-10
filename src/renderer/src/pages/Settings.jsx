@@ -462,6 +462,7 @@ function CliSettings() {
   const [directShimsEnabled, setDirectShimsEnabled] = useState(false);
   const [defaultPhpVersion, setDefaultPhpVersion] = useState(null);
   const [defaultNodeVersion, setDefaultNodeVersion] = useState(null);
+  const [defaultPythonVersion, setDefaultPythonVersion] = useState(null);
   const [installedBinaries, setInstalledBinaries] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
@@ -483,6 +484,9 @@ function CliSettings() {
 
         const defNode = await window.mylocaldev?.cli?.getDefaultNodeVersion();
         setDefaultNodeVersion(defNode);
+
+        const defPython = await window.mylocaldev?.cli?.getDefaultPythonVersion();
+        setDefaultPythonVersion(defPython);
 
         const binaries = await window.mylocaldev?.binaries?.getInstalled();
         setInstalledBinaries(binaries);
@@ -508,11 +512,14 @@ function CliSettings() {
 
       if (enabled) {
         // Add to PATH automatically - always try to ensure System PATH priority
-        await window.mylocaldev?.cli?.addToPath();
+        const pathResult = await window.mylocaldev?.cli?.addToPath();
+        if (pathResult && !pathResult.success) {
+          throw new Error(pathResult.message || 'Could not update PATH');
+        }
 
         setMessage({
           type: 'success',
-          text: 'Terminal commands enabled! Restart your terminal or VS Code to use php, npm, node, composer, and mysql directly.'
+          text: 'Terminal commands enabled! Restart your terminal or VS Code to use the selected runtimes directly.'
         });
       } else {
         setMessage({ type: 'success', text: 'Terminal commands disabled and removed from PATH. Restart your terminal or VS Code for changes to take effect.' });
@@ -562,6 +569,15 @@ function CliSettings() {
     }
   };
 
+  const handleSetDefaultPython = async (version) => {
+    try {
+      await window.mylocaldev?.cli?.setDefaultPythonVersion(version || null);
+      setDefaultPythonVersion(version || null);
+    } catch (error) {
+      setMessage({ type: 'error', text: error.message });
+    }
+  };
+
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -574,6 +590,9 @@ function CliSettings() {
     : [];
   const nodeVersions = installedBinaries?.nodejs
     ? Object.entries(installedBinaries.nodejs).filter(([, installed]) => installed).map(([v]) => v).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+    : [];
+  const pythonVersions = installedBinaries?.python
+    ? Object.entries(installedBinaries.python).filter(([, installed]) => installed).map(([v]) => v).sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
     : [];
 
   if (loading) {
@@ -594,7 +613,7 @@ function CliSettings() {
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
           Use <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">php</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">npm</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">node</code>, <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">composer</code>, and <code className="bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">mysql</code> commands
-          directly from any terminal. MyLocalDev automatically uses the correct version based on your project.
+          directly from any terminal. MyLocalDev puts the selected global versions first on PATH; use the MyLocalDev alias for project-specific versions.
         </p>
 
 
@@ -616,7 +635,7 @@ function CliSettings() {
               Enable terminal commands
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Allows using php, npm, node, composer, and mysql from any terminal
+              Allows using PHP, Composer, Node.js, Python, database clients, and installed tools from any terminal
             </p>
           </div>
           <input
@@ -654,7 +673,7 @@ function CliSettings() {
             Default Versions
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Used when you're not in a registered project directory.
+            Used by direct terminal commands outside project-specific MyLocalDev commands.
           </p>
 
           <div className="grid grid-cols-2 gap-4">
@@ -685,12 +704,26 @@ function CliSettings() {
                 ))}
               </select>
             </div>
+
+            <div>
+              <label className="label">Python Version</label>
+              <select
+                value={defaultPythonVersion || ''}
+                onChange={(e) => handleSetDefaultPython(e.target.value)}
+                className="select w-full"
+              >
+                <option value="">Auto-detect</option>
+                {pythonVersions.map(v => (
+                  <option key={v} value={v}>Python {v}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <p className="text-sm text-blue-700 dark:text-blue-300">
-              <strong>How it works:</strong> Inside a project folder, MyLocalDev uses that project's configured PHP/Node version.
-              Outside a project, it uses the default versions above.
+              <strong>How it works:</strong> The selected versions are added as real directories to PATH, so cmd, PowerShell, and other terminals resolve them directly.
+              The <code>mylocaldev</code> alias remains available for project-specific versions.
             </p>
           </div>
         </div>

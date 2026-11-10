@@ -11,10 +11,10 @@ module.exports = {
       await this.installDirectShims();
     } else {
       await this.removeDirectShims();
-            await this.removeFromPath();
+      await this.removeFromPath();
     }
 
-        this.configStore.set('settings.directShimsEnabled', enabled);
+    this.configStore.set('settings.directShimsEnabled', enabled);
 
     return enabled;
   },

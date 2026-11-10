@@ -167,6 +167,8 @@ contextBridge.exposeInMainWorld('mylocaldev', {
     setDefaultPhpVersion: (version) => ipcRenderer.invoke('cli:setDefaultPhpVersion', version),
     getDefaultNodeVersion: () => ipcRenderer.invoke('cli:getDefaultNodeVersion'),
     setDefaultNodeVersion: (version) => ipcRenderer.invoke('cli:setDefaultNodeVersion', version),
+    getDefaultPythonVersion: () => ipcRenderer.invoke('cli:getDefaultPythonVersion'),
+    setDefaultPythonVersion: (version) => ipcRenderer.invoke('cli:setDefaultPythonVersion', version),
     getDefaultMysqlType: () => ipcRenderer.invoke('cli:getDefaultMysqlType'),
     getDefaultMysqlVersion: () => ipcRenderer.invoke('cli:getDefaultMysqlVersion'),
   },

@@ -1,6 +1,6 @@
 {
   "name": "mylocaldev",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Local development server manager for PHP, Node.js and bundled services",
   "main": "src/main/main.js",
   "author": "PlayPixelPro",

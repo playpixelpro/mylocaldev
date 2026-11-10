@@ -47,6 +47,21 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
     getLiveMainWindow()?.webContents.send(channel, payload);
   };
 
+  const refreshManagedCliPath = async () => {
+    if (!managers.cli?.getDirectShimsEnabled?.()) return null;
+    return managers.cli.addToPath();
+  };
+
+  const runWithManagedCliPathRefresh = async (operation) => {
+    const result = await operation();
+    try {
+      await refreshManagedCliPath();
+    } catch (error) {
+      managers.log?.systemWarn('Could not refresh managed CLI PATH', { error: error.message });
+    }
+    return result;
+  };
+
   managers.tunnel?.setStatusEmitter?.((payload) => {
     sendToMainWindow('tunnel:statusChanged', payload);
   });
@@ -456,7 +471,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
   });
 
   ipcMain.handle('database:setActiveDatabaseType', async (event, dbType, version) => {
-    return database.setActiveDatabaseType(dbType, version);
+    return runWithManagedCliPathRefresh(() => database.setActiveDatabaseType(dbType, version));
   });
 
   ipcMain.handle('database:getDatabaseInfo', async () => {
@@ -1186,7 +1201,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:downloadPhp', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadPhp(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadPhp(version));
   });
 
   ipcMain.handle('binaries:getPhpVersionDetails', async (event, version) => {
@@ -1206,7 +1221,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:updatePhp', async (event, version, options) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.updatePhp(version, options);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.updatePhp(version, options));
   });
 
   ipcMain.handle('binaries:getPackageVersionDetails', async (event, service, version) => {
@@ -1226,37 +1241,37 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:updatePackage', async (event, service, version, options) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.updatePackage(service, version, options);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.updatePackage(service, version, options));
   });
 
   ipcMain.handle('binaries:downloadMysql', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMysql(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMysql(version));
   });
 
   ipcMain.handle('binaries:downloadMariadb', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMariadb(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMariadb(version));
   });
 
   ipcMain.handle('binaries:downloadRedis', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadRedis(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadRedis(version));
   });
 
   ipcMain.handle('binaries:downloadMailpit', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMailpit();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMailpit());
   });
 
   ipcMain.handle('binaries:downloadCloudflared', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadCloudflared();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadCloudflared());
   });
 
   ipcMain.handle('binaries:downloadZrok', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadZrok();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadZrok());
   });
 
   ipcMain.handle('binaries:downloadPhpMyAdmin', async () => {
@@ -1266,23 +1281,23 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:downloadNginx', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadNginx(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadNginx(version));
   });
 
   ipcMain.handle('binaries:downloadApache', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadApache(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadApache(version));
   });
 
   ipcMain.handle('binaries:importApache', async (event, filePath, version = '2.4') => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.importApache(filePath, version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.importApache(filePath, version));
   });
 
   // Generic binary import for any service
   ipcMain.handle('binaries:import', async (event, serviceName, version, filePath) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.importBinary(serviceName, version, filePath);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.importBinary(serviceName, version, filePath));
   });
 
   ipcMain.handle('binaries:openApacheDownloadPage', async () => {
@@ -1293,47 +1308,47 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:downloadNodejs', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadNodejs(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadNodejs(version));
   });
 
   ipcMain.handle('binaries:downloadComposer', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadComposer();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadComposer());
   });
 
   ipcMain.handle('binaries:downloadGit', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadGit();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadGit());
   });
 
   ipcMain.handle('binaries:downloadPostgresql', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadPostgresql(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadPostgresql(version));
   });
 
   ipcMain.handle('binaries:downloadPython', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadPython(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadPython(version));
   });
 
   ipcMain.handle('binaries:downloadMongodb', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMongodb(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMongodb(version));
   });
 
   ipcMain.handle('binaries:downloadSqlite', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadSqlite(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadSqlite(version));
   });
 
   ipcMain.handle('binaries:downloadMinio', async () => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMinio();
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMinio());
   });
 
   ipcMain.handle('binaries:downloadMemcached', async (event, version) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.downloadMemcached(version);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.downloadMemcached(version));
   });
 
   ipcMain.handle('binaries:runPip', async (event, version, args) => {
@@ -1363,7 +1378,7 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
 
   ipcMain.handle('binaries:remove', async (event, type, version, force) => {
     if (!managers.binaryDownload) throw new Error('Binary manager not initialized');
-    return managers.binaryDownload.removeBinary(type, version, force);
+    return runWithManagedCliPathRefresh(() => managers.binaryDownload.removeBinary(type, version, force));
   });
 
   // Scan for custom imported versions
@@ -1776,9 +1791,9 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
   ipcMain.handle('cli:setDefaultPhpVersion', async (event, version) => {
     if (!managers.cli) throw new Error('CLI manager not initialized');
     managers.cli.setDefaultPhpVersion(version);
-    // Reinstall shims if enabled
     if (managers.cli.getDirectShimsEnabled()) {
       await managers.cli.installDirectShims();
+      await managers.cli.addToPath();
     }
     return version;
   });
@@ -1791,9 +1806,24 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
   ipcMain.handle('cli:setDefaultNodeVersion', async (event, version) => {
     if (!managers.cli) throw new Error('CLI manager not initialized');
     managers.cli.setDefaultNodeVersion(version);
-    // Reinstall shims if enabled
     if (managers.cli.getDirectShimsEnabled()) {
       await managers.cli.installDirectShims();
+      await managers.cli.addToPath();
+    }
+    return version;
+  });
+
+  ipcMain.handle('cli:getDefaultPythonVersion', async () => {
+    if (!managers.cli) return null;
+    return managers.cli.getDefaultPythonVersion();
+  });
+
+  ipcMain.handle('cli:setDefaultPythonVersion', async (event, version) => {
+    if (!managers.cli) throw new Error('CLI manager not initialized');
+    managers.cli.setDefaultPythonVersion(version);
+    if (managers.cli.getDirectShimsEnabled()) {
+      await managers.cli.installDirectShims();
+      await managers.cli.addToPath();
     }
     return version;
   });

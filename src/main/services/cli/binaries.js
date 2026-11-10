@@ -5,6 +5,14 @@ function getPlatform() {
   return process.platform === 'win32' ? 'win' : process.platform === 'darwin' ? 'mac' : 'linux';
 }
 
+function isDirectory(targetPath) {
+  try {
+    return Boolean(targetPath && fs.statSync(targetPath).isDirectory());
+  } catch {
+    return false;
+  }
+}
+
 module.exports = {
   getFirstInstalledNodeVersion() {
     if (!this.resourcesPath) return '20';
@@ -290,5 +298,105 @@ module.exports = {
     } catch {
       return '3.13';
     }
+  },
+
+  getFirstInstalledVersion(serviceName, executableRelativePath) {
+    if (!this.resourcesPath) return null;
+
+    const serviceDir = path.join(this.resourcesPath, serviceName);
+    const platform = getPlatform();
+
+    try {
+      if (!isDirectory(serviceDir)) return null;
+
+      const versions = fs.readdirSync(serviceDir)
+        .filter((version) => !['downloads', 'win', 'mac', 'backups'].includes(version))
+        .filter((version) => fs.existsSync(path.join(serviceDir, version, platform, executableRelativePath)))
+        .sort((left, right) => right.localeCompare(left, undefined, { numeric: true }));
+
+      return versions[0] || null;
+    } catch {
+      return null;
+    }
+  },
+
+  getManagedPathEntries() {
+    if (!this.resourcesPath) return [];
+
+    const platform = getPlatform();
+    const entries = [];
+    const addEntry = (targetPath) => {
+      if (!isDirectory(targetPath)) return;
+
+      const normalized = path.normalize(targetPath);
+      const alreadyAdded = entries.some((entry) => path.normalize(entry).toLowerCase() === normalized.toLowerCase());
+      if (!alreadyAdded) entries.push(normalized);
+    };
+
+    const phpVersion = this.getDefaultPhpVersion() || this.getFirstInstalledPhpVersion();
+    const phpDir = path.join(this.resourcesPath, 'php', phpVersion, platform);
+    if (fs.existsSync(path.join(phpDir, process.platform === 'win32' ? 'php.exe' : 'php'))) {
+      addEntry(phpDir);
+    }
+
+    const nodeVersion = this.getDefaultNodeVersion() || this.getFirstInstalledNodeVersion();
+    const nodeDir = path.join(this.resourcesPath, 'nodejs', nodeVersion, platform);
+    if (fs.existsSync(path.join(nodeDir, process.platform === 'win32' ? 'node.exe' : 'node'))) {
+      addEntry(nodeDir);
+    }
+
+    // Composer is distributed as a PHAR. Its command wrapper lives in the CLI
+    // directory, which is added after all real runtime directories below.
+    addEntry(path.join(this.resourcesPath, 'composer'));
+
+    let databaseInfo = this.getActiveMysqlInfo();
+    const databaseClient = this.getMysqlClientPath(databaseInfo.dbType, databaseInfo.version);
+    if (!databaseClient) {
+      databaseInfo = this.getFirstInstalledMysqlVersion();
+    }
+    const databaseBin = path.join(this.resourcesPath, databaseInfo.dbType, databaseInfo.version, platform, 'bin');
+    addEntry(databaseBin);
+
+    const pythonVersion = this.getDefaultPythonVersion() || this.getFirstInstalledPythonVersion();
+    const pythonDir = path.join(this.resourcesPath, 'python', pythonVersion, platform);
+    if (fs.existsSync(path.join(pythonDir, process.platform === 'win32' ? 'python.exe' : 'bin/python3'))) {
+      addEntry(pythonDir);
+      if (process.platform === 'win32') addEntry(path.join(pythonDir, 'Scripts'));
+      else addEntry(path.join(pythonDir, 'bin'));
+    }
+
+    const versionedTools = [
+      ['postgresql', process.platform === 'win32' ? 'bin/psql.exe' : 'bin/psql', 'bin'],
+      ['mongodb', process.platform === 'win32' ? 'bin/mongosh.exe' : 'bin/mongosh', 'bin'],
+      ['redis', process.platform === 'win32' ? 'redis-cli.exe' : 'redis-cli', ''],
+      ['nginx', process.platform === 'win32' ? 'nginx.exe' : 'nginx', ''],
+      ['apache', process.platform === 'win32' ? 'bin/httpd.exe' : 'bin/httpd', 'bin'],
+      ['memcached', process.platform === 'win32' ? 'memcached.exe' : 'memcached', ''],
+    ];
+
+    for (const [serviceName, executableRelativePath, binRelativePath] of versionedTools) {
+      const version = this.getFirstInstalledVersion(serviceName, executableRelativePath);
+      if (version) addEntry(path.join(this.resourcesPath, serviceName, version, platform, binRelativePath));
+    }
+
+    const unversionedTools = [
+      ['git', platform === 'win' ? 'cmd/git.exe' : 'bin/git', platform === 'win' ? 'cmd' : 'bin'],
+      ['mailpit', platform === 'win' ? 'mailpit.exe' : 'mailpit', ''],
+      ['cloudflared', platform === 'win' ? 'cloudflared.exe' : 'cloudflared', ''],
+      ['zrok', platform === 'win' ? 'zrok.exe' : 'zrok', ''],
+      ['sqlite', platform === 'win' ? 'sqlite3.exe' : 'sqlite3', ''],
+      ['minio', platform === 'win' ? 'minio.exe' : 'minio', ''],
+    ];
+
+    for (const [serviceName, executableName, relativePath] of unversionedTools) {
+      const targetPath = path.join(this.resourcesPath, serviceName, serviceName === 'sqlite' ? '3' : platform, relativePath);
+      if (fs.existsSync(path.join(targetPath, executableName))) addEntry(targetPath);
+    }
+
+    // Keep the MyLocalDev alias available, but after real runtime directories
+    // so `php`, `node`, `python`, etc. resolve to the selected binaries.
+    if (typeof this.getCliPath === 'function') addEntry(this.getCliPath());
+
+    return entries;
   },
 };
