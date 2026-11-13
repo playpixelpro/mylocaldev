@@ -29,6 +29,45 @@ async function needsWindowsRuntimeSync(sourcePath, destPath) {
 }
 
 module.exports = {
+  getConfiguredPortSetting(settingName, fallbackPort) {
+    const configuredPort = this.configStore?.get?.(`settings.${settingName}`, fallbackPort);
+    const port = Number(configuredPort);
+
+    return Number.isInteger(port) && port >= 1024 && port <= 65535
+      ? port
+      : fallbackPort;
+  },
+
+  getConfiguredServicePort(serviceName) {
+    const settingNames = {
+      mysql: 'mysqlPort',
+      mariadb: 'mariadbPort',
+      redis: 'redisPort',
+      mailpit: 'mailpitPort',
+      phpmyadmin: 'phpMyAdminPort',
+      postgresql: 'postgresqlPort',
+      mongodb: 'mongodbPort',
+      memcached: 'memcachedPort',
+      minio: 'minioPort',
+    };
+    const serviceConfig = this.serviceConfigs?.[serviceName];
+    const settingName = settingNames[serviceName];
+
+    if (!serviceConfig || !settingName) {
+      return serviceConfig?.defaultPort;
+    }
+
+    return this.getConfiguredPortSetting(settingName, serviceConfig.defaultPort);
+  },
+
+  getConfiguredMailpitSmtpPort() {
+    return this.getConfiguredPortSetting('mailpitSmtpPort', this.serviceConfigs.mailpit.smtpPort);
+  },
+
+  getConfiguredMinioConsolePort() {
+    return this.getConfiguredPortSetting('minioConsolePort', this.serviceConfigs.minio.consolePort);
+  },
+
   getDataPath() {
     if (typeof this.configStore.getDataPath === 'function') {
       return this.configStore.getDataPath();

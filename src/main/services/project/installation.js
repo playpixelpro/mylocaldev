@@ -4,6 +4,7 @@ const installationLaravel = require('./installation/laravel');
 const installationNodeFramework = require('./installation/nodeFramework');
 const installationPostClone = require('./installation/postClone');
 const installationSymfony = require('./installation/symfony');
+const installationCodeIgniter = require('./installation/codeigniter');
 const installationWordPress = require('./installation/wordpress');
 
 module.exports = Object.assign(
@@ -14,5 +15,6 @@ module.exports = Object.assign(
   installationNodeFramework,
   installationPostClone,
   installationSymfony,
+  installationCodeIgniter,
   installationWordPress,
 );

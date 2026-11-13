@@ -1657,7 +1657,7 @@ function OverviewTab({ project, processes, refreshProjects }) {
                 }}
                 placeholder={
                   project.type === 'wordpress' ? 'Default: project root' :
-                    project.type === 'laravel' || project.type === 'symfony' ? 'Default: public' :
+                    project.type === 'laravel' || project.type === 'symfony' || project.type === 'codeigniter' ? 'Default: public' :
                       'Default: auto-detect (public, www, web)'
                 }
                 className="input text-sm w-full"

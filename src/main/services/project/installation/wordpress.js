@@ -182,9 +182,12 @@ module.exports = {
         const runningVersions = serviceManager?.runningVersions?.get(dbType);
         const runningVersionInfo = runningVersions?.get(dbVersion);
         const serviceConfig = serviceManager?.serviceConfigs?.[dbType];
+        const configuredBasePort = serviceManager?.getConfiguredServicePort?.(dbType)
+          || serviceConfig?.defaultPort
+          || (prefersMariaDb ? 3310 : 3306);
         const fallbackPort = serviceManager?.getVersionPort
-          ? serviceManager.getVersionPort(dbType, dbVersion, serviceConfig?.defaultPort || (prefersMariaDb ? 3310 : 3306))
-          : (prefersMariaDb ? 3310 : 3306);
+          ? serviceManager.getVersionPort(dbType, dbVersion, configuredBasePort)
+          : configuredBasePort;
         const dbUser = settings.dbUser || dbInfo.user || 'root';
         const dbPassword = settings.dbPassword !== undefined ? settings.dbPassword : (dbInfo.password || '');
         const dbPort = runningVersionInfo?.port || fallbackPort;

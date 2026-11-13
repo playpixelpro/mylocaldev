@@ -13,6 +13,10 @@ function spawnHidden(command, args, options = {}) {
 }
 
 module.exports = {
+  getPhpMyAdminPort() {
+    return this.getConfiguredServicePort('phpmyadmin');
+  },
+
   // phpMyAdmin (using built-in PHP server)
   async startPhpMyAdmin() {
     const phpManager = this.managers.php;
@@ -68,7 +72,7 @@ module.exports = {
       return;
     }
 
-    const defaultPort = this.serviceConfigs.phpmyadmin.defaultPort;
+    const defaultPort = this.getPhpMyAdminPort();
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {
@@ -162,7 +166,7 @@ $cfg['Servers'][${serverIndex}]['AllowNoPassword'] = true;
       .filter(v => installedBinaries.mysql?.[v] === true)
       .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
     for (const version of mysqlVersions) {
-      const port = this.getVersionPort('mysql', version, this.serviceConfigs.mysql.defaultPort);
+      const port = this.getVersionPort('mysql', version, this.getConfiguredServicePort('mysql'));
       addServer('mysql', port, `MySQL ${version}`);
     }
 
@@ -170,7 +174,7 @@ $cfg['Servers'][${serverIndex}]['AllowNoPassword'] = true;
       .filter(v => installedBinaries.mariadb?.[v] === true)
       .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
     for (const version of mariadbVersions) {
-      const port = this.getVersionPort('mariadb', version, this.serviceConfigs.mariadb.defaultPort);
+      const port = this.getVersionPort('mariadb', version, this.getConfiguredServicePort('mariadb'));
       addServer('mariadb', port, `MariaDB ${version}`);
     }
 

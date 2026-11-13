@@ -61,7 +61,7 @@ module.exports = {
       // Best-effort cleanup
     }
 
-    const defaultPort = this.getVersionPort('redis', version, this.serviceConfigs.redis.defaultPort);
+    const defaultPort = this.getVersionPort('redis', version, this.getConfiguredServicePort('redis'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {

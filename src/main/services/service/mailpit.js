@@ -25,8 +25,8 @@ module.exports = {
       return;
     }
 
-    const defaultPort = this.serviceConfigs.mailpit.defaultPort;
-    const defaultSmtpPort = this.serviceConfigs.mailpit.smtpPort;
+    const defaultPort = this.getConfiguredServicePort('mailpit');
+    const defaultSmtpPort = this.getConfiguredMailpitSmtpPort();
 
     let port = defaultPort;
     let smtpPort = defaultSmtpPort;

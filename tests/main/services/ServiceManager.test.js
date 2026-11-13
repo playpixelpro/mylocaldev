@@ -173,6 +173,49 @@ describe('ServiceManager', () => {
     });
 
     describe('startService', () => {
+        it('uses the saved phpMyAdmin port setting when resolving its port', () => {
+            configStore.set('settings.phpMyAdminPort', 9090);
+
+            expect(mgr.getPhpMyAdminPort()).toBe(9090);
+        });
+
+        it('falls back to the default phpMyAdmin port for invalid settings', () => {
+            configStore.set('settings.phpMyAdminPort', 70000);
+
+            expect(mgr.getPhpMyAdminPort()).toBe(8080);
+        });
+
+        it('resolves every configurable service port from saved settings', () => {
+            const configuredPorts = {
+                mysqlPort: 13306,
+                mariadbPort: 13307,
+                redisPort: 16379,
+                mailpitPort: 18025,
+                phpMyAdminPort: 18080,
+                postgresqlPort: 15432,
+                mongodbPort: 17017,
+                memcachedPort: 21211,
+                minioPort: 19000,
+                mailpitSmtpPort: 11025,
+                minioConsolePort: 19001,
+            };
+
+            Object.entries(configuredPorts).forEach(([key, value]) => configStore.set(`settings.${key}`, value));
+
+            expect(mgr.getConfiguredServicePort('mysql')).toBe(13306);
+            expect(mgr.getConfiguredServicePort('mariadb')).toBe(13307);
+            expect(mgr.getConfiguredServicePort('redis')).toBe(16379);
+            expect(mgr.getConfiguredServicePort('mailpit')).toBe(18025);
+            expect(mgr.getPhpMyAdminPort()).toBe(18080);
+            expect(mgr.getConfiguredServicePort('postgresql')).toBe(15432);
+            expect(mgr.getConfiguredServicePort('mongodb')).toBe(17017);
+            expect(mgr.getConfiguredServicePort('memcached')).toBe(21211);
+            expect(mgr.getConfiguredServicePort('minio')).toBe(19000);
+            expect(mgr.getConfiguredMailpitSmtpPort()).toBe(11025);
+            expect(mgr.getConfiguredMinioConsolePort()).toBe(19001);
+            expect(mgr.getVersionPort('mysql', '8.0', mgr.getConfiguredServicePort('mysql'))).toBe(13307);
+        });
+
         it('calls the corresponding specific start method for MySQL', async () => {
             await mgr.startService('mysql', '8.4');
             expect(mgr.startMySQL).toHaveBeenCalledWith('8.4');

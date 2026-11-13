@@ -82,6 +82,8 @@ module.exports = {
         await this.installWordPress(project, mainWindow);
       } else if (project.type === 'symfony') {
         await this.installSymfony(project, mainWindow);
+      } else if (project.type === 'codeigniter') {
+        await this.installCodeIgniter(project, mainWindow);
       } else if (project.type === 'nodejs') {
         await this.installNodeFramework(project, mainWindow);
       }

@@ -183,6 +183,7 @@ class ConfigStore {
         mailpitSmtpPort: 1025,
         redisPort: 6379,
         mysqlPort: 3306,
+        mariadbPort: 3310,
         postgresqlPort: 5432,
         mongodbPort: 27017,
         minioPort: 9000,

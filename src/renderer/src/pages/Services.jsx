@@ -794,6 +794,9 @@ function SimpleServiceCard({
   resourceUsage
 }) {
   const Icon = info.icon;
+  const webUrl = serviceName === 'phpmyadmin'
+    ? `http://localhost:${service.port || info.defaultPort}`
+    : info.webUrl;
 
   const colorClasses = {
     blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
@@ -873,9 +876,9 @@ function SimpleServiceCard({
           )}
         </button>
 
-        {isRunning && info.webUrl && (
+        {isRunning && webUrl && (
           <button
-            onClick={() => window.mylocaldev?.system.openExternal(info.webUrl)}
+            onClick={() => window.mylocaldev?.system.openExternal(webUrl)}
             className="btn-ghost btn-sm"
           >
             <ExternalLink className="w-4 h-4" />

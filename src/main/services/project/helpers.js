@@ -86,10 +86,14 @@ module.exports = {
 
     let dbPort = activeDatabaseInfo.port || DEFAULT_DATABASE_PORTS[dbType] || DEFAULT_DATABASE_PORTS.mysql;
     if (selection.explicit) {
+      const configuredBasePort = serviceManager?.getConfiguredServicePort?.(dbType)
+        || serviceConfig?.defaultPort
+        || DEFAULT_DATABASE_PORTS[dbType]
+        || DEFAULT_DATABASE_PORTS.mysql;
       dbPort = runningVersionInfo?.port
         || (serviceManager?.getVersionPort
-          ? serviceManager.getVersionPort(dbType, dbVersion, serviceConfig?.defaultPort || DEFAULT_DATABASE_PORTS[dbType] || DEFAULT_DATABASE_PORTS.mysql)
-          : (serviceConfig?.defaultPort || DEFAULT_DATABASE_PORTS[dbType] || DEFAULT_DATABASE_PORTS.mysql));
+          ? serviceManager.getVersionPort(dbType, dbVersion, configuredBasePort)
+          : configuredBasePort);
     }
 
     const dbUser = settings.dbUser || activeDatabaseInfo.user || 'root';
@@ -462,6 +466,8 @@ module.exports = {
       case 'laravel':
         return path.join(project.path, 'public');
       case 'symfony':
+        return path.join(project.path, 'public');
+      case 'codeigniter':
         return path.join(project.path, 'public');
       case 'wordpress':
         return project.path;

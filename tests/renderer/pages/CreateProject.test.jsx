@@ -123,6 +123,7 @@ describe('CreateProject', () => {
             await waitFor(() => {
                 const laravelButton = screen.getByText('Laravel');
                 expect(laravelButton).toBeInTheDocument();
+                expect(screen.getByText('CodeIgniter 4')).toBeInTheDocument();
             });
         });
 

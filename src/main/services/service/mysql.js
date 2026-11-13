@@ -74,7 +74,7 @@ module.exports = {
     const shareMessagesPath = path.join(mysqlPath, 'share', 'messages_to_error_log.txt');
 
     const status = this.serviceStatus.get('mysql');
-    const defaultPort = this.getVersionPort('mysql', version, this.serviceConfigs.mysql.defaultPort);
+    const defaultPort = this.getVersionPort('mysql', version, this.getConfiguredServicePort('mysql'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {
@@ -340,7 +340,7 @@ module.exports = {
     const dataDir = path.join(dataPath, 'mysql', version, 'data');
     const configPath = path.join(dataPath, 'mysql', version, 'my.cnf');
 
-    const defaultPort = this.getVersionPort('mysql', version, this.serviceConfigs.mysql.defaultPort);
+    const defaultPort = this.getVersionPort('mysql', version, this.getConfiguredServicePort('mysql'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {
@@ -433,7 +433,7 @@ module.exports = {
     const dataPath = this.getDataPath();
     const dataDir = path.join(dataPath, 'mysql', version, 'data');
 
-    const defaultPort = this.getVersionPort('mysql', version, this.serviceConfigs.mysql.defaultPort);
+    const defaultPort = this.getVersionPort('mysql', version, this.getConfiguredServicePort('mysql'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {

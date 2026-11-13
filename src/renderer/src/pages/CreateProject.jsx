@@ -80,6 +80,14 @@ const PROJECT_TYPES = [
     features: ['Console Commands', 'Doctrine ORM'],
   },
   {
+    id: 'codeigniter',
+    name: 'CodeIgniter 4',
+    description: 'Lightweight PHP framework for fast web applications',
+    icon: PhpIcon,
+    iconColor: 'text-orange-500',
+    features: ['Spark CLI', 'MVC Architecture'],
+  },
+  {
     id: 'wordpress',
     name: 'WordPress',
     description: 'Popular CMS for websites and blogs',
@@ -577,7 +585,7 @@ function CreateProject() {
 
     // Reset and show installation progress if installing fresh OR cloning from repository OR nodejs project
     const shouldShowProgress =
-      (formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony')) ||
+      (formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony' || formData.type === 'codeigniter')) ||
       (formData.projectSource === 'clone' && formData.repositoryUrl) ||
       formData.type === 'nodejs';
 
@@ -857,8 +865,8 @@ function CreateProject() {
                 {isCreating ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress')
-                      ? `Installing ${formData.type === 'laravel' ? 'Laravel' : 'WordPress'}...`
+                    {formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony' || formData.type === 'codeigniter')
+                      ? `Installing ${formData.type === 'laravel' ? 'Laravel' : formData.type === 'wordpress' ? 'WordPress' : formData.type === 'symfony' ? 'Symfony' : 'CodeIgniter 4'}...`
                       : 'Creating...'}
                   </>
                 ) : (
@@ -1187,7 +1195,7 @@ function StepDetails({
 
       <div className="space-y-6">
         {/* Project Source Selection - Available for framework and Node.js projects */}
-        {(formData.type === 'laravel' || formData.type === 'custom' || formData.type === 'nodejs') && (
+        {(formData.type === 'laravel' || formData.type === 'codeigniter' || formData.type === 'custom' || formData.type === 'nodejs') && (
           <div>
             <label className="label">Project Source</label>
             <div className={clsx('gap-4', gitStatus?.available || gitStatus?.checking ? 'grid grid-cols-2' : 'grid grid-cols-1')}>
@@ -1640,7 +1648,7 @@ function StepDetails({
         )}
 
         {/* Fresh Install Toggle - only for new projects */}
-        {formData.projectSource === 'new' && (formData.type === 'laravel' || formData.type === 'wordpress') && (
+        {formData.projectSource === 'new' && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony' || formData.type === 'codeigniter') && (
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
@@ -1651,12 +1659,16 @@ function StepDetails({
               />
               <div>
                 <span className="font-medium text-gray-900 dark:text-white">
-                  Install Fresh {formData.type === 'laravel' ? 'Laravel' : 'WordPress'}
+                  Install Fresh {formData.type === 'laravel' ? 'Laravel' : formData.type === 'wordpress' ? 'WordPress' : formData.type === 'symfony' ? 'Symfony' : 'CodeIgniter 4'}
                 </span>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {formData.type === 'laravel'
                     ? 'Run "composer create-project laravel/laravel" to set up a new Laravel installation'
-                    : 'Download and install a fresh WordPress copy'}
+                    : formData.type === 'symfony'
+                      ? 'Run "composer create-project symfony/skeleton" to set up a new Symfony installation'
+                      : formData.type === 'codeigniter'
+                        ? 'Run "composer create-project codeigniter4/appstarter" to set up a new CodeIgniter 4 application'
+                        : 'Download and install a fresh WordPress copy'}
                 </p>
               </div>
             </label>
@@ -2177,13 +2189,13 @@ function StepDomain({ formData, updateFormData, binariesStatus, serviceConfig, d
             className="input"
             placeholder={
               formData.type === 'wordpress' ? '.' :
-                formData.type === 'laravel' || formData.type === 'symfony' ? 'public' :
+              formData.type === 'laravel' || formData.type === 'symfony' || formData.type === 'codeigniter' ? 'public' :
                   'public, www, web, or .'
             }
           />
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
             The folder the web server points to.
-            {formData.type === 'laravel' || formData.type === 'symfony'
+            {formData.type === 'laravel' || formData.type === 'symfony' || formData.type === 'codeigniter'
               ? ' Default: public'
               : formData.type === 'wordpress'
                 ? ' Default: project root'
@@ -2414,20 +2426,22 @@ function StepReview({ formData }) {
         )}
 
         {/* Fresh Install Notice */}
-        {formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony') && (
+        {formData.installFresh && (formData.type === 'laravel' || formData.type === 'wordpress' || formData.type === 'symfony' || formData.type === 'codeigniter') && (
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
             <div className="flex items-center gap-2">
               <span className="text-xl">📦</span>
               <div>
                 <h3 className="font-medium text-blue-900 dark:text-blue-100">
-                  Fresh {formData.type === 'laravel' ? 'Laravel' : formData.type === 'symfony' ? 'Symfony' : 'WordPress'} Installation
+                  Fresh {formData.type === 'laravel' ? 'Laravel' : formData.type === 'symfony' ? 'Symfony' : formData.type === 'codeigniter' ? 'CodeIgniter 4' : 'WordPress'} Installation
                 </h3>
                 <p className="text-sm text-blue-700 dark:text-blue-300">
                   {formData.type === 'laravel'
                     ? `Will run "composer create-project" and generate app key${formData.services.nodejs ? ', then "npm install"' : ''} to set up a complete Laravel application.`
                     : formData.type === 'symfony'
                       ? 'Will run "composer create-project symfony/skeleton" and install webapp dependencies.'
-                      : 'Will run "composer create-project johnpbloch/wordpress" and configure wp-config.php.'}
+                      : formData.type === 'codeigniter'
+                        ? 'Will run "composer create-project codeigniter4/appstarter" and configure the application environment.'
+                        : 'Will run "composer create-project johnpbloch/wordpress" and configure wp-config.php.'}
                 </p>
               </div>
             </div>

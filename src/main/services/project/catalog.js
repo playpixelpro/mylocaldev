@@ -98,6 +98,9 @@ module.exports = {
         if (composer.require?.['symfony/framework-bundle']) {
           return 'symfony';
         }
+        if (composer.require?.['codeigniter4/framework']) {
+          return 'codeigniter';
+        }
       }
 
       if (await fs.pathExists(path.join(projectPath, 'wp-config.php'))) {

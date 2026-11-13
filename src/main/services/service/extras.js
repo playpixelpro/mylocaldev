@@ -78,7 +78,7 @@ module.exports = {
       });
     }
 
-    const defaultPort = this.getVersionPort('postgresql', version, this.serviceConfigs.postgresql.defaultPort);
+    const defaultPort = this.getVersionPort('postgresql', version, this.getConfiguredServicePort('postgresql'));
     let port = defaultPort;
     if (!await isPortAvailable(port)) {
       port = await findAvailablePort(defaultPort, 100);
@@ -175,7 +175,7 @@ module.exports = {
     await fs.ensureDir(dataDir);
     await fs.ensureDir(path.dirname(logFile));
 
-    const defaultPort = this.getVersionPort('mongodb', version, this.serviceConfigs.mongodb.defaultPort);
+    const defaultPort = this.getVersionPort('mongodb', version, this.getConfiguredServicePort('mongodb'));
     let port = defaultPort;
     if (!await isPortAvailable(port)) {
       port = await findAvailablePort(defaultPort, 100);
@@ -263,7 +263,7 @@ module.exports = {
       return;
     }
 
-    const defaultPort = this.getVersionPort('memcached', version, this.serviceConfigs.memcached.defaultPort);
+    const defaultPort = this.getVersionPort('memcached', version, this.getConfiguredServicePort('memcached'));
     let port = defaultPort;
     if (!await isPortAvailable(port)) {
       port = await findAvailablePort(defaultPort, 100);
@@ -328,8 +328,8 @@ module.exports = {
     const minioDataDir = path.join(dataPath, 'minio', 'data');
     await fs.ensureDir(minioDataDir);
 
-    const defaultPort = this.serviceConfigs.minio.defaultPort;
-    const defaultConsolePort = this.serviceConfigs.minio.consolePort;
+    const defaultPort = this.getConfiguredServicePort('minio');
+    const defaultConsolePort = this.getConfiguredMinioConsolePort();
     let port = defaultPort;
     let consolePort = defaultConsolePort;
 

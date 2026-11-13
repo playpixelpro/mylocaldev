@@ -71,47 +71,65 @@ module.exports = {
   },
 
   async checkMySqlHealth() {
-    const port = this.serviceConfigs.mysql.actualPort || this.serviceConfigs.mysql.defaultPort;
+    const port = this.serviceConfigs.mysql.actualPort
+      || this.getConfiguredServicePort?.('mysql')
+      || this.serviceConfigs.mysql.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkMariaDbHealth() {
-    const port = this.serviceConfigs.mariadb.actualPort || this.serviceConfigs.mariadb.defaultPort;
+    const port = this.serviceConfigs.mariadb.actualPort
+      || this.getConfiguredServicePort?.('mariadb')
+      || this.serviceConfigs.mariadb.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkRedisHealth() {
-    const port = this.serviceConfigs.redis.actualPort || this.serviceConfigs.redis.defaultPort;
+    const port = this.serviceConfigs.redis.actualPort
+      || this.getConfiguredServicePort?.('redis')
+      || this.serviceConfigs.redis.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkMailpitHealth() {
-    const port = this.serviceConfigs.mailpit.actualPort || this.serviceConfigs.mailpit.defaultPort;
+    const port = this.serviceConfigs.mailpit.actualPort
+      || this.getConfiguredServicePort?.('mailpit')
+      || this.serviceConfigs.mailpit.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkPhpMyAdminHealth() {
-    const port = this.serviceConfigs.phpmyadmin.actualPort || this.serviceConfigs.phpmyadmin.defaultPort;
+    const port = this.serviceConfigs.phpmyadmin.actualPort
+      || this.getPhpMyAdminPort?.()
+      || this.serviceConfigs.phpmyadmin.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkPostgresqlHealth() {
-    const port = this.serviceConfigs.postgresql.actualPort || this.serviceConfigs.postgresql.defaultPort;
+    const port = this.serviceConfigs.postgresql.actualPort
+      || this.getConfiguredServicePort?.('postgresql')
+      || this.serviceConfigs.postgresql.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkMongodbHealth() {
-    const port = this.serviceConfigs.mongodb.actualPort || this.serviceConfigs.mongodb.defaultPort;
+    const port = this.serviceConfigs.mongodb.actualPort
+      || this.getConfiguredServicePort?.('mongodb')
+      || this.serviceConfigs.mongodb.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkMemcachedHealth() {
-    const port = this.serviceConfigs.memcached.actualPort || this.serviceConfigs.memcached.defaultPort;
+    const port = this.serviceConfigs.memcached.actualPort
+      || this.getConfiguredServicePort?.('memcached')
+      || this.serviceConfigs.memcached.defaultPort;
     return this.checkPortOpen(port);
   },
 
   async checkMinioHealth() {
-    const port = this.serviceConfigs.minio.actualPort || this.serviceConfigs.minio.defaultPort;
+    const port = this.serviceConfigs.minio.actualPort
+      || this.getConfiguredServicePort?.('minio')
+      || this.serviceConfigs.minio.defaultPort;
     return this.checkPortOpen(port);
   },
 

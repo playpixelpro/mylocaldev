@@ -396,7 +396,7 @@ function ImportProjectModal({ project, onClose, onImport }) {
                                                     onChange={(e) => setConfig({ ...config, documentRoot: e.target.value })}
                                                     placeholder={
                                                         config.type === 'wordpress' ? 'Default: project root' :
-                                                        config.type === 'laravel' || config.type === 'symfony' ? 'Default: public' :
+                                                        config.type === 'laravel' || config.type === 'symfony' || config.type === 'codeigniter' ? 'Default: public' :
                                                         'Default: auto-detect'
                                                     }
                                                     className="input text-sm"

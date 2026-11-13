@@ -95,7 +95,7 @@ module.exports = {
     const dataDir = path.join(dataPath, 'mariadb', version, 'data');
     const status = this.serviceStatus.get('mariadb');
 
-    const defaultPort = this.getVersionPort('mariadb', version, this.serviceConfigs.mariadb.defaultPort);
+    const defaultPort = this.getVersionPort('mariadb', version, this.getConfiguredServicePort('mariadb'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {
@@ -296,7 +296,7 @@ module.exports = {
     const dataDir = path.join(dataPath, 'mariadb', version, 'data');
     const configPath = path.join(dataPath, 'mariadb', version, 'my.cnf');
 
-    const defaultPort = this.getVersionPort('mariadb', version, this.serviceConfigs.mariadb.defaultPort);
+    const defaultPort = this.getVersionPort('mariadb', version, this.getConfiguredServicePort('mariadb'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {
@@ -367,7 +367,7 @@ module.exports = {
     const dataPath = this.getDataPath();
     const dataDir = path.join(dataPath, 'mariadb', version, 'data');
 
-    const defaultPort = this.getVersionPort('mariadb', version, this.serviceConfigs.mariadb.defaultPort);
+    const defaultPort = this.getVersionPort('mariadb', version, this.getConfiguredServicePort('mariadb'));
     let port = defaultPort;
 
     if (!await isPortAvailable(port)) {

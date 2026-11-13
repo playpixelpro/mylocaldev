@@ -58,10 +58,14 @@ module.exports = {
   async initialize() {
     // Set initial status for all services
     for (const [key, config] of Object.entries(this.serviceConfigs)) {
+      const initialPort = typeof this.getConfiguredServicePort === 'function'
+        ? this.getConfiguredServicePort(key)
+        : config.defaultPort;
+
       this.serviceStatus.set(key, {
         name: config.name,
         status: 'stopped',
-        port: config.defaultPort,
+        port: initialPort,
         pid: null,
         uptime: null,
         memory: 0,

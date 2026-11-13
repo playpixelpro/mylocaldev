@@ -104,13 +104,20 @@ module.exports = {
       }
 
       const serviceConfig = this.managers.service.serviceConfigs[dbType];
-      const basePort = serviceConfig?.defaultPort || 3306;
+      const basePort = this.managers.service.getConfiguredServicePort?.(dbType)
+        || serviceConfig?.defaultPort
+        || 3306;
       const portOffset = this.managers.service.versionPortOffsets[dbType]?.[version] || 0;
       return basePort + portOffset;
     }
 
-    const defaultPorts = { mariadb: 3306, mysql: 3306, postgresql: 5432, mongodb: 27017 };
-    return defaultPorts[dbType] || (settings.mysqlPort || 3306);
+    const defaultPorts = {
+      mariadb: settings.mariadbPort || 3310,
+      mysql: settings.mysqlPort || 3306,
+      postgresql: settings.postgresqlPort || 5432,
+      mongodb: settings.mongodbPort || 27017,
+    };
+    return defaultPorts[dbType] || 3306;
   },
 
   isServiceRunning(dbType = null, version = null) {
@@ -169,7 +176,11 @@ module.exports = {
       }
     }
 
-    const pmaPort = this.managers.service.serviceConfigs.phpmyadmin.actualPort || 8080;
+    const pmaConfig = this.managers.service.serviceConfigs.phpmyadmin;
+    const pmaPort = pmaConfig.actualPort
+      || this.managers.service.getPhpMyAdminPort?.()
+      || pmaConfig.defaultPort
+      || 8080;
     await (async () => {
       const http = require('http');
       const maxWait = 30000;

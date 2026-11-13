@@ -1186,11 +1186,42 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
   // falling back to static SERVICE_VERSIONS as defaults
   ipcMain.handle('binaries:getServiceConfig', async () => {
     const dynamicVersions = managers.binaryDownload?.versionMeta;
+    const defaultPorts = {
+      ...DEFAULT_PORTS,
+      mysql: service?.getConfiguredServicePort?.('mysql') || DEFAULT_PORTS.mysql,
+      mariadb: service?.getConfiguredServicePort?.('mariadb') || DEFAULT_PORTS.mariadb,
+      redis: service?.getConfiguredServicePort?.('redis') || DEFAULT_PORTS.redis,
+      mailpit: service?.getConfiguredServicePort?.('mailpit') || DEFAULT_PORTS.mailpit,
+      mailpitSmtp: service?.getConfiguredMailpitSmtpPort?.() || DEFAULT_PORTS.mailpitSmtp,
+      phpmyadmin: service?.getPhpMyAdminPort?.() || DEFAULT_PORTS.phpmyadmin,
+      postgresql: service?.getConfiguredServicePort?.('postgresql') || DEFAULT_PORTS.postgresql,
+      mongodb: service?.getConfiguredServicePort?.('mongodb') || DEFAULT_PORTS.mongodb,
+      memcached: service?.getConfiguredServicePort?.('memcached') || DEFAULT_PORTS.memcached,
+      minio: service?.getConfiguredServicePort?.('minio') || DEFAULT_PORTS.minio,
+      minioConsole: service?.getConfiguredMinioConsolePort?.() || DEFAULT_PORTS.minioConsole,
+    };
     return {
       versions: dynamicVersions || SERVICE_VERSIONS,
       portOffsets: VERSION_PORT_OFFSETS,
-      defaultPorts: DEFAULT_PORTS,
-      serviceInfo: SERVICE_INFO,
+      defaultPorts,
+      serviceInfo: {
+        ...SERVICE_INFO,
+        phpmyadmin: {
+          ...SERVICE_INFO.phpmyadmin,
+          defaultPort: defaultPorts.phpmyadmin,
+          webUrl: `http://localhost:${defaultPorts.phpmyadmin}`,
+        },
+        mailpit: {
+          ...SERVICE_INFO.mailpit,
+          defaultPort: defaultPorts.mailpit,
+          webUrl: `http://localhost:${defaultPorts.mailpit}`,
+        },
+        minio: {
+          ...SERVICE_INFO.minio,
+          defaultPort: defaultPorts.minio,
+          webUrl: `http://localhost:${defaultPorts.minioConsole}`,
+        },
+      },
     };
   });
 

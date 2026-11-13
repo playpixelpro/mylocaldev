@@ -986,19 +986,19 @@ function NetworkSettings({ settings, updateSetting }) {
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">MySQL</label>
-              <input type="number" value={settings.mysqlPort || 3306} onChange={(e) => updateSetting('mysqlPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.mysqlPort || 3306} onChange={(e) => updateSetting('mysqlPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">PostgreSQL</label>
-              <input type="number" value={settings.postgresqlPort || 5432} onChange={(e) => updateSetting('postgresqlPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.postgresqlPort || 5432} onChange={(e) => updateSetting('postgresqlPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">MariaDB</label>
-              <input type="number" value={settings.mariadbPort || 3307} onChange={(e) => updateSetting('mariadbPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.mariadbPort || 3310} onChange={(e) => updateSetting('mariadbPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">MongoDB</label>
-              <input type="number" value={settings.mongodbPort || 27017} onChange={(e) => updateSetting('mongodbPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.mongodbPort || 27017} onChange={(e) => updateSetting('mongodbPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
           </div>
         </div>
@@ -1009,11 +1009,11 @@ function NetworkSettings({ settings, updateSetting }) {
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">Redis</label>
-              <input type="number" value={settings.redisPort || 6379} onChange={(e) => updateSetting('redisPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.redisPort || 6379} onChange={(e) => updateSetting('redisPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">Memcached</label>
-              <input type="number" value={settings.memcachedPort || 11211} onChange={(e) => updateSetting('memcachedPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.memcachedPort || 11211} onChange={(e) => updateSetting('memcachedPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
           </div>
         </div>
@@ -1024,19 +1024,23 @@ function NetworkSettings({ settings, updateSetting }) {
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">phpMyAdmin</label>
-              <input type="number" value={settings.phpMyAdminPort || 8080} onChange={(e) => updateSetting('phpMyAdminPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.phpMyAdminPort || 8080} onChange={(e) => updateSetting('phpMyAdminPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">Mailpit</label>
-              <input type="number" value={settings.mailpitPort || 8025} onChange={(e) => updateSetting('mailpitPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.mailpitPort || 8025} onChange={(e) => updateSetting('mailpitPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
+            </div>
+            <div className="flex items-center gap-3">
+              <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">Mailpit SMTP</label>
+              <input type="number" value={settings.mailpitSmtpPort || 1025} onChange={(e) => updateSetting('mailpitSmtpPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">MinIO</label>
-              <input type="number" value={settings.minioPort || 9000} onChange={(e) => updateSetting('minioPort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.minioPort || 9000} onChange={(e) => updateSetting('minioPort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
             <div className="flex items-center gap-3">
               <label className="text-sm text-gray-700 dark:text-gray-300 w-36 shrink-0">MinIO Console</label>
-              <input type="number" value={settings.minioConsolePort || 9001} onChange={(e) => updateSetting('minioConsolePort', parseInt(e.target.value))} className="input w-28" />
+              <input type="number" value={settings.minioConsolePort || 9001} onChange={(e) => updateSetting('minioConsolePort', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
           </div>
         </div>

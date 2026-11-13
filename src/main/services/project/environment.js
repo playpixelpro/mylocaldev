@@ -199,6 +199,9 @@ module.exports = {
   getDefaultEnvironment(projectType, projectName, port, projectConfig = {}) {
     const mode = projectConfig.deploymentMode || 'local';
     const isProd = mode === 'production';
+    const settings = this.configStore?.get('settings', {}) || {};
+    const redisPort = settings.redisPort || 6379;
+    const mailpitSmtpPort = settings.mailpitSmtpPort || 1025;
 
     const baseEnv = {
       APP_ENV: isProd ? 'production' : 'local',
@@ -231,10 +234,10 @@ module.exports = {
           QUEUE_CONNECTION: 'redis',
           SESSION_DRIVER: 'redis',
           REDIS_HOST: '127.0.0.1',
-          REDIS_PORT: '6379',
+          REDIS_PORT: String(redisPort),
           MAIL_MAILER: 'smtp',
           MAIL_HOST: '127.0.0.1',
-          MAIL_PORT: '1025',
+          MAIL_PORT: String(mailpitSmtpPort),
         };
 
         if (isProd) {
@@ -255,7 +258,7 @@ module.exports = {
         const symfonyEnv = {
           ...baseEnv,
           DATABASE_URL: dbConfig.symfonyDatabaseUrl,
-          MAILER_DSN: 'smtp://127.0.0.1:1025',
+          MAILER_DSN: `smtp://127.0.0.1:${mailpitSmtpPort}`,
         };
 
         if (isProd) {
