@@ -22,14 +22,19 @@ const { __resetForTests } = require('../../../src/main/utils/PathResolver');
 
 describe('ConfigStore', () => {
     let store;
+    const isolatedHomeDir = path.join(os.tmpdir(), 'MyLocalDev-configstore-home');
 
     beforeEach(() => {
+        vi.spyOn(os, 'homedir').mockReturnValue(isolatedHomeDir);
+        fs.rmSync(isolatedHomeDir, { recursive: true, force: true });
         __resetForTests();
         store = new ConfigStore();
     });
 
     afterEach(() => {
         __resetForTests();
+        fs.rmSync(isolatedHomeDir, { recursive: true, force: true });
+        vi.restoreAllMocks();
     });
 
     // ─── constructor ──────────────────────────────────────────────────────

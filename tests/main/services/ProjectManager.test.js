@@ -263,6 +263,24 @@ describe('ProjectManager', () => {
             expect(updated.phpVersion).toBe('8.3');
         });
 
+        it('reassigns existing project ports when the port range start changes', async () => {
+            const projects = [
+                { id: 'first', name: 'First', port: 8000, environment: { APP_URL: 'http://localhost:8000' } },
+                { id: 'second', name: 'Second', port: 8001, environment: { APP_URL: 'http://localhost:8001' } },
+            ];
+            configStore.set('projects', projects);
+
+            const result = await mgr.applyPortRangeStart(7000);
+
+            expect(result).toEqual({ success: true, updated: 2 });
+            expect(configStore.get('projects')).toEqual([
+                expect.objectContaining({ id: 'first', port: 7000 }),
+                expect.objectContaining({ id: 'second', port: 7001 }),
+            ]);
+            expect(configStore.get('projects')[0].environment.APP_URL).toBe('http://localhost:7000');
+            expect(configStore.get('projects')[1].environment.APP_URL).toBe('http://localhost:7001');
+        });
+
         it('rejects updating a project to a domain already reserved by another project', async () => {
             const project = { id: 'abc1234', name: 'OldName', type: 'static', phpVersion: '8.2', path: '/foo/old', domain: 'old.test', domains: ['old.test'], services: {} };
             const otherProject = { id: 'other', name: 'OtherProj', type: 'static', phpVersion: '8.2', path: '/foo/other', domain: 'dupe.test', domains: ['dupe.test'], services: {} };

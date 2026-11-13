@@ -148,6 +148,67 @@ class ProjectManager {
     return projects[index];
   }
 
+  async applyPortRangeStart(portRangeStart) {
+    const startPort = Number(portRangeStart);
+    if (!Number.isInteger(startPort) || startPort < 1024 || startPort > 65535) {
+      throw new Error('Project port range start must be an integer between 1024 and 65535.');
+    }
+
+    const projects = this.configStore.get('projects', []);
+    if (projects.length > 0 && startPort + projects.length - 1 > 65535) {
+      throw new Error('The project port range is too small for all registered projects.');
+    }
+    let nextPort = startPort;
+    let updated = 0;
+
+    const updatedProjects = projects.map((project) => {
+      const port = nextPort++;
+      const nextProject = {
+        ...project,
+        port,
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Keep generated localhost URLs in sync, but do not overwrite a project's
+      // explicit domain URL or any application-managed URL.
+      if (typeof project.environment?.APP_URL === 'string' && /localhost(?::\d+)?/.test(project.environment.APP_URL)) {
+        nextProject.environment = {
+          ...project.environment,
+          APP_URL: project.environment.APP_URL.replace(/localhost(?::\d+)?/, `localhost:${port}`),
+        };
+      }
+
+      if (project.port !== port) {
+        updated += 1;
+      }
+
+      return nextProject;
+    });
+
+    this.configStore.set('projects', updatedProjects);
+    await this.syncCliProjectsFile();
+
+    // A network-access project listens on its persisted project port. Rebuild
+    // its vhost while it is running so the setting takes effect immediately;
+    // stopped projects use the new port on their next start.
+    for (const project of updatedProjects) {
+      if (!project.networkAccess || !this.runningProjects.has(project.id)) {
+        continue;
+      }
+
+      try {
+        await this.createVirtualHost(project);
+      } catch (error) {
+        this.managers.log?.systemWarn('Could not apply the new project port while the project was running', {
+          project: project.name,
+          error: error.message,
+        });
+      }
+    }
+
+    return { success: true, updated };
+  }
+
   async reorderProjects(projectIds) {
     const projects = this.configStore.get('projects', []);
     const projectMap = new Map();

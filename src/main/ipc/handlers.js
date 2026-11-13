@@ -626,6 +626,10 @@ function setupIpcHandlers(ipcMain, managers, mainWindow) {
   ipcMain.handle('settings:set', async (event, key, value) => {
     const result = config.set(key, value);
 
+    if (key === 'settings.portRangeStart') {
+      await project.applyPortRangeStart(value);
+    }
+
     // Handle launch on system startup setting
     if (key === 'settings.autoStartOnLaunch') {
       try {

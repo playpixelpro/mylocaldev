@@ -88,6 +88,15 @@ describe('PathResolver', () => {
         expect(pathResolver.getAppCachePath(app, 'binaries-config.json')).toBe(path.join(exeDir, 'binaries-config.json'));
     });
 
+    it('keeps the existing standard profile when a stale portable.flag is left by an update', () => {
+        fs.writeFileSync(path.join(exeDir, 'portable.flag'), '');
+        fs.mkdirSync(path.join(mockedHomeDir, '.mylocaldev'), { recursive: true });
+        fs.writeFileSync(path.join(mockedHomeDir, '.mylocaldev', 'mylocaldev-config.json'), '{"projects":[{"id":"existing-project"}]}');
+
+        expect(pathResolver.getPortableRoot(app)).toBeNull();
+        expect(pathResolver.getDataPath(app)).toBe(path.join(mockedHomeDir, '.mylocaldev'));
+    });
+
     it('ignores stale portable.flag files in the standard Windows install directory', () => {
         const originalLocalAppData = process.env.LOCALAPPDATA;
         const standardInstallRoot = path.join(os.tmpdir(), 'MyLocalDev-standard-install-root');

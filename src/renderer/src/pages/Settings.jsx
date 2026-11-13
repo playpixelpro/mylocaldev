@@ -965,7 +965,7 @@ function NetworkSettings({ settings, updateSetting }) {
           Port Configuration
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
-          Default ports for each service. Changes take effect after restarting the service.
+          Service port changes take effect after restarting the service. Changing the project range reassigns registered projects immediately.
         </p>
 
         {/* Project ports */}
@@ -977,7 +977,7 @@ function NetworkSettings({ settings, updateSetting }) {
               <input type="number" value={settings.portRangeStart || 8000} onChange={(e) => updateSetting('portRangeStart', parseInt(e.target.value))} className="input w-28" min="1024" max="65535" />
             </div>
           </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5">Projects are assigned ports starting from this number</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5">Existing projects are reassigned sequentially from this number; running network-access projects are reloaded.</p>
         </div>
 
         {/* Database ports */}

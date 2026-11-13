@@ -65,7 +65,8 @@ function hasExistingStandardInstallState(app) {
   const userDataPath = typeof app?.getPath === 'function' ? app.getPath('userData') : null;
   const candidatePaths = [
     path.join(os.homedir(), '.mylocaldev'),
-    userDataPath ? path.join(userDataPath, 'data') : null,
+    // userData/data is intentionally omitted: it is a legacy location handled
+    // by MigrationManager and must not shadow the standard profile.
     userDataPath ? path.join(userDataPath, 'resources') : null,
   ].filter(Boolean);
 
@@ -103,9 +104,14 @@ function getPortableRoot(app) {
   const exeDir = getExeDir(app);
   const flagPath = path.join(exeDir, 'portable.flag');
   const hasPortableFlag = fs.existsSync(flagPath);
+  const hasStandardInstallState = hasExistingStandardInstallState(app);
 
   cachedExePath = exePath;
-  cachedPortableRoot = hasPortableFlag && !isLikelyStandardInstallDir(exeDir) ? exeDir : null;
+  cachedPortableRoot = hasPortableFlag
+    && !isLikelyStandardInstallDir(exeDir)
+    && !hasStandardInstallState
+    ? exeDir
+    : null;
   return cachedPortableRoot;
 }
 
