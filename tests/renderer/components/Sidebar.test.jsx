@@ -58,6 +58,11 @@ describe('Sidebar', () => {
             expect(screen.getByText('Settings')).toBeInTheDocument();
         });
 
+        it('renders Documentation link', () => {
+            renderSidebar();
+            expect(screen.getByText('Documentation')).toBeInTheDocument();
+        });
+
         it('renders New Project button', () => {
             renderSidebar();
             expect(screen.getByText('New Project')).toBeInTheDocument();
@@ -107,6 +112,9 @@ describe('Sidebar', () => {
 
             const servicesLink = screen.getByText('Services').closest('a');
             expect(servicesLink).toHaveAttribute('href', '/services');
+
+            const documentationLink = screen.getByText('Documentation').closest('a');
+            expect(documentationLink).toHaveAttribute('href', '/documentation');
         });
 
         it('New Project button links to /projects/new', () => {

@@ -13,6 +13,7 @@ const Services      = lazy(() => import('./pages/Services'));
 const Databases     = lazy(() => import('./pages/Databases'));
 const Logs          = lazy(() => import('./pages/Logs'));
 const Settings      = lazy(() => import('./pages/Settings'));
+const Documentation = lazy(() => import('./pages/Documentation'));
 const CreateProject = lazy(() => import('./pages/CreateProject'));
 const BinaryManager = lazy(() => import('./pages/BinaryManager'));
 import { AppProvider, useApp } from './context/AppContext';
@@ -133,6 +134,7 @@ function AppContent({ darkMode, setDarkMode }) {
               <Route path="/logs" element={<Logs />} />
               <Route path="/binaries" element={<BinaryManager />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/documentation" element={<Documentation />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
